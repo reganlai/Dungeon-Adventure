@@ -1,12 +1,11 @@
 import javax.sound.sampled.*;
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class DungeonGUI {
 
     /* Width pixels for JFrame */
     public static final int FRAME_WIDTH = 1000;
