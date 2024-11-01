@@ -48,11 +48,8 @@ public class DungeonGUI {
         enter.setBounds(430, 350, 140,40);
         enter.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent theE) {
-                if (audioClip != null && audioClip.isRunning()) {
-                    audioClip.stop();  // Stop the audio
-                }
                 home.dispose();
-                SettingsGUI settings = new SettingsGUI();
+                SettingsGUI settings = new SettingsGUI(audioClip);
             }
         });
 
