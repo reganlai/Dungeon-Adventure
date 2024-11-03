@@ -1,5 +1,7 @@
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -44,6 +46,12 @@ public class DungeonGUI {
 
         enter.setText("Enter Dungeon");
         enter.setBounds(430, 350, 140,40);
+        enter.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent theE) {
+                home.dispose();
+                SettingsGUI settings = new SettingsGUI(audioClip);
+            }
+        });
 
         home.add(backgroundImage);
 
