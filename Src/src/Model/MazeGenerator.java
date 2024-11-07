@@ -55,7 +55,7 @@ public final class MazeGenerator {
         initMaze();
     }
 
-    protected Room[][] getMaze() {
+    public Room[][] getMaze() {
         return myMaze;
     }
     private void setMaze(final int theRows, final int theCols) {
