@@ -28,7 +28,7 @@ public final class Room {
         return new Room(roomWalls);
     }
 
-    protected Wall getRoomWalls() {
+    public Wall getRoomWalls() {
         return myRoomWalls;
     }
 

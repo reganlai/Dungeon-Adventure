@@ -183,6 +183,11 @@ public final class SettingsGUI extends JFrame {
             if (myAudioClip != null && myAudioClip.isRunning()) {
                 myAudioClip.stop();
             }
+            final String playerName = myNameField.getText();
+            final int heroClass = myHeroClassBox.getSelectedIndex();
+            final int difficultyLevel = myDifficultyBox.getSelectedIndex();
+            this.dispose();
+            GameplayGUI gameplay = new GameplayGUI(playerName, heroClass, difficultyLevel);
         });
         add(myReadyButton);
 

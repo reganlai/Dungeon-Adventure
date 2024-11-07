@@ -3,6 +3,8 @@ package Controller;//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 
 import Model.MazeGenerator;
 
+import Model.MazeGenerator;
+
 public class Main {
     public static void main(String[] theArgs) {
         MazeGenerator maze = new MazeGenerator(6, 6);

@@ -151,7 +151,7 @@ public abstract class DungeonCharacter {
 
             if (theOp instanceof Hero) {
                 Hero heroOp = (Hero) theOp;
-                if (rand.nextDouble() <= heroOp.getMyChanceToBlock()) {
+                if (rand.nextDouble() <= heroOp.getChanceToBlock()) {
                     System.out.println(heroOp.getMyName() + " blocked the attack!");
                     return;
                 }
