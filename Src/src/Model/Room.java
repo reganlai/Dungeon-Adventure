@@ -84,7 +84,7 @@ public final class Room {
         myRoomWalls.setWestWall(theWestWall);
     }
 
-    protected String roomToString() {
+    public String roomToString() {
         StringBuilder str = new StringBuilder();
         str.append(myRoomWalls.getNorthWall().getWallSymbol());
         str.append("\n");
