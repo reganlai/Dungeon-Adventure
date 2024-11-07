@@ -1,4 +1,4 @@
-/*
+package Model;/*
  * TCSS 360 - Dungeon Adventure
  */
 
@@ -37,7 +37,7 @@ public final class Room {
     }
 
     /**
-     * Returns the item in the room. (e.g. Monster, Health, Pillar)
+     * Returns the item in the room. (e.g. Model.Monster, Health, Pillar)
      *
      * @return the item stored in the room.
      */

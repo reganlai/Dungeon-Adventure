@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.Random;
 
 /**
@@ -30,7 +32,7 @@ public abstract class DungeonCharacter {
     private final int myMaxHp;
 
     /**
-     * Constructs a DungeonCharacter with the specified attributes.
+     * Constructs a Model.DungeonCharacter with the specified attributes.
      *
      * @param theName the name of the character
      * @param theHp the initial health points

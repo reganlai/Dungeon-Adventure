@@ -1,3 +1,5 @@
+package Controller;
+
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
@@ -90,7 +92,7 @@ public final class SettingsGUI extends JFrame {
     /** The audio clip that is being played in the background. */
     private Clip myAudioClip;
 
-    /** Constructs a SettingsGUI JFrame.
+    /** Constructs a Controller.SettingsGUI JFrame.
      *
      * @param theClip the audio clip that is being played in the background
      */

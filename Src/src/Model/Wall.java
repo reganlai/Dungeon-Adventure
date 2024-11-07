@@ -1,4 +1,4 @@
-/*
+package Model;/*
  * TCSS 360 - Dungeon Adventure
  */
 
@@ -22,7 +22,7 @@ public final class Wall {
     private WallType myWestWall;
 
     /**
-     * Constructs a new Wall with specified states for each direction.
+     * Constructs a new Model.Wall with specified states for each direction.
      *
      * @param theNorthWall the state of the north wall
      * @param theSouthWall the state of the south wall

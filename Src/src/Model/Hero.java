@@ -1,3 +1,5 @@
+package Model;
+
 public abstract class Hero extends DungeonCharacter{
 
     private int myPotions;
@@ -6,7 +8,7 @@ public abstract class Hero extends DungeonCharacter{
 
 
     /**
-     * Constructs a DungeonCharacter with the specified attributes.
+     * Constructs a Model.DungeonCharacter with the specified attributes.
      *
      * @param theName      the name of the character
      * @param theHp        the initial health points
@@ -74,7 +76,7 @@ public abstract class Hero extends DungeonCharacter{
     }
 
     public String toString() {
-        return "Hero: " + getMyName() +
+        return "Model.Hero: " + getMyName() +
                 "\nHp: " + getMyHp() +
                 "\nHealing Potions: " + getMyPotions() +
                 "\nVision Potions: " + getMyVisionPotions();

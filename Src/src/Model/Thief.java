@@ -1,3 +1,5 @@
+package Model;
+
 public class Thief extends Hero {
     private final double mySpecialChance = .4;
     private final double myCaughtChance = .2;
@@ -21,7 +23,7 @@ public class Thief extends Hero {
     @Override
     public String toString() {
         return super.toString() +
-                "\nClass: Thief" +
+                "\nClass: Model.Thief" +
                 "\nSpecial Skill: Surprise Attack (Chance: " + (mySpecialChance * 100) + "% success, " +
                 (myCaughtChance * 100) + "% chance of getting caught)";
     }

@@ -1,3 +1,5 @@
+package Model;
+
 public class Warrior extends Hero {
     private final double mySpecialChance;
     private final  int minCrushingBlowDmg = 75;
@@ -32,7 +34,7 @@ public class Warrior extends Hero {
     @Override
     public String toString() {
         return super.toString() +
-                "\nClass: Warrior" +
+                "\nClass: Model.Warrior" +
                 "\nSpecial Skill: Crushing Blow (Chance: " + (mySpecialChance * 100) + "%, Damage: " +
                 minCrushingBlowDmg + " - " + maxCrushingBlowDmg + ")";
     }

@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.Random;
 
 public abstract class Monster extends DungeonCharacter {
@@ -6,7 +8,7 @@ public abstract class Monster extends DungeonCharacter {
     private final int myMinHeal;
     private final int myMaxHeal;
     /**
-     * Constructs a DungeonCharacter with the specified attributes.
+     * Constructs a Model.DungeonCharacter with the specified attributes.
      *
      * @param theName      the name of the character
      * @param theHp        the initial health points
@@ -49,7 +51,7 @@ public abstract class Monster extends DungeonCharacter {
         }
     }
     public String toString() {
-        return "Monster: " + this.getMyName() +
+        return "Model.Monster: " + this.getMyName() +
                 "\nHit Points: " + this.getMyHp() +
                 "\nAttack Speed: " + this.getMyAttackSpd() +
                 "\nChance to Heal: " + this.myHealChance +

@@ -1,4 +1,4 @@
-/*
+package Model;/*
  * TCSS 360 - Dungeon Adventure
  */
 

@@ -1,3 +1,5 @@
+package Model;
+
 public class Priestess extends Hero {
     private final int myMinHeal = 20;
     private final int myMaxHeal = 50;
@@ -17,7 +19,7 @@ public class Priestess extends Hero {
     @Override
     public String toString() {
         return super.toString() +
-                "\nClass: Priestess" +
+                "\nClass: Model.Priestess" +
                 "\nSpecial Skill: Heal (Restores " + myMinHeal + " - " + myMaxHeal + " HP)";
     }
 
