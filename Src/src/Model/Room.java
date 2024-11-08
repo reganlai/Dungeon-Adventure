@@ -32,7 +32,7 @@ public final class Room {
         return myRoomWalls;
     }
 
-    public void setItem(final String theItem) {
+    public void setRoomOccupant(final String theItem) {
         myItem = theItem;
     }
 
@@ -41,7 +41,7 @@ public final class Room {
      *
      * @return the item stored in the room.
      */
-    public String getItem() {
+    public String getRoomOccupant() {
         return myItem;
     }
 

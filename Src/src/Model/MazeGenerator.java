@@ -48,11 +48,16 @@ public final class MazeGenerator {
         mySpawnInRow = myRandom.nextInt(myRows);
         mySpawnInCol = myRandom.nextInt(myCols);
         myItemsPercent = (int) Math.ceil((double) (theRows * theCols) / ITEM_PERCENTAGE);
-        System.err.println(myItemsPercent);
 
         setMaze(theRows, theCols);
 
         initMaze();
+    }
+    public int getRows() {
+        return myRows;
+    }
+    public int getCol() {
+        return myCols;
     }
 
     public Room[][] getMaze() {
@@ -106,26 +111,30 @@ public final class MazeGenerator {
      * that's on the border of the maze. Adds the rooms items.
      */
     private void generateMaze() {
-        myMaze[mySpawnInRow][mySpawnInCol].setItem("i"); //Entrance
+        myMaze[mySpawnInRow][mySpawnInCol].setRoomOccupant("i"); //Entrance
+        addValueToMap(mySpawnInRow, mySpawnInCol);
         myMaze[mySpawnInRow][mySpawnInCol].setVisitStatus(true);
 
         dfs(mySpawnInRow, mySpawnInCol);
 
 
-
+        int exitRow = 0, exitCol = 0;
         boolean chooseRow = myRandom.nextBoolean();
         if (chooseRow) { // Chooses a room for the exit that is on the border of the maze.
-            myMaze[myRandom.nextInt(myRows)][0].setItem("O");
+            exitRow = myRandom.nextInt(myRows);
+            myMaze[exitRow][exitCol].setRoomOccupant("O");
         } else {
-            myMaze[0][myRandom.nextInt(myCols)].setItem("O");
+            exitCol = myRandom.nextInt(myCols);
+            myMaze[exitRow][exitCol].setRoomOccupant("O");
         }
+        addValueToMap(exitRow, exitCol);
 
-        setRoomItem("M", myItemsPercent); // Add the items of the room (e.g. Monster, Health, Pillar) randomly. One per room.
-        setRoomItem("A", 1); // Abstraction
-        setRoomItem("E", 1); //Encapsulation
-        setRoomItem("I", 1); // Inheritance
-        setRoomItem("P", 1); //Polymorphism
-        setRoomItem("H", myItemsPercent); // Health potion
+        setRoomOccupant("M", myItemsPercent); // Add the items of the room (e.g. Monster, Health, Pillar) randomly. One per room.
+        setRoomOccupant("A", 1); // Abstraction
+        setRoomOccupant("E", 1); //Encapsulation
+        setRoomOccupant("I", 1); // Inheritance
+        setRoomOccupant("P", 1); //Polymorphism
+        setRoomOccupant("H", myItemsPercent); // Health potion
     }
 
     /**
@@ -164,20 +173,20 @@ public final class MazeGenerator {
                     newRow++;
                     break;
                 case WEST:
-                    newCol++;
+                    newCol--;
                     break;
                 default:
-                    newCol--;
+                    newCol++;
             }
             if (isInBound(newRow, newCol) && !myMaze[newRow][newCol].getVisitStatus()) {
-                System.err.print(dir + " ");
+                //System.err.print(dir + " ");
                 myMaze[newRow][newCol].setVisitStatus(true);
                 openDoor(myMaze[row][col], myMaze[newRow][newCol], dir);
                 dfs(newRow, newCol);
             }
 
         }
-        System.err.print("backtrack ");
+        //System.err.print("backtrack ");
 
 
     }
@@ -230,25 +239,25 @@ public final class MazeGenerator {
      * @param theItem the item to add to a room.
      * @param theCount the quantity of items to add.
      */
-    private void setRoomItem(final String theItem, final int theCount) {
+    private void setRoomOccupant(final String theItem, final int theCount) {
         int itemsCount = 0;
-        do {
+        while (itemsCount < theCount) {
             final int row = myRandom.nextInt(myRows);
             final int col = myRandom.nextInt(myCols);
 
             if (myOccupiedRooms.get(row) != null) {
-                if(!myOccupiedRooms.get(row).contains(col)) {
+                if(!myOccupiedRooms.get(row).contains(col) ) {
                     addValueToMap(row, col);
-                    myMaze[row][col].setItem(theItem);
+                    myMaze[row][col].setRoomOccupant(theItem);
                     itemsCount++;
                 }
             } else {
                 addValueToMap(row, col);
-                myMaze[row][col].setItem(theItem);
+                myMaze[row][col].setRoomOccupant(theItem);
                 myAddedItemsCount++;
                 itemsCount++;
             }
-        } while (itemsCount != theCount);
+        }
 
     }
 
@@ -268,7 +277,7 @@ public final class MazeGenerator {
     }
 
     /**
-     * The toString graphical representation of the 2Dimensional maze.
+     * The toString for the graphical representation of the 2-Dimensional maze.
      *
      * @return a string representing the 2D graphical
      *          representation of the maze.
@@ -282,9 +291,9 @@ public final class MazeGenerator {
             }
             strBuilder.append("\n");
             for (int col = 0; col < myCols; col++) {
-                strBuilder.append(myMaze[row][col].getEastWall().getWallSymbol());
-                strBuilder.append(myMaze[row][col].getItem());
-                strBuilder.append(myMaze[row][col].getWestWall().getWallSymbol()).append(" ");
+                strBuilder.append(myMaze[row][col].getWestWall().getWallSymbol());
+                strBuilder.append(myMaze[row][col].getRoomOccupant());
+                strBuilder.append(myMaze[row][col].getEastWall().getWallSymbol()).append(" ");
             }
             strBuilder.append("\n");
             for (int col = 0; col < myCols; col++) {
