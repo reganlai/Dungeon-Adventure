@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.Random;
 
 /**
@@ -9,25 +11,28 @@ import java.util.Random;
  */
 public abstract class DungeonCharacter {
     /** The name of the character */
-    String myName;
+    private String myName;
 
     /** The character's current health points */
-    int myHp;
+    private int myHp;
 
     /** The minimum attack damage the character can deal */
-    int myMinAttack;
+    private final int myMinAttack;
 
     /** The maximum attack damage the character can deal */
-    int myMaxAttack;
+    private final int myMaxAttack;
 
     /** The character's attack speed */
-    int myAttackSpd;
+    private final int myAttackSpd;
 
     /** The probability (0-1) of successfully hitting a target */
-    double myHitChance;
+    private final double myHitChance;
+
+    /** The Max Hp this dungeon character can have */
+    private final int myMaxHp;
 
     /**
-     * Constructs a DungeonCharacter with the specified attributes.
+     * Constructs a Model.DungeonCharacter with the specified attributes.
      *
      * @param theName the name of the character
      * @param theHp the initial health points
@@ -37,7 +42,8 @@ public abstract class DungeonCharacter {
      * @param theHitChance the probability (0-1) that an attack hits
      */
     DungeonCharacter(final String theName, final int theHp, final int theMinAttack,
-                     final int theMaxAttack, final int theAttackSpd, final int theHitChance) {
+                     final int theMaxAttack, final int theAttackSpd, final double theHitChance,
+                     final int theMaxHp) {
         super();
         myName = theName;
         myHp = theHp;
@@ -45,6 +51,7 @@ public abstract class DungeonCharacter {
         myMaxAttack = theMaxAttack;
         myAttackSpd = theAttackSpd;
         myHitChance = theHitChance;
+        myMaxHp = theMaxHp;
     }
 
     /**
@@ -119,6 +126,16 @@ public abstract class DungeonCharacter {
         return myHitChance;
     }
 
+
+    /**
+     * Returns the max hp of the character.
+     *
+     * @return the max hp of the character.
+     */
+    public int getMyMaxHp() {
+        return myMaxHp;
+    }
+
     /**
      * Executes an attack on the specified opponent. If the opponent is a Hero,
      * the method checks if the opponent successfully blocks the attack.
@@ -129,12 +146,12 @@ public abstract class DungeonCharacter {
         Random rand = new Random();
         System.out.println(this.myName + " attacks " + theOp.getMyName() + "!");
 
-        if (rand.nextDouble() + 0.1 <= this.myHitChance) {
+        if (rand.nextDouble() <= this.myHitChance) {
             int dmg = rand.nextInt(this.myMaxAttack - this.myMinAttack + 1) + this.myMinAttack;
 
             if (theOp instanceof Hero) {
                 Hero heroOp = (Hero) theOp;
-                if (rand.nextDouble() + 0.1 <= heroOp.getChanceToBlock()) {
+                if (rand.nextDouble() <= heroOp.getMyChanceToBlock()) {
                     System.out.println(heroOp.getMyName() + " blocked the attack!");
                     return;
                 }
