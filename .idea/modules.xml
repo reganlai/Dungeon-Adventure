@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Model/Model.iml" filepath="$PROJECT_DIR$/Model/Model.iml" />
       <module fileurl="file://$PROJECT_DIR$/Src/Src.iml" filepath="$PROJECT_DIR$/Src/Src.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/TCSS-360-Dungeon-Adventure.iml" filepath="$PROJECT_DIR$/.idea/TCSS-360-Dungeon-Adventure.iml" />
-      <module fileurl="file://$PROJECT_DIR$/View/View.iml" filepath="$PROJECT_DIR$/View/View.iml" />
     </modules>
   </component>
 </project>
