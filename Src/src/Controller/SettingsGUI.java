@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.MazeGenerator;
+
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
@@ -183,6 +185,25 @@ public final class SettingsGUI extends JFrame {
             if (myAudioClip != null && myAudioClip.isRunning()) {
                 myAudioClip.stop();
             }
+            final String playerName = myNameField.getText();
+            final int heroClass = myHeroClassBox.getSelectedIndex();
+            final int difficultyLevel = myDifficultyBox.getSelectedIndex();
+
+            final MazeGenerator maze;
+            switch (difficultyLevel) {
+                case 0:
+                     maze = new MazeGenerator(6, 6);
+                    break;
+                case 1:
+                    maze = new MazeGenerator(10, 10);
+                    break;
+                default:
+                    maze = new MazeGenerator(12, 12);
+            }
+
+            this.dispose();
+
+            GameplayGUI gameplay = new GameplayGUI(playerName, heroClass, difficultyLevel, maze);
         });
         add(myReadyButton);
 

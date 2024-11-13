@@ -28,11 +28,11 @@ public final class Room {
         return new Room(roomWalls);
     }
 
-    protected Wall getRoomWalls() {
+    public Wall getRoomWalls() {
         return myRoomWalls;
     }
 
-    public void setItem(final String theItem) {
+    public void setRoomOccupant(final String theItem) {
         myItem = theItem;
     }
 
@@ -41,7 +41,7 @@ public final class Room {
      *
      * @return the item stored in the room.
      */
-    public String getItem() {
+    public String getRoomOccupant() {
         return myItem;
     }
 
@@ -84,7 +84,7 @@ public final class Room {
         myRoomWalls.setWestWall(theWestWall);
     }
 
-    protected String roomToString() {
+    public String roomToString() {
         StringBuilder str = new StringBuilder();
         str.append(myRoomWalls.getNorthWall().getWallSymbol());
         str.append("\n");
