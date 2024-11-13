@@ -13,9 +13,15 @@ public class Thief extends Hero {
     public void specialAbility(final DungeonCharacter theOp) {
         System.out.println(getMyName() + "attempts a Surprise Attack!");
 
-        if(Math.random() < mySpecialChance) {
-            System.out.println("Surprise Attack successful!" + getMyName() + " lands gets and extra attack!");
+        if(Math.random() < myCaughtChance) {
+            System.out.println(getMyName() + " was caught!");
+        } else if (Math.random() < mySpecialChance) {
+            System.out.println("Surprise Attack successful! " + getMyName() + " lands an extra attack!");
             this.attack(theOp);
+            this.attack(theOp);
+        } else {
+            System.out.println(getMyName() + " performs a regular attack.");
+            attack(theOp);
         }
 
     }

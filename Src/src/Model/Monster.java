@@ -26,6 +26,18 @@ public abstract class Monster extends DungeonCharacter {
         myMaxHeal = theMaxHeal;
     }
 
+    public double getMyHealChance() {
+        return myHealChance;
+    }
+
+    public int getMyMinHeal(){
+        return myMinHeal;
+    }
+
+    public int getMyMaxHeal() {
+        return myMaxHeal;
+    }
+
     public void heal(){
         Random rand = new Random();
         if (rand.nextDouble() <= this.myHealChance) {
