@@ -2,30 +2,24 @@ package Controller;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class DungeonGUI {
 
-    /* Width pixels for JFrame */
     public static final int FRAME_WIDTH = 1000;
-
-    /* Height pixels for JFrame */
     public static final int FRAME_HEIGHT = 500;
-
-    /* Background image's path */
     public static final String BACKGROUND_IMAGE = "images/home.jpg";
-
-    /* JFrame's iconImage's image path */
     public static final String ICON_IMAGE = "images/torch.png";
-
     private static final String AUDIO_PATH = "images/bgmusic.wav";
-
     private static Clip audioClip;
+
+    private static JFrame home;
+    private static CardLayout cardLayout;
+    private static JPanel mainPanel;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -35,38 +29,54 @@ public class DungeonGUI {
     }
 
     private static void createHomePage() {
-        JFrame home = new JFrame("Dungeon Adventure");
-        JLabel backgroundImage = new JLabel();
-        JButton enter = new JButton();
+        home = new JFrame("Dungeon Adventure");
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 
-        ImageIcon image = new ImageIcon(BACKGROUND_IMAGE);
-        backgroundImage.setIcon(image);
-        backgroundImage.setBounds(0, -30, FRAME_WIDTH, FRAME_HEIGHT);
+        ImageIcon iconImage = new ImageIcon(ICON_IMAGE);
+        ImageIcon backgroundImageIcon = new ImageIcon(BACKGROUND_IMAGE);
+        Image backgroundImage =
+                backgroundImageIcon.getImage().getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
+        JLabel background = new JLabel(new ImageIcon(backgroundImage));
+        JButton enter = new JButton("Enter Dungeon");
 
-        ImageIcon iconImage =
-                new ImageIcon(ICON_IMAGE);
+        background.setBounds(0, -20, FRAME_WIDTH, FRAME_HEIGHT);
+        enter.setBounds(430, 350, 140, 40);
 
-        enter.setText("Enter Dungeon");
-        enter.setBounds(430, 350, 140,40);
-        enter.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent theE) {
-                home.dispose();
-                SettingsGUI settings = new SettingsGUI(audioClip);
-            }
-        });
+        layeredPane.add(background, Integer.valueOf(0));
+        layeredPane.add(enter, Integer.valueOf(1));
 
-        home.add(backgroundImage);
-
-        JLayeredPane layeredPane = home.getLayeredPane();
-        layeredPane.add(enter, JLayeredPane.PALETTE_LAYER);
+        enter.addActionListener(e -> showSettingsPanel());
 
         home.setIconImage(iconImage.getImage());
-        home.setLayout(null);
         home.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         home.setLocationRelativeTo(null);
         home.setResizable(false);
         home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+        mainPanel.add(layeredPane, "Home");
+
+        SettingsGUI settingsPanel = new SettingsGUI(audioClip);
+        mainPanel.add(settingsPanel, "Settings");
+
+        GameplayGUI gameplayPanel = new GameplayGUI("PlayerName", 1, 1);
+        mainPanel.add(gameplayPanel, "Gameplay");
+
+        home.add(mainPanel);
         home.setVisible(true);
+    }
+
+
+    public static void showSettingsPanel() {
+        cardLayout.show(mainPanel, "Settings");
+    }
+
+    public static void showGameplayPanel(String playerName, int selectedHero, int selectedDifficulty) {
+        cardLayout.show(mainPanel, "Gameplay");
+        GameplayGUI gameplayPanel = new GameplayGUI(playerName, selectedHero, selectedDifficulty);
+        mainPanel.add(gameplayPanel, "Gameplay");
     }
 
     private static void playAudio(final String thePath) {
@@ -76,7 +86,6 @@ public class DungeonGUI {
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
                 audioClip = AudioSystem.getClip();
                 audioClip.open(audioStream);
-
                 audioClip.start();
             } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
                 e.printStackTrace();
