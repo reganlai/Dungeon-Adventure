@@ -31,10 +31,12 @@ public class SettingsGUI extends JPanel {
     private JComboBox myDifficultyBox;
     private JButton myReadyButton;
     private JLabel myBackgroundImage;
+    private JPanel myPanel;
 
-    public SettingsGUI() {
+    public SettingsGUI(final JPanel thePanel) {
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLayout(null);
+        myPanel = thePanel;
         mySelectedHero = new JLabel();
         mySelectedHeroBorder = new JLabel();
         myNameLabel = new JLabel();
@@ -153,7 +155,7 @@ public class SettingsGUI extends JPanel {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         parentFrame.remove(this);
 
-        GameplayGUI anotherPanel = new GameplayGUI(theName, theHero, theDifficulty);
+        GameplayGUI anotherPanel = new GameplayGUI(theName, theHero, theDifficulty, myPanel);
         parentFrame.add(anotherPanel);
 
         parentFrame.revalidate();
