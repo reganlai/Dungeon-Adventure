@@ -5,7 +5,7 @@ public class Priestess extends Hero {
     private final int myMaxHeal = 50;
 
     public Priestess(final String theName) {
-        super(theName, 75, 25, 45, 5, .7, .3, 75);
+        super(theName, 75, 25, 45, 5, .7, .3, 75, 0,0);
 
     }
 

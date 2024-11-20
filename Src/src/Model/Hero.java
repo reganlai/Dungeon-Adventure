@@ -2,9 +2,10 @@ package Model;
 
 public abstract class Hero extends DungeonCharacter{
 
-    private int myPotions;
+    private int myHealthPotions;
     private int myVisionPotions;
     private final double myChanceToBlock;
+    private int myPillarsCollected;
 
 
     /**
@@ -17,12 +18,15 @@ public abstract class Hero extends DungeonCharacter{
      * @param theAttackSpd the attack speed of the character
      * @param theHitChance the probability (0-1) that an attack hits
      */
-    Hero(String theName, int theHp, int theMinAttack, int theMaxAttack, int theAttackSpd, double theHitChance,
-            double theChanceToBlock, int theMaxHp) {
+    Hero(String theName,
+         int theHp,
+         int theMinAttack, int theMaxAttack, int theAttackSpd, double theHitChance,
+            double theChanceToBlock, int theMaxHp, int theHealthPotions, int theVisionPotions) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
         myChanceToBlock = theChanceToBlock;
-        myPotions = 2;
-        myVisionPotions = 1;
+        myHealthPotions = theHealthPotions;
+        myVisionPotions = theVisionPotions;
+        myPillarsCollected = 0;
     }
 
 
@@ -31,25 +35,25 @@ public abstract class Hero extends DungeonCharacter{
     public double getMyChanceToBlock(){
         return myChanceToBlock;
     }
-
-    public int getMyPotions(){
-        return myPotions;
+    public int getMyHealthPotions(){
+        return myHealthPotions;
     }
-
     public int getMyVisionPotions(){
         return myVisionPotions;
     }
+    public int getMyPillarsCollected() { return myPillarsCollected; }
 
-    public void addPotion() {
-        myPotions++;
+    public void addHealthPotion() {
+        myHealthPotions++;
     }
     public void addVisionPotion() {
         myVisionPotions++;
     }
+    public void addPillarCollected() { myPillarsCollected++; }
 
     public void usePotion() {
-        if(myPotions > 0) {
-            myPotions--;
+        if(myHealthPotions > 0) {
+            myHealthPotions--;
             int hp = getMyHp();
             hp += 25;
             if (hp > getMyMaxHp()) {
@@ -79,7 +83,7 @@ public abstract class Hero extends DungeonCharacter{
     public String toString() {
         return "Model.Hero: " + getMyName() +
                 "\nHp: " + getMyHp() +
-                "\nHealing Potions: " + getMyPotions() +
+                "\nHealing Potions: " + getMyHealthPotions() +
                 "\nVision Potions: " + getMyVisionPotions();
                 // "\nPillars Found: " + pillars;
     }
