@@ -307,10 +307,8 @@ public final class MazeGenerator {
                     moved = theHero.getMyY() - 1;
                     myMaze[theHero.getMyX()][theHero.getMyY()].setRoomOccupant(" ");
                     /*Temp name holder*/
-                    myMaze[theHero.getMyX()][moved].setRoomOccupant(theHero.getClass().getSimpleName());
+                    myMaze[theHero.getMyX()][moved].setRoomOccupant(theHero.getMyName().substring(0,1));
                     theHero.setMyY(moved);
-
-
                     result = 1;
 
                 }
@@ -320,7 +318,7 @@ public final class MazeGenerator {
                     moved = theHero.getMyY() + 1;
                     myMaze[theHero.getMyX()][theHero.getMyY()].setRoomOccupant(" ");
                     /*Temp name holder*/
-                    myMaze[theHero.getMyX()][moved].setRoomOccupant(theHero.getMyName());
+                    myMaze[theHero.getMyX()][moved].setRoomOccupant(theHero.getMyName().substring(0,1));
                     theHero.setMyY(moved);
                     result = 1;
                 }
@@ -328,6 +326,9 @@ public final class MazeGenerator {
                 if (theHero.getMyX() + 1 < myMaze[0].length &&
                         myMaze[theHero.getMyX()][theHero.getMyY()].getEastWall() != WallType.VERTICAL_WALL) {
                     moved = theHero.getMyX() + 1;
+                    myMaze[theHero.getMyX()][theHero.getMyY()].setRoomOccupant(" ");
+                    /*Temp name holder*/
+                    myMaze[moved][theHero.getMyY()].setRoomOccupant(theHero.getMyName().substring(0,1));
                     theHero.setMyX(moved);
                     result = 1;
                 }
@@ -335,11 +336,13 @@ public final class MazeGenerator {
                 if (theHero.getMyX() - 1 < 0 &&
                         myMaze[theHero.getMyX()][theHero.getMyY()].getWestWall() != WallType.VERTICAL_WALL) {
                     moved = theHero.getMyX() - 1;
+                    myMaze[theHero.getMyX()][theHero.getMyY()].setRoomOccupant(" ");
+                    /*Temp name holder*/
+                    myMaze[moved][theHero.getMyY()].setRoomOccupant(theHero.getMyName().substring(0,1));
                     theHero.setMyX(moved);
                     result = 1;
                 }
         }
-
         return result;
     }
 
