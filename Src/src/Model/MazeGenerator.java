@@ -63,6 +63,7 @@ public final class MazeGenerator {
     public Room[][] getMaze() {
         return myMaze;
     }
+
     private void setMaze(final int theRows, final int theCols) {
         if (theRows < 1 || theCols < 0) {
             throw new IllegalArgumentException("The maze dimensions are incorrect.");

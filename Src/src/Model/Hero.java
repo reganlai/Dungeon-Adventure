@@ -25,6 +25,7 @@ public abstract class Hero extends DungeonCharacter{
         myVisionPotions = 1;
     }
 
+
     public abstract void specialAbility(final DungeonCharacter theOp);
 
     public double getMyChanceToBlock(){

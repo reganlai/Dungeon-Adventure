@@ -70,7 +70,7 @@ public class DungeonGUI extends JFrame {
 
     private void showSettingsPanel() {
         remove(myHomePanel);
-        SettingsGUI settingsPanel = new SettingsGUI(myMenuPanel);
+        SettingsGUI settingsPanel = new SettingsGUI(myMenuPanel, myInstructions, myControls);
         add(settingsPanel);
         revalidate();
         repaint();

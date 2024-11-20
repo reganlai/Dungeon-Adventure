@@ -54,6 +54,7 @@ public abstract class DungeonCharacter {
         myMaxHp = theMaxHp;
     }
 
+
     /**
      * Returns the name of the character.
      *
