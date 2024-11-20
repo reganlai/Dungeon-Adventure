@@ -18,7 +18,8 @@ import java.util.Set;
  */
 public final class MazeGenerator {
 
-    private static final int PILLAR_COUNT = 4;
+    private static final int DEFAULT_SIZE = 1;
+
 
     private static final int ITEM_PERCENTAGE = 10;
 
@@ -26,11 +27,14 @@ public final class MazeGenerator {
 
     private final Map<Integer, Set<Integer>> myOccupiedRooms;
 
+    //private final DungeonCharacter myCharacter;
+
     private final int mySpawnInRow;
 
     private final int mySpawnInCol;
 
     private final int myItemsPercent;
+
     /** */
     private Room myMaze[][];
 
@@ -40,7 +44,8 @@ public final class MazeGenerator {
     /** */
     private int myCols;
 
-    public MazeGenerator(final int theRows, final int theCols) {
+    public MazeGenerator(final int theRows, final int theCols /*final DungeonCharacter theCharacter*/) {
+        //myCharacter = theCharacter;
         myAddedItemsCount = 0;
         myOccupiedRooms = new HashMap<>();
         myRows = theRows;
@@ -52,6 +57,10 @@ public final class MazeGenerator {
         setMaze(theRows, theCols);
 
         initMaze();
+    }
+    public void mazeDimensions(final int theRow, final int theCol) {
+        myRows = theRow;
+        myCols = theCol;
     }
     public int getRows() {
         return myRows;
@@ -278,7 +287,75 @@ public final class MazeGenerator {
     }
 
     /**
-     * The toString for the graphical representation of the 2-Dimensional maze.
+     * The hero will only move if moving in that direction is in bound of
+     * the maze, and if moving in that direction doesn't hit a wall.
+     * Thus, this function changes the current X or Y by moving in the
+     * given direction when applicable, and returns 1 if the character
+     * can move and has moved, otherwise it returns 0.
+     *
+     * @param theDir the intended moving direction.
+     * @param theHero the current hero.
+     * @return 1 if character moved, 0 otherwise
+     */
+    public int move(final Direction theDir, final DungeonCharacter theHero) {
+        int result = 0;
+        int moved = 0;
+        switch (theDir) {
+            case NORTH:
+                if (theHero.getMyX() - 1 < 0 &&
+                        myMaze[theHero.getMyX()][theHero.getMyY()].getNorthWall() != WallType.HORIZONTAL_WALL) {
+                    moved = theHero.getMyY() - 1;
+                    myMaze[theHero.getMyX()][theHero.getMyY()].setRoomOccupant(" ");
+                    /*Temp name holder*/
+                    myMaze[theHero.getMyX()][moved].setRoomOccupant(theHero.getClass().getSimpleName());
+                    theHero.setMyY(moved);
+
+
+                    result = 1;
+
+                }
+            case SOUTH:
+                if (theHero.getMyY() + 1 > myMaze.length &&
+                        myMaze[theHero.getMyX()][theHero.getMyY()].getSouthWall() != WallType.HORIZONTAL_WALL) {
+                    moved = theHero.getMyY() + 1;
+                    myMaze[theHero.getMyX()][theHero.getMyY()].setRoomOccupant(" ");
+                    /*Temp name holder*/
+                    myMaze[theHero.getMyX()][moved].setRoomOccupant(theHero.getMyName());
+                    theHero.setMyY(moved);
+                    result = 1;
+                }
+            case EAST:
+                if (theHero.getMyX() + 1 < myMaze[0].length &&
+                        myMaze[theHero.getMyX()][theHero.getMyY()].getEastWall() != WallType.VERTICAL_WALL) {
+                    moved = theHero.getMyX() + 1;
+                    theHero.setMyX(moved);
+                    result = 1;
+                }
+            case WEST:
+                if (theHero.getMyX() - 1 < 0 &&
+                        myMaze[theHero.getMyX()][theHero.getMyY()].getWestWall() != WallType.VERTICAL_WALL) {
+                    moved = theHero.getMyX() - 1;
+                    theHero.setMyX(moved);
+                    result = 1;
+                }
+        }
+
+        return result;
+    }
+
+    /**
+     * The room class has a getRoomOccupant class that can also
+     * return the item currently in a room.
+     *
+     * @param theHero the current hero object.
+     * @return A string representation of the room's occupant.
+     */
+    private String whatInTheRoom(DungeonCharacter theHero) {
+        return myMaze[theHero.getMyX()][theHero.getMyY()].getRoomOccupant();
+    }
+
+    /**
+     * A toString representation of the 2-Dimensional graphical maze.
      *
      * @return a string representing the 2D graphical
      *          representation of the maze.

@@ -30,6 +30,10 @@ public abstract class DungeonCharacter {
 
     /** The Max Hp this dungeon character can have */
     private final int myMaxHp;
+    /** The current X position of the character. */
+    private int myX;
+    /** The current Y position of the character. */
+    private int myY;
 
     /**
      * Constructs a Model.DungeonCharacter with the specified attributes.
@@ -52,6 +56,29 @@ public abstract class DungeonCharacter {
         myAttackSpd = theAttackSpd;
         myHitChance = theHitChance;
         myMaxHp = theMaxHp;
+    }
+
+    /**
+     * Return the current X position on the maze.
+     *
+     * @return the character's X position.
+     */
+    public int getMyX() {
+        return myX;
+    }
+    /**
+     * Return the current Y position on the maze.
+     *
+     * @return the character's Y position.
+     */
+    public int getMyY() {
+        return myY;
+    }
+    public void setMyY(final int theY) {
+        myY += theY;
+    }
+    public void setMyX(final int theX) {
+        myX += theX;
     }
 
 

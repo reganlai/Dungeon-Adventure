@@ -3,64 +3,177 @@ package View;
 import Model.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameplayGUI extends JPanel {
-
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
+    private final JFrame myMainFrame;
+    /** The menu bar that holds all the menus.*/
+    private final JMenuBar myMenubar = new JMenuBar();
+    /** The Gameplay menu. This menu holds the map.*/
+    private final JMenu myGameplayMenu = new JMenu("Gameplay");
+    /** The map menu. */
+    private final JMenuItem myMap = new JMenuItem("Map");
+    /** The help menu. */
+    private final JMenu myHelp = new JMenu("Help");
+    /** The menu item that displays the game instructions.*/
+    private final JMenuItem myInstructions = new JMenuItem("Instructions");
+    private final JMenu myInventory = new JMenu("Inventory");
+    private JMenuItem myControls = new JMenuItem("Controls");
 
-    private String myName;
+    private JLabel myGameplay = new JLabel();
+    /** The maze that the player is in. */
+    private MazeGenerator myMaze;
+    /** The player name. */
+    private String myPlayerName;
     private int myClass;
+    /** The difficulty level. */
     private int myDifficulty;
-    private JPanel myPanel;
-    private JLabel myGameplay;
-    private JTextArea myInventory;
-    private JLabel myMessage;
-    private JLabel mySecondMessage;
-    private JLabel myUpArrow;
-    private JLabel myDownArrow;
-    private JLabel myRightArrow;
-    private JLabel myLeftArrow;
-    private JMenuItem myInstructions;
-    private JMenuItem myControls;
-    private JMenuBar myMenubar;
-    private Hero myHero;
 
-    public GameplayGUI(final String theName,
+    private JPanel myPanel;
+
+
+    private JTextArea myInventoryText;
+    private JLabel myMessage = new JLabel();
+    private JLabel mySecondMessage = new JLabel();
+    private JLabel myUpArrow = new JLabel();
+    private JLabel myDownArrow = new JLabel();
+    private JLabel myRightArrow = new JLabel();
+    private JLabel myLeftArrow = new JLabel();
+
+    private DungeonCharacter myHero;
+
+
+    public GameplayGUI(final String thePlayerName,
                        final int theClass,
                        final int theDifficulty,
-                       final JPanel thePanel,
-                       JMenuItem theInstructions,
-                       JMenuItem theControls) {
+                       final JFrame theMainFrame,
+                       final JPanel thePanel) {
+        super();
         setLayout(null);
-        myName = theName;
+        myPlayerName = thePlayerName;
         myClass = theClass;
         myDifficulty = theDifficulty;
-        myPanel = thePanel;
-        myGameplay = new JLabel();
-        myInventory = new JTextArea();
-        myMessage = new JLabel();
-        mySecondMessage = new JLabel();
-        myUpArrow = new JLabel();
-        myDownArrow = new JLabel();
-        myRightArrow = new JLabel();
-        myLeftArrow = new JLabel();
-        myMenubar = new JMenuBar();
-        myInstructions = theInstructions;
-        myControls = theControls;
-        setMyMessage();
-        setArrows();
+        myMainFrame = theMainFrame;
         setHero(theClass);
-        setInstructions();
-        setControls();
-        MazeGenerator maze = new MazeGenerator(6,6);
-        maze.toString();
+
+        initGameScreen();
+
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
     }
 
+    private void initGameScreen() {
+        setMyMessage();
+        setArrows();
+        setInstructions();
+        setControls();
+        initMaze();
+        setMap();
+        setMenuBar();
+    }
+
+    private void initMaze() {
+        switch (myDifficulty) {
+            case 0:
+                myMaze = new MazeGenerator(6,6);
+                break;
+            case 1:
+                myMaze = new MazeGenerator(10,10);
+                break;
+            default:
+                myMaze = new MazeGenerator(12,12);
+
+        }
+    }
+
+    private void setMenuBar() {
+        myGameplayMenu.add(myMap);
+        //myInventory.add(myInventoryText);
+        myGameplayMenu.addSeparator();
+        myGameplayMenu.add(myInventory);
+        myHelp.add(myInstructions);
+        myHelp.add(myControls);
+
+
+        myMenubar.add(myGameplayMenu);
+        myMenubar.add(myHelp);
+        myMainFrame.setJMenuBar(myMenubar);
+
+    }
+    private void setMap() {
+
+        myMap.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GridLayout mazeGrid = new GridLayout(myMaze.getRows(), myMaze.getCol());
+
+                JDialog mapPopup = new JDialog(myMainFrame,"Map");
+                JPanel mazeMap = new JPanel(mazeGrid);
+                // Puts a panel in each grid dimensions
+                for (int grid = 0; grid < mazeGrid.getRows() * mazeGrid.getColumns(); grid++) {
+                    JPanel room = new JPanel();
+                    mazeMap.add(room);
+                }
+
+                //Uses the rooms on the maze to draw the grid.
+                Component[] gridTo1DArray = mazeMap.getComponents();
+                for (int row = 0; row < myMaze.getRows(); row++) {
+                    for (int col = 0; col < myMaze.getCol(); col++) {
+                        int componentIndex = row * myMaze.getCol() + col;
+                        JPanel currRoom = (JPanel) gridTo1DArray[componentIndex];
+                        currRoom.add(new JLabel(myMaze.getMaze()[row][col].getRoomOccupant()));
+                        Border currRoomWallsStatus = createRoomWalls(row, col, currRoom);
+                        currRoom.setBorder(currRoomWallsStatus);
+                    }
+                }
+                mapPopup.setSize(400, 400);
+                mapPopup.add(mazeMap);
+                mapPopup.setLocationRelativeTo(myMainFrame);
+                mapPopup.setVisible(true);
+            }
+        });
+    }
+    private Border createRoomWalls(final int theRow, final int theCol, final JPanel thePanel) {
+        Border north, south, west, east;
+        int top, left, bottom, right;
+        if (myMaze.getMaze()[theRow][theCol].getNorthWall() == WallType.HORIZONTAL_WALL) {
+            //north = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
+            top = 4;
+        } else {
+            //north = BorderFactory.createDashedBorder(Color.RED, 1, 3);
+            top = 1;
+        }
+        if (myMaze.getMaze()[theRow][theCol].getSouthWall() == WallType.HORIZONTAL_WALL) {
+            //south = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
+            bottom = 3;
+        } else {
+            //south = BorderFactory.createDashedBorder(Color.RED, 2, 2);
+            bottom = 1;
+        }
+        if (myMaze.getMaze()[theRow][theCol].getWestWall() == WallType.VERTICAL_WALL) {
+            //west = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
+            left = 3;
+        } else {
+            //west = BorderFactory.createDashedBorder(Color.RED, 2, 2);
+            left = 1;
+
+        }
+        if (myMaze.getMaze()[theRow][theCol].getEastWall() == WallType.VERTICAL_WALL) {
+            //east = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
+            right = 3;
+        } else {
+            //east = BorderFactory.createDashedBorder(Color.RED, 2, 2);
+            right = 1;
+        }
+        return BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK);
+    }
+
     private void setHero(final int theHero) {
-        myPanel.setVisible(true);
+        //myMenubar.setVisible(true);
         myGameplay.setBounds(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
         if (theHero == 0) {
             myGameplay.setIcon(new ImageIcon("images/thief_in_dungeon.png"));
@@ -78,7 +191,7 @@ public class GameplayGUI extends JPanel {
 
 
     private void setMyMessage() {
-        myMessage.setText("Welcome to the dungeon, " + myName);
+        myMessage.setText("Welcome to the dungeon, " + myPlayerName);
         mySecondMessage.setText("You may use the buttons on the right or arrow keys to move");
         myMessage.setBounds(370, 370, 500, 30);
         mySecondMessage.setBounds(320, 385, 500, 30);

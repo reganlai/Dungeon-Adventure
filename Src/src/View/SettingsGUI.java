@@ -1,5 +1,7 @@
 package View;
 
+import Model.MazeGenerator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,36 +23,37 @@ public class SettingsGUI extends JPanel {
     private static final String DIFFICULTY_CHOICES[] =
             {"Easy", "Normal", "Difficult"};
 
-    private JLabel mySelectedHero;
-    private JLabel mySelectedHeroBorder;
-    private JLabel myNameLabel;
-    private JTextField myNameField;
-    private JLabel myHeroClassLabel;
-    private JComboBox myHeroBox;
-    private JLabel myDifficultyLabel;
-    private JComboBox myDifficultyBox;
-    private JButton myReadyButton;
-    private JLabel myBackgroundImage;
-    private JPanel myPanel;
-    private JMenuItem myInstructions;
-    private JMenuItem myControls;
+    private final JLabel mySelectedHero = new JLabel();;
+    private final JLabel mySelectedHeroBorder = new JLabel();;
+    private final JLabel myNameLabel = new JLabel();
+    private JTextField myNameField = new JTextField();;
+    private JLabel myHeroClassLabel = new JLabel();;
+    private final JComboBox myHeroBox = new JComboBox(HERO_CLASSES);;
+    private final JLabel myDifficultyLabel = new JLabel();;
+    private final JComboBox myDifficultyBox = new JComboBox(DIFFICULTY_CHOICES);;
+    private final JButton myReadyButton = new JButton("I'm ready");;
 
-    public SettingsGUI(final JPanel thePanel, final JMenuItem theInstructions, final JMenuItem theControls) {
+    private JPanel myCardPanel;
+
+    private CardLayout myCardLayout;
+    private JLabel myBackgroundImage = new JLabel();;
+    private JFrame myMainFrame;
+
+
+    public SettingsGUI(final JFrame theMainFrame, final JPanel theCardPanel, final CardLayout theCardLayout) {
+        super();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLayout(null);
-        myPanel = thePanel;
-        mySelectedHero = new JLabel();
-        mySelectedHeroBorder = new JLabel();
-        myNameLabel = new JLabel();
-        myNameField = new JTextField();
-        myHeroClassLabel = new JLabel();
-        myHeroBox = new JComboBox(HERO_CLASSES);
-        myDifficultyLabel = new JLabel();
-        myDifficultyBox = new JComboBox(DIFFICULTY_CHOICES);
-        myReadyButton = new JButton();
-        myBackgroundImage = new JLabel();
-        myInstructions = theInstructions;
-        myControls = theControls;
+        myMainFrame = theMainFrame;
+        myCardPanel = theCardPanel;
+        myCardLayout = theCardLayout;
+
+        initSettings();
+        revalidate();
+        repaint();
+    }
+
+    private void initSettings() {
         setSelectedHero();
         setSelectedHeroBorder();
         setNameLabel();
@@ -59,8 +62,8 @@ public class SettingsGUI extends JPanel {
         setHeroBox();
         setDifficultyLabel();
         setDifficultyBox();
-        setReadyButton();
         setBackgroundImage();
+        setReadyButton();
     }
 
     private void setSelectedHero() {
@@ -138,32 +141,40 @@ public class SettingsGUI extends JPanel {
         add(myDifficultyBox);
     }
 
-    private void setReadyButton() {
+    public void setReadyButton() {
         myReadyButton.setBounds(X_COORDINATE, 360, 300, 50);
-        myReadyButton.setText("I'm ready");
+        //myReadyButton.setText("I'm ready");
         myReadyButton.setFont(new Font("Arial", Font.BOLD, 20));
         myReadyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String playerName = myNameField.getText();
                 final int heroClass = myHeroBox.getSelectedIndex();
-                final int diffiCultyLevel = myDifficultyBox.getSelectedIndex();
-                showAnotherPanel(playerName, heroClass, diffiCultyLevel);
+                final int difficultyLevel = myDifficultyBox.getSelectedIndex();
+                showAnotherPanel(playerName, heroClass, difficultyLevel);
+
             }
         });
         myReadyButton.setVisible(true);
         add(myReadyButton);
+        revalidate();
+        repaint();
     }
 
-    private void showAnotherPanel(final String theName, final int theHero, final int theDifficulty) {
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        parentFrame.remove(this);
 
-        GameplayGUI anotherPanel = new GameplayGUI(theName, theHero, theDifficulty, myPanel, myInstructions, myControls);
-        parentFrame.add(anotherPanel);
+    private void showAnotherPanel(final String theName, final int theHero,
+                                  final int theDifficulty) {
 
-        parentFrame.revalidate();
-        parentFrame.repaint();
+        GameplayGUI gamePanel = new GameplayGUI(theName, theHero, theDifficulty, myMainFrame, myCardPanel);
+        myCardPanel.add(gamePanel, "Game");
+        myCardLayout.show(myCardPanel, "Game");
+
+//        myMainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+//        myMainFrame.remove(this);
+
+//        myMainFrame.add(anotherPanel);
+//        myMainFrame.revalidate();
+//        myMainFrame.repaint();
     }
 
     private void setBackgroundImage() {
