@@ -13,7 +13,7 @@ public class DungeonGUI {
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
     /** The main frame shared across different classes to update the same frame.*/
-    private final JFrame myMainFrame = new JFrame(WINDOW_TITLE);
+    private final JFrame myMainFrame;
     /** The CardLayout that deals with the screen changing.*/
     private final CardLayout myCardLayout;
     /** The parent panel for all the screens. Used by the CardLayout.*/
@@ -25,6 +25,7 @@ public class DungeonGUI {
     private JLabel myBackgroundLabel;
 
     public DungeonGUI() {
+        myMainFrame = new JFrame(WINDOW_TITLE);
         myHomePanel = new JPanel();
         myBackgroundLabel = new JLabel();
 
