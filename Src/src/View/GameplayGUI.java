@@ -5,10 +5,7 @@ import Model.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class GameplayGUI extends JPanel {
     private static final int FRAME_WIDTH = 1000;
@@ -78,27 +75,22 @@ public class GameplayGUI extends JPanel {
         myInventoryText = new JTextArea();
         myControls = new JMenuItem("Controls");
         myGameplay = new JLabel();
-
         myMessage = new JLabel();
         mySecondMessage = new JLabel();
         myUpArrow = new JLabel();
         myDownArrow = new JLabel();
         myRightArrow = new JLabel();
         myLeftArrow = new JLabel();
-
-
         setArrows();
         setMyMessage();
-
         setGameplay();
-
         initGameScreen();
-
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
     }
 
     private void initGameScreen() {
         keyboardArrowClicked();
+        upArrowClicked();
         setInstructions();
         setControls();
         initMaze();
@@ -300,6 +292,20 @@ public class GameplayGUI extends JPanel {
         });
         myMainFrame.setFocusable(true);
         myMainFrame.requestFocusInWindow();
+    }
+
+    private void upArrowClicked() {
+        myUpArrow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int move = myMaze.move(Direction.NORTH, myHero);
+                if (move == 1) {
+                    System.out.println("you moved up");
+                } else {
+                    System.out.println("You can't move up");
+                }
+            }
+        });
     }
 
 }
