@@ -23,20 +23,20 @@ public class SettingsGUI extends JPanel {
     private static final String DIFFICULTY_CHOICES[] =
             {"Easy", "Normal", "Difficult"};
 
-    private final JLabel mySelectedHero = new JLabel();;
-    private final JLabel mySelectedHeroBorder = new JLabel();;
-    private final JLabel myNameLabel = new JLabel();
-    private JTextField myNameField = new JTextField();;
-    private JLabel myHeroClassLabel = new JLabel();;
-    private final JComboBox myHeroBox = new JComboBox(HERO_CLASSES);;
-    private final JLabel myDifficultyLabel = new JLabel();;
-    private final JComboBox myDifficultyBox = new JComboBox(DIFFICULTY_CHOICES);;
-    private final JButton myReadyButton = new JButton("I'm ready");;
+    private final JLabel mySelectedHero;
+    private final JLabel mySelectedHeroBorder;
+    private final JLabel myNameLabel;
+    private JTextField myNameField;
+    private JLabel myHeroClassLabel;
+    private final JComboBox myHeroBox;
+    private final JLabel myDifficultyLabel;
+    private final JComboBox myDifficultyBox;
+    private final JButton myReadyButton;
 
     private JPanel myCardPanel;
 
     private CardLayout myCardLayout;
-    private JLabel myBackgroundImage = new JLabel();;
+    private JLabel myBackgroundImage;
     private JFrame myMainFrame;
 
 
@@ -47,6 +47,18 @@ public class SettingsGUI extends JPanel {
         myMainFrame = theMainFrame;
         myCardPanel = theCardPanel;
         myCardLayout = theCardLayout;
+        myHeroClassLabel = new JLabel();
+        myNameField = new JTextField();
+        mySelectedHero = new JLabel();
+        mySelectedHeroBorder = new JLabel();
+        myNameLabel = new JLabel();
+        myHeroBox = new JComboBox(HERO_CLASSES);
+        myDifficultyLabel = new JLabel();
+        myDifficultyBox = new JComboBox(DIFFICULTY_CHOICES);
+        myReadyButton = new JButton("I'm ready");
+        myBackgroundImage = new JLabel();
+
+
 
         initSettings();
         revalidate();
@@ -54,6 +66,7 @@ public class SettingsGUI extends JPanel {
     }
 
     private void initSettings() {
+        setReadyButton();
         setSelectedHero();
         setSelectedHeroBorder();
         setNameLabel();
@@ -63,7 +76,7 @@ public class SettingsGUI extends JPanel {
         setDifficultyLabel();
         setDifficultyBox();
         setBackgroundImage();
-        setReadyButton();
+
     }
 
     private void setSelectedHero() {
@@ -165,7 +178,7 @@ public class SettingsGUI extends JPanel {
     private void showAnotherPanel(final String theName, final int theHero,
                                   final int theDifficulty) {
 
-        GameplayGUI gamePanel = new GameplayGUI(theName, theHero, theDifficulty, myMainFrame, myCardPanel);
+        GameplayGUI gamePanel = new GameplayGUI(theName, theHero, theDifficulty, myMainFrame, myCardPanel, myCardLayout);
         myCardPanel.add(gamePanel, "Game");
         myCardLayout.show(myCardPanel, "Game");
 

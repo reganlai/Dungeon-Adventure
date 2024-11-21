@@ -7,25 +7,31 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GameplayGUI extends JPanel {
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
     private final JFrame myMainFrame;
     /** The menu bar that holds all the menus.*/
-    private final JMenuBar myMenubar = new JMenuBar();
+    private final JMenuBar myMenubar;
     /** The Gameplay menu. This menu holds the map.*/
-    private final JMenu myGameplayMenu = new JMenu("Gameplay");
+    private final JMenu myGameplayMenu;
     /** The map menu. */
-    private final JMenuItem myMap = new JMenuItem("Map");
+    private final JMenuItem myMap;
     /** The help menu. */
-    private final JMenu myHelp = new JMenu("Help");
+    private final JMenu myHelp;
     /** The menu item that displays the game instructions.*/
-    private final JMenuItem myInstructions = new JMenuItem("Instructions");
-    private final JMenu myInventory = new JMenu("Inventory");
-    private JMenuItem myControls = new JMenuItem("Controls");
+    private final JMenuItem myInstructions;
+    private final JMenuItem myInventory;
 
-    private JLabel myGameplay = new JLabel();
+    private final CardLayout myCardLayout;
+
+    private final JPanel myCardPanel;
+    private JMenuItem myControls;
+
+    private JLabel myGameplay;
     /** The maze that the player is in. */
     private MazeGenerator myMaze;
     /** The player name. */
@@ -34,8 +40,9 @@ public class GameplayGUI extends JPanel {
     /** The difficulty level. */
     private int myDifficulty;
 
-    private JPanel myPanel;
-
+    /** The hero that the user chose*/
+    private Hero myHero;
+    //private DungeonCharacter myHero;
 
     private JTextArea myInventoryText;
     private JLabel myMessage = new JLabel();
@@ -45,21 +52,45 @@ public class GameplayGUI extends JPanel {
     private JLabel myRightArrow = new JLabel();
     private JLabel myLeftArrow = new JLabel();
 
-    private DungeonCharacter myHero;
+
 
 
     public GameplayGUI(final String thePlayerName,
                        final int theClass,
                        final int theDifficulty,
                        final JFrame theMainFrame,
-                       final JPanel thePanel) {
+                       final JPanel theCardPanel,
+                       final CardLayout theCardLayout) {
         super();
         setLayout(null);
         myPlayerName = thePlayerName;
         myClass = theClass;
         myDifficulty = theDifficulty;
         myMainFrame = theMainFrame;
-        setHero(theClass);
+        myCardPanel = theCardPanel;
+        myCardLayout = theCardLayout;
+        myMenubar = new JMenuBar();
+        myGameplayMenu = new JMenu("Gameplay");
+        myMap = new JMenuItem("Map");
+        myHelp = new JMenu("Help");
+        myInstructions = new JMenuItem("Instructions");
+        myInventory = new JMenuItem("Inventory");
+        myInventoryText = new JTextArea();
+        myControls = new JMenuItem("Controls");
+        myGameplay = new JLabel();
+
+        myMessage = new JLabel();
+        mySecondMessage = new JLabel();
+        myUpArrow = new JLabel();
+        myDownArrow = new JLabel();
+        myRightArrow = new JLabel();
+        myLeftArrow = new JLabel();
+
+
+        setArrows();
+        setMyMessage();
+
+        setGameplay();
 
         initGameScreen();
 
@@ -67,8 +98,7 @@ public class GameplayGUI extends JPanel {
     }
 
     private void initGameScreen() {
-        setMyMessage();
-        setArrows();
+        keyboardArrowClicked();
         setInstructions();
         setControls();
         initMaze();
@@ -94,6 +124,9 @@ public class GameplayGUI extends JPanel {
         myGameplayMenu.add(myMap);
         //myInventory.add(myInventoryText);
         myGameplayMenu.addSeparator();
+        myInventory.addActionListener(event-> {
+            //myInventoryText
+        });
         myGameplayMenu.add(myInventory);
         myHelp.add(myInstructions);
         myHelp.add(myControls);
@@ -172,18 +205,21 @@ public class GameplayGUI extends JPanel {
         return BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK);
     }
 
-    private void setHero(final int theHero) {
-        //myMenubar.setVisible(true);
+    /**
+     * Sets the icon of myGameplay JLabel initially to the right image.
+     */
+    private void setGameplay() {
+        setVisible(true);
         myGameplay.setBounds(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
-        if (theHero == 0) {
+        if (myClass == 0) {
             myGameplay.setIcon(new ImageIcon("images/thief_in_dungeon.png"));
-            //myHero = new Thief(myDifficulty);
-        } else if (theHero == 1) {
+            myHero = new Thief(myPlayerName);
+        } else if (myClass == 1) {
             myGameplay.setIcon(new ImageIcon("images/warrior_in_dungeon.png"));
-            //myHero = new Warrior(myDifficulty);
+            myHero = new Warrior(myPlayerName);
         } else {
             myGameplay.setIcon(new ImageIcon("images/priestess_in_dungeon.png"));
-            //myHero = new Priestess(myDifficulty);
+            myHero = new Priestess(myPlayerName);
         }
         myGameplay.setOpaque(true);
         add(myGameplay);
@@ -244,5 +280,26 @@ public class GameplayGUI extends JPanel {
         });
     }
 
+    private void keyboardArrowClicked() {
+        myMainFrame.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                //System.out.println("Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    System.out.println("You pressed up!");
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    System.out.println("You pressed down!");
+                }
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    System.out.println("You pressed right!");
+                }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    System.out.println("You pressed left!");
+                }
+            }
+        });
+        myMainFrame.setFocusable(true);
+        myMainFrame.requestFocusInWindow();
+    }
 
 }
