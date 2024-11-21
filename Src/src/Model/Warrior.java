@@ -8,7 +8,7 @@ public class Warrior extends Hero {
 
 
     public Warrior(final String theName) {
-        super(theName, 125, 35, 60, 4, .8, .2, 125);
+        super(theName, 125, 35, 60, 4, .8, .2, 125, 0,0);
         mySpecialChance = .4;
     }
 

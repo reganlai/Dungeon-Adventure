@@ -5,7 +5,8 @@ public class Thief extends Hero {
     private final double myCaughtChance = .2;
 
     public Thief (final String theName) {
-        super(theName, 75, 20, 40, 6, .8, .4, 75);
+        super(theName, 75, 20, 40, 6, .8,
+                .4, 75,0 ,0);
 
     }
 

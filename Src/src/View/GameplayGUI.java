@@ -262,7 +262,7 @@ public class GameplayGUI extends JPanel {
         myInstructions.addActionListener(e ->{
             JOptionPane.showMessageDialog(null,
                     "You are lost in a dungeon, you must collect the four sacred pillars of \n" +
-                    "object-oriented programming and navigate to the exit. \n" +
+                            "object-oriented programming and navigate to the exit. \n" +
                             "Throughout the dungeon, you may need to fight monsters or pick \n" +
                             "up items that aid your journey. Good luck adventurer!",
                     "Instructions",
