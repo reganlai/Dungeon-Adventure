@@ -75,10 +75,10 @@ public abstract class DungeonCharacter {
         return myY;
     }
     public void setMyY(final int theY) {
-        myY += theY;
+        myY = theY;
     }
     public void setMyX(final int theX) {
-        myX += theX;
+        myX = theX;
     }
 
 

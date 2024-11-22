@@ -41,6 +41,10 @@ public class GameplayGUI extends JPanel {
     private Hero myHero;
     //private DungeonCharacter myHero;
 
+    private JDialog myMapPopup;
+
+    private JPanel myMazeMap;
+
     private JTextArea myInventoryText;
     private JLabel myMessage = new JLabel();
     private JLabel mySecondMessage = new JLabel();
@@ -110,6 +114,8 @@ public class GameplayGUI extends JPanel {
                 myMaze = new MazeGenerator(12,12);
 
         }
+        myHero.setMyY(myMaze.getMySpawnInRow());
+        myHero.setMyX(myMaze.getMySpawnInCol());
     }
 
     private void setMenuBar() {
@@ -129,39 +135,73 @@ public class GameplayGUI extends JPanel {
         myMainFrame.setJMenuBar(myMenubar);
 
     }
-    private void setMap() {
-
+    public void setMap() {
         myMap.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GridLayout mazeGrid = new GridLayout(myMaze.getRows(), myMaze.getCol());
-
-                JDialog mapPopup = new JDialog(myMainFrame,"Map");
-                JPanel mazeMap = new JPanel(mazeGrid);
-                // Puts a panel in each grid dimensions
-                for (int grid = 0; grid < mazeGrid.getRows() * mazeGrid.getColumns(); grid++) {
-                    JPanel room = new JPanel();
-                    mazeMap.add(room);
+                if (myMapPopup == null) {
+                    initializeMapPopup();
                 }
-
-                //Uses the rooms on the maze to draw the grid.
-                Component[] gridTo1DArray = mazeMap.getComponents();
-                for (int row = 0; row < myMaze.getRows(); row++) {
-                    for (int col = 0; col < myMaze.getCol(); col++) {
-                        int componentIndex = row * myMaze.getCol() + col;
-                        JPanel currRoom = (JPanel) gridTo1DArray[componentIndex];
-                        currRoom.add(new JLabel(myMaze.getMaze()[row][col].getRoomOccupant()));
-                        Border currRoomWallsStatus = createRoomWalls(row, col, currRoom);
-                        currRoom.setBorder(currRoomWallsStatus);
-                    }
-                }
-                mapPopup.setSize(400, 400);
-                mapPopup.add(mazeMap);
-                mapPopup.setLocationRelativeTo(myMainFrame);
-                mapPopup.setVisible(true);
+                updateMapDisplay();
+                myMapPopup.setVisible(true);
             }
         });
     }
+    private void initializeMapPopup() {
+        GridLayout mazeGrid = new GridLayout(myMaze.getRows(), myMaze.getCol());
+        myMapPopup = new JDialog(myMainFrame,"Map");
+        myMazeMap = new JPanel(mazeGrid);
+
+        // Puts a panel (room) in each grid dimensions
+        for (int grid = 0; grid < mazeGrid.getRows() * mazeGrid.getColumns(); grid++) {
+            JPanel room = new JPanel();
+            myMazeMap.add(room);
+        }
+
+        myMapPopup.setSize(400, 400);
+        myMapPopup.add(myMazeMap);
+        myMapPopup.setLocationRelativeTo(myMainFrame);
+    }
+    private void updateMapDisplay() {
+        Component[] gridTo1DArray = myMazeMap.getComponents();
+
+        for (int row = 0; row < myMaze.getRows(); row++) {
+            for (int col = 0; col < myMaze.getCol(); col++) {
+                int componentIndex = row * myMaze.getCol() + col;
+                JPanel currRoom = (JPanel) gridTo1DArray[componentIndex];
+                //Clear old data
+                currRoom.removeAll();
+                currRoom.add(new JLabel(myMaze.getMaze()[row][col].getRoomOccupant()));
+                Border currRoomWallsStatus = createRoomWalls(row, col, currRoom);
+                currRoom.setBorder(currRoomWallsStatus);
+            }
+        }
+        myMazeMap.revalidate();
+        myMazeMap.repaint();
+    }
+
+//        myMap.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                GridLayout mazeGrid = new GridLayout(myMaze.getRows(), myMaze.getCol());
+//
+//                JDialog mapPopup = new JDialog(myMainFrame,"Map");
+//                JPanel mazeMap = new JPanel(mazeGrid);
+//                // Puts a panel in each grid dimensions
+//                for (int grid = 0; grid < mazeGrid.getRows() * mazeGrid.getColumns(); grid++) {
+//                    JPanel room = new JPanel();
+//                    mazeMap.add(room);
+//                }
+//
+//                //Uses the rooms on the maze to draw the grid.
+//
+//                mapPopup.setSize(400, 400);
+//                mapPopup.add(mazeMap);
+//                mapPopup.setLocationRelativeTo(myMainFrame);
+//                mapPopup.setVisible(true);
+//            }
+//        });
+
     private Border createRoomWalls(final int theRow, final int theCol, final JPanel thePanel) {
         Border north, south, west, east;
         int top, left, bottom, right;
@@ -277,16 +317,50 @@ public class GameplayGUI extends JPanel {
             public void keyPressed(KeyEvent e) {
                 //System.out.println("Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    System.out.println("You pressed up!");
+                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+                    int move = myMaze.move(Direction.NORTH, myHero);
+                    if (move == 1) {
+                        updateMapDisplay();
+
+                    }
+
+                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
                 }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    System.out.println("You pressed down!");
+                    System.out.println(myMaze.toString());
+                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+                    int move = myMaze.move(Direction.SOUTH, myHero);
+                    if (move == 1) {
+                        updateMapDisplay();
+
+                    }
+
+                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+
                 }
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    System.out.println("You pressed right!");
+
+                    System.out.println(myMaze.toString());
+                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+                    int move = myMaze.move(Direction.EAST, myHero);
+                    if (move == 1) {
+                        updateMapDisplay();
+                    }
+
+                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
                 }
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    System.out.println("You pressed left!");
+
+                    System.out.println(myMaze.toString());
+                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+                    int move = myMaze.move(Direction.WEST, myHero);
+                    if (move == 1) {
+                        updateMapDisplay();
+                    }
                 }
             }
         });
@@ -295,15 +369,24 @@ public class GameplayGUI extends JPanel {
     }
 
     private void upArrowClicked() {
+
         myUpArrow.addMouseListener(new MouseAdapter() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
+                System.out.println(myMaze.toString());
+                System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
                 int move = myMaze.move(Direction.NORTH, myHero);
                 if (move == 1) {
+                    updateMapDisplay();
                     System.out.println("you moved up");
                 } else {
                     System.out.println("You can't move up");
                 }
+
+                System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+
             }
         });
     }
