@@ -39,7 +39,7 @@ public class InventoryGUI extends JFrame {
         setPillarImage();
         setPillarCount();
         setUseHealthPotionButton();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
