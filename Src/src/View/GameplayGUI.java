@@ -95,6 +95,9 @@ public class GameplayGUI extends JPanel {
     private void initGameScreen() {
         keyboardArrowClicked();
         upArrowClicked();
+        downArrowClicked();
+        leftArrowClicked();
+        rightArrowClicked();
         setInstructions();
         setControls();
         initMaze();
@@ -123,7 +126,7 @@ public class GameplayGUI extends JPanel {
         //myInventory.add(myInventoryText);
         myGameplayMenu.addSeparator();
         myInventory.addActionListener(event-> {
-            //myInventoryText
+            InventoryGUI inventory = new InventoryGUI(myHero);
         });
         myGameplayMenu.add(myInventory);
         myHelp.add(myInstructions);
@@ -313,59 +316,91 @@ public class GameplayGUI extends JPanel {
     }
 
     private void keyboardArrowClicked() {
-        myMainFrame.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                //System.out.println("Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+//        myMainFrame.addKeyListener(new KeyAdapter() {
+//            public void keyPressed(KeyEvent e) {
+//                //System.out.println("Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
+//                if (e.getKeyCode() == KeyEvent.VK_UP) {
+//                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+//
+//                    int move = myMaze.move(Direction.NORTH, myHero);
+//                    if (move == 1) {
+//                        updateMapDisplay();
+//
+//                    }
+//
+//                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+//                }
+//                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+//                    System.out.println(myMaze.toString());
+//                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+//
+//                    int move = myMaze.move(Direction.SOUTH, myHero);
+//                    if (move == 1) {
+//                        updateMapDisplay();
+//
+//                    }
+//
+//                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+//
+//                }
+//                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+//
+//                    System.out.println(myMaze.toString());
+//                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+//
+//                    int move = myMaze.move(Direction.EAST, myHero);
+//                    if (move == 1) {
+//                        updateMapDisplay();
+//                    }
+//
+//                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+//                }
+//                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+//
+//                    System.out.println(myMaze.toString());
+//                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+//
+//                    int move = myMaze.move(Direction.WEST, myHero);
+//                    if (move == 1) {
+//                        updateMapDisplay();
+//                    }
+//                }
+//            }
+//        });
+//        myMainFrame.setFocusable(true);
+//        myMainFrame.requestFocusInWindow();
 
-                    int move = myMaze.move(Direction.NORTH, myHero);
-                    if (move == 1) {
-                        updateMapDisplay();
-
-                    }
-
-                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
-                }
-                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    System.out.println(myMaze.toString());
-                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-
-                    int move = myMaze.move(Direction.SOUTH, myHero);
-                    if (move == 1) {
-                        updateMapDisplay();
-
-                    }
-
-                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
-
-                }
-                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-
-                    System.out.println(myMaze.toString());
-                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-
-                    int move = myMaze.move(Direction.EAST, myHero);
-                    if (move == 1) {
-                        updateMapDisplay();
-                    }
-
-                    System.err.println(myHero.getMyY() + " " + myHero.getMyX());
-                }
-                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-
-                    System.out.println(myMaze.toString());
-                    System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-
-                    int move = myMaze.move(Direction.WEST, myHero);
-                    if (move == 1) {
-                        updateMapDisplay();
-                    }
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_UP:
+                        int up = myMaze.move(Direction.NORTH, myHero);
+                        if (up == 1) {
+                            updateMapDisplay();
+                        }
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        int down = myMaze.move(Direction.SOUTH, myHero);
+                        if (down == 1) {
+                            updateMapDisplay();
+                        }
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        int left = myMaze.move(Direction.WEST, myHero);
+                        if (left == 1) {
+                            updateMapDisplay();
+                        }
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        int right = myMaze.move(Direction.EAST, myHero);
+                        if (right == 1) {
+                            updateMapDisplay();
+                        }
+                        break;
                 }
             }
+            return false; // Ensure other components can still process the key event
         });
-        myMainFrame.setFocusable(true);
-        myMainFrame.requestFocusInWindow();
     }
 
     private void upArrowClicked() {
@@ -383,6 +418,75 @@ public class GameplayGUI extends JPanel {
                     System.out.println("you moved up");
                 } else {
                     System.out.println("You can't move up");
+                }
+
+                System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+
+            }
+        });
+    }
+
+    private void downArrowClicked() {
+
+        myDownArrow.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println(myMaze.toString());
+                System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+                int move = myMaze.move(Direction.SOUTH, myHero);
+                if (move == 1) {
+                    updateMapDisplay();
+                    System.out.println("you moved down");
+                } else {
+                    System.out.println("You can't move down");
+                }
+
+                System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+
+            }
+        });
+    }
+
+    private void leftArrowClicked() {
+
+        myLeftArrow.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println(myMaze.toString());
+                System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+                int move = myMaze.move(Direction.WEST, myHero);
+                if (move == 1) {
+                    updateMapDisplay();
+                    System.out.println("you moved left");
+                } else {
+                    System.out.println("You can't move left");
+                }
+
+                System.err.println(myHero.getMyY() + " " + myHero.getMyX());
+
+            }
+        });
+    }
+
+    private void rightArrowClicked() {
+
+        myRightArrow.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println(myMaze.toString());
+                System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+                int move = myMaze.move(Direction.EAST, myHero);
+                if (move == 1) {
+                    updateMapDisplay();
+                    System.out.println("you moved right");
+                } else {
+                    System.out.println("You can't move right");
                 }
 
                 System.err.println(myHero.getMyY() + " " + myHero.getMyX());
