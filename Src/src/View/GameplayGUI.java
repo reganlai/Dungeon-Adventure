@@ -124,6 +124,7 @@ public class GameplayGUI extends JPanel {
     }
 
     private void setMenuBar() {
+        //
         myGameplayMenu.add(myMap);
         myGameplayMenu.addSeparator();
         myInventory.addActionListener(event-> {
