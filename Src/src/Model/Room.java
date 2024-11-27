@@ -14,30 +14,54 @@ public final class Room {
     /** */
     private String myItem;
 
+    private String myStatus;
+
     /** The visit status. */
     private boolean myVisitStatus;
+
+    private boolean myEmptyRoom;
 
     private Room(final Wall theRoomWalls) {
         myRoomWalls = theRoomWalls;
         myVisitStatus = false;
-        myItem = " ";
+        myItem = "";
+        myStatus = "";
+        myEmptyRoom = false;
     }
     public static Room defualtRoom() {
         Wall roomWalls = new Wall(/*North*/ WallType.HORIZONTAL_WALL, /*South*/ WallType.HORIZONTAL_WALL,
                 /*East*/ WallType.VERTICAL_WALL, /*West*/WallType.VERTICAL_WALL);
         return new Room(roomWalls);
     }
+    public void setMyEmptyRoom(final boolean theEmptyMyRoom) {
+        myEmptyRoom = theEmptyMyRoom;
+    }
+    private boolean getEmptyRoom() {
+        return myEmptyRoom;
+    }
 
     public Wall getRoomWalls() {
         return myRoomWalls;
     }
+    public void setVisiting(final String thePlayer) {
+        myStatus = (myItem == "" ? thePlayer : myItem + ", " + thePlayer);
+    }
+    public void setVisited() {
+        if (myEmptyRoom == true) {
+            myStatus = "";
+            myItem = "";
+        } else {
+            myStatus = myItem;
+        }
+    }
 
-    public void setRoomOccupant(final String theItem) {
+    protected void setRoomOccupant(final String theItem) {
         myItem = theItem;
+        myStatus = theItem;
     }
 
     /**
-     * Returns the item in the room. (e.g. Model.Monster, Health, Pillar)
+     * Returns the item in the room. (e.g. Monster, Health, Pillar)
      *
      * @return the item stored in the room.
      */
@@ -45,11 +69,11 @@ public final class Room {
         return myItem;
     }
 
-    public void setVisitStatus(final boolean theVisitStatus) {
+    protected void setVisitStatus(final boolean theVisitStatus) {
         myVisitStatus = theVisitStatus;
 
     }
-    public boolean getVisitStatus() {
+    protected boolean getVisitStatus() {
         return myVisitStatus;
     }
 
@@ -83,8 +107,11 @@ public final class Room {
     public void setWestWall(final WallType theWestWall) {
         myRoomWalls.setWestWall(theWestWall);
     }
+    public String toRoomString() {
+        return myStatus;
+    }
 
-    public String roomToString() {
+    public String roomWallToString() {
         StringBuilder str = new StringBuilder();
         str.append(myRoomWalls.getNorthWall().getWallSymbol());
         str.append("\n");

@@ -299,79 +299,8 @@ public final class MazeGenerator {
      * @param theHero the current hero.
      * @return 1 if character moved, 0 otherwise
      */
-    public int move(final Direction theDir, final DungeonCharacter theHero) {
-        int result = 0;
-        int moved = 0;
-        switch (theDir) {
-            case NORTH:
-                System.out.println("Hero at (" + theHero.getMyY() + ", " + theHero.getMyX() + ")");
-                System.out.println("North Wall: " + myMaze[theHero.getMyY()][theHero.getMyX()].getNorthWall());
-                if (myMaze[theHero.getMyY()][theHero.getMyX()].getNorthWall() != WallType.HORIZONTAL_WALL &&
-                        theHero.getMyY() - 1 >= 0) {
-                    moved = theHero.getMyY() - 1;
-                    //Set current room to no occupant.
-                    myMaze[theHero.getMyY()][theHero.getMyX()].setRoomOccupant(" ");
-                    /*Temp name holder*/
-                    myMaze[moved][theHero.getMyX()].setRoomOccupant(theHero.getMyName().substring(0,1));
-                    theHero.setMyY(moved);
-                    result = 1;
-
-                } else {
-                    System.out.println("Cannot move NORTH. Wall type: " +
-                            myMaze[theHero.getMyY()][theHero.getMyX()].getNorthWall());
-                }
-                break;
-            case SOUTH:
-                System.out.println("Hero at (" + theHero.getMyY() + ", " + theHero.getMyX() + ")");
-                System.out.println("South Wall: " + myMaze[theHero.getMyY()][theHero.getMyX()].getSouthWall());
-                if (theHero.getMyY() + 1 < myMaze.length &&
-                        myMaze[theHero.getMyY()][theHero.getMyX()].getSouthWall() != WallType.HORIZONTAL_WALL) {
-                    moved = theHero.getMyY() + 1;
-                    myMaze[theHero.getMyY()][theHero.getMyX()].setRoomOccupant(" ");
-                    /*Temp name holder*/
-                    myMaze[moved][theHero.getMyX()].setRoomOccupant(theHero.getMyName().substring(0,1));
-                    theHero.setMyY(moved);
-                    result = 1;
-                } else {
-                    System.out.println("Cannot move South. Wall type: " +
-                            myMaze[theHero.getMyY()][theHero.getMyX()].getSouthWall());
-                }
-                break;
-            case EAST:
-                System.out.println("Hero at (" + theHero.getMyY() + ", " + theHero.getMyX() + ")");
-                System.out.println("East Wall: " + myMaze[theHero.getMyY()][theHero.getMyX()].getEastWall());
-                if (theHero.getMyX() + 1 < myMaze[0].length &&
-                        myMaze[theHero.getMyY()][theHero.getMyX()].getEastWall() != WallType.VERTICAL_WALL) {
-                    moved = theHero.getMyX() + 1;
-                    myMaze[theHero.getMyY()][theHero.getMyX()].setRoomOccupant(" ");
-                    /*Temp name holder*/
-                    myMaze[theHero.getMyY()][moved].setRoomOccupant(theHero.getMyName().substring(0,1));
-                    theHero.setMyX(moved);
-                    result = 1;
-                } else {
-                    System.out.println("Cannot move East. Wall type: " +
-                            myMaze[theHero.getMyY()][theHero.getMyX()].getEastWall());
-                }
-                break;
-            case WEST:
-                System.out.println("Hero at (" + theHero.getMyY() + ", " + theHero.getMyX() + ")");
-                System.out.println("West Wall: " + myMaze[theHero.getMyY()][theHero.getMyX()].getWestWall());
-                if (theHero.getMyX() - 1 >= 0 &&
-                        myMaze[theHero.getMyY()][theHero.getMyX()].getWestWall() != WallType.VERTICAL_WALL) {
-                    moved = theHero.getMyX() - 1;
-                    myMaze[theHero.getMyY()][theHero.getMyX()].setRoomOccupant(" ");
-                    /*Temp name holder*/
-                    myMaze[theHero.getMyY()][moved].setRoomOccupant(theHero.getMyName().substring(0,1));
-                    theHero.setMyX(moved);
-                    result = 1;
-                } else {
-                    System.out.println("Cannot move West. Wall type: " +
-                            myMaze[theHero.getMyY()][theHero.getMyX()].getWestWall());
-                }
-                break;
-        }
-        System.out.println("Hero at (" + theHero.getMyY() + ", " + theHero.getMyX() + ")");
-        return result;
+    public MoveHandler move(final Direction theDir, final DungeonCharacter theHero) {
+        return MoveHandler.move(myMaze, theDir, theHero);
     }
 
     /**
@@ -382,7 +311,7 @@ public final class MazeGenerator {
      * @return A string representation of the room's occupant.
      */
     private String whatInTheRoom(DungeonCharacter theHero) {
-        return myMaze[theHero.getMyX()][theHero.getMyY()].getRoomOccupant();
+        return myMaze[theHero.getMyX()][theHero.getMyY()].toString();
     }
 
     /**
@@ -401,7 +330,7 @@ public final class MazeGenerator {
             strBuilder.append("\n");
             for (int col = 0; col < myCols; col++) {
                 strBuilder.append(myMaze[row][col].getWestWall().getWallSymbol());
-                strBuilder.append(myMaze[row][col].getRoomOccupant());
+                strBuilder.append(myMaze[row][col].roomWallToString());
                 strBuilder.append(myMaze[row][col].getEastWall().getWallSymbol()).append(" ");
             }
             strBuilder.append("\n");

@@ -182,12 +182,6 @@ public class SettingsGUI extends JPanel {
         myCardPanel.add(gamePanel, "Game");
         myCardLayout.show(myCardPanel, "Game");
 
-//        myMainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-//        myMainFrame.remove(this);
-
-//        myMainFrame.add(anotherPanel);
-//        myMainFrame.revalidate();
-//        myMainFrame.repaint();
     }
 
     private void setBackgroundImage() {

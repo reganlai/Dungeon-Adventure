@@ -10,6 +10,7 @@ import java.awt.event.*;
 public class GameplayGUI extends JPanel {
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
+    /** The main frame shared across different classes to update the same frame.*/
     private final JFrame myMainFrame;
     /** The menu bar that holds all the menus.*/
     private final JMenuBar myMenubar;
@@ -25,8 +26,11 @@ public class GameplayGUI extends JPanel {
     private JMenuItem mySave;
     private JMenuItem myLoad;
 
-    private final CardLayout myCardLayout;
+    private final FightScene myFightScenePanel;
 
+    /** The CardLayout that deals with the screen changing.*/
+    private final CardLayout myCardLayout;
+    /** The parent panel for all the screens. Used by the CardLayout.*/
     private final JPanel myCardPanel;
     private JMenuItem myControls;
 
@@ -47,6 +51,8 @@ public class GameplayGUI extends JPanel {
 
     private JPanel myMazeMap;
 
+    private JTextArea myInventoryText;
+    private boolean myEmptyCurrentRoom;
     private JLabel myMessage;
     private JLabel mySecondMessage;
     private JLabel myUpArrow;
@@ -87,6 +93,9 @@ public class GameplayGUI extends JPanel {
         myDownArrow = new JLabel();
         myRightArrow = new JLabel();
         myLeftArrow = new JLabel();
+        myEmptyCurrentRoom = true;
+        myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
+        myCardPanel.add(myFightScenePanel, "Fight");
         setArrows();
         setMyMessage();
         setGameplay();
@@ -179,7 +188,8 @@ public class GameplayGUI extends JPanel {
                 JPanel currRoom = (JPanel) gridTo1DArray[componentIndex];
                 //Clear old data
                 currRoom.removeAll();
-                currRoom.add(new JLabel(myMaze.getMaze()[row][col].getRoomOccupant()));
+                currRoom.add(new JLabel(myMaze.getMaze()[row][col].toRoomString()));
+                //currRoom.add(new JLabel(myMaze.getMaze()[row][col].getRoomOccupant()));
                 Border currRoomWallsStatus = createRoomWalls(row, col, currRoom);
                 currRoom.setBorder(currRoomWallsStatus);
             }
@@ -195,7 +205,7 @@ public class GameplayGUI extends JPanel {
         int top, left, bottom, right;
         if (myMaze.getMaze()[theRow][theCol].getNorthWall() == WallType.HORIZONTAL_WALL) {
             //north = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
-            top = 4;
+            top = 3;
         } else {
             //north = BorderFactory.createDashedBorder(Color.RED, 1, 3);
             top = 1;
@@ -301,6 +311,7 @@ public class GameplayGUI extends JPanel {
 
     private void keyboardArrowClicked() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+
             if (e.getID() == KeyEvent.KEY_PRESSED) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP:
@@ -319,6 +330,37 @@ public class GameplayGUI extends JPanel {
             }
             return false; // Ensure other components can still process the key event
         });
+    }
+
+    /**
+     * Does the necessary action based on what the player encountered.
+     * @param theMove
+     */
+    private synchronized void doSomethingWithItem(final MoveHandler theMove) {
+        final Room newRoom = theMove.getMyNewRoom();
+        String item = newRoom.getRoomOccupant();
+
+        if (item == "M") {
+            myCardLayout.show(myCardPanel, "Fight");
+            theMove.getMyNewRoom().setMyEmptyRoom(true);
+        } else if (item == "P" || item == "I" || item == "E" || item == "A") {
+            myHero.addPillarCollected();
+            newRoom.setMyEmptyRoom(true);
+        } else if (item == "H") {
+            if (myHero.getMyHealthPotions() > 4) {
+                newRoom.setMyEmptyRoom(false);
+            } else {
+                newRoom.setMyEmptyRoom(true);
+                myHero.addHealthPotion();
+            }
+        }
+
+
+            // Prompt user to pick or leave the item.
+            // Do logic for if the picked up the item, say health potion, set the myEmptyCurrentRoom to true.
+            // This will let the program know that that room should now be empty after the user moves to another room.
+            // If they don't pick up the item, set it to false to keep that item in that room.
+        updateMapDisplay();
     }
 
     private void upArrowClicked() {
@@ -362,10 +404,9 @@ public class GameplayGUI extends JPanel {
         System.out.println(myMaze.toString());
         System.out.println(myHero.getMyY() + " " + myHero.getMyX());
 
-        int move = myMaze.move(Direction.NORTH, myHero);
-        if (move == 1) {
-            checkItemInsideRoom();
-            updateMapDisplay();
+        MoveHandler move2 = myMaze.move(Direction.NORTH, myHero);
+        if (move2.getSuccess()) {
+            doSomethingWithItem(move2);
             mySecondMessage.setBounds(445, 385, 500, 30);
             mySecondMessage.setText("You moved up");
         } else {
@@ -378,48 +419,46 @@ public class GameplayGUI extends JPanel {
         System.out.println(myMaze.toString());
         System.out.println(myHero.getMyY() + " " + myHero.getMyX());
 
-        int move = myMaze.move(Direction.SOUTH, myHero);
-        if (move == 1) {
-            checkItemInsideRoom();
-            updateMapDisplay();
+        MoveHandler move2 = myMaze.move(Direction.SOUTH, myHero);
+        if (move2.getSuccess()) {
+            doSomethingWithItem(move2);
             mySecondMessage.setBounds(445, 385, 500, 30);
-            mySecondMessage.setText("You moved down");
+            mySecondMessage.setText("You moved up");
         } else {
             mySecondMessage.setBounds(440, 385, 500, 30);
-            mySecondMessage.setText("You can't move down");
+            mySecondMessage.setText("You can't move up");
         }
     }
 
     private void movingRight() {
         System.out.println(myMaze.toString());
         System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-
-        int move = myMaze.move(Direction.EAST, myHero);
-        if (move == 1) {
-            checkItemInsideRoom();
-            updateMapDisplay();
+        MoveHandler move2 = myMaze.move(Direction.EAST, myHero);
+        if (move2.getSuccess()) {
+            doSomethingWithItem(move2);
             mySecondMessage.setBounds(445, 385, 500, 30);
-            mySecondMessage.setText("You moved right");
+            mySecondMessage.setText("You moved up");
         } else {
             mySecondMessage.setBounds(440, 385, 500, 30);
-            mySecondMessage.setText("You can't move right");
+            mySecondMessage.setText("You can't move up");
         }
+
     }
 
     private void movingLeft() {
         System.out.println(myMaze.toString());
         System.out.println(myHero.getMyY() + " " + myHero.getMyX());
 
-        int move = myMaze.move(Direction.WEST, myHero);
-        if (move == 1) {
-            checkItemInsideRoom();
-            updateMapDisplay();
+        MoveHandler move2 = myMaze.move(Direction.WEST, myHero);
+        if (move2.getSuccess()) {
+            doSomethingWithItem(move2);
             mySecondMessage.setBounds(445, 385, 500, 30);
-            mySecondMessage.setText("You moved left");
+            mySecondMessage.setText("You moved up");
         } else {
             mySecondMessage.setBounds(440, 385, 500, 30);
-            mySecondMessage.setText("You can't move left");
+            mySecondMessage.setText("You can't move up");
         }
+
     }
 
     private void checkItemInsideRoom() {
@@ -443,6 +482,7 @@ public class GameplayGUI extends JPanel {
                 myHero.addHealthPotion();
                 break;
             case "M":
+                //doSomethingWithItem();
                 //FightScene goes here
                 break;
         }

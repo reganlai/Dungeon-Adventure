@@ -18,7 +18,9 @@ public class DungeonGUI {
     private final CardLayout myCardLayout;
     /** The parent panel for all the screens. Used by the CardLayout.*/
     private final JPanel myCardPanel;
-    /** The panel for the home screen.
+
+    /**
+     * The panel for the home screen.
      * This is the screen that is first shows when the game launches.
      */
     private final JPanel myHomePanel;
