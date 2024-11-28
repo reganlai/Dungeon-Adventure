@@ -1,7 +1,14 @@
 package View;
 
-import Model.*;
-
+import Model.Direction;
+import Model.Hero;
+import Model.MazeGenerator;
+import Model.MoveHandler;
+import Model.Priestess;
+import Model.Room;
+import Model.Thief;
+import Model.Warrior;
+import Model.WallType;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
