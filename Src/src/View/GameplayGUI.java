@@ -62,6 +62,7 @@ public class GameplayGUI extends JPanel {
     private boolean myEmptyCurrentRoom;
     private JLabel myMessage;
     private JLabel mySecondMessage;
+    private JLabel myItem;
     private JLabel myUpArrow;
     private JLabel myDownArrow;
     private JLabel myRightArrow;
@@ -100,6 +101,7 @@ public class GameplayGUI extends JPanel {
         myDownArrow = new JLabel();
         myRightArrow = new JLabel();
         myLeftArrow = new JLabel();
+        myItem = new JLabel();
         myEmptyCurrentRoom = true;
         myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
         myCardPanel.add(myFightScenePanel, "Fight");
@@ -276,6 +278,9 @@ public class GameplayGUI extends JPanel {
     }
 
     private void setArrows() {
+        myItem.setBounds(540, 265, 100, 100);
+        add(myItem);
+
         myUpArrow.setIcon(new ImageIcon("images/up.png"));
         myUpArrow.setBounds(820, 230, 60, 60);
         myRightArrow.setIcon(new ImageIcon("images/right.png"));
@@ -343,9 +348,9 @@ public class GameplayGUI extends JPanel {
      * Does the necessary action based on what the player encountered.
      * @param theMove
      */
-    private synchronized void doSomethingWithItem(final MoveHandler theMove) {
+    private synchronized String doSomethingWithItem(final MoveHandler theMove) {
         final Room newRoom = theMove.getMyNewRoom();
-        String item = newRoom.getRoomOccupant();
+        final String item = newRoom.getRoomOccupant();
 
         if (item == "M") {
             myCardLayout.show(myCardPanel, "Fight");
@@ -363,11 +368,13 @@ public class GameplayGUI extends JPanel {
         }
 
 
-            // Prompt user to pick or leave the item.
-            // Do logic for if the picked up the item, say health potion, set the myEmptyCurrentRoom to true.
-            // This will let the program know that that room should now be empty after the user moves to another room.
-            // If they don't pick up the item, set it to false to keep that item in that room.
+
+        // Prompt user to pick or leave the item.
+        // Do logic for if the picked up the item, say health potion, set the myEmptyCurrentRoom to true.
+        // This will let the program know that that room should now be empty after the user moves to another room.
+        // If they don't pick up the item, set it to false to keep that item in that room.
         updateMapDisplay();
+        return item;
     }
 
     private void upArrowClicked() {
@@ -413,12 +420,10 @@ public class GameplayGUI extends JPanel {
 
         MoveHandler move2 = myMaze.move(Direction.NORTH, myHero);
         if (move2.getSuccess()) {
-            doSomethingWithItem(move2);
-            mySecondMessage.setBounds(445, 385, 500, 30);
-            mySecondMessage.setText("You moved up");
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "up");
         } else {
-            mySecondMessage.setBounds(440, 385, 500, 30);
-            mySecondMessage.setText("You can't move up");
+            cantMove("up");
         }
     }
 
@@ -428,12 +433,10 @@ public class GameplayGUI extends JPanel {
 
         MoveHandler move2 = myMaze.move(Direction.SOUTH, myHero);
         if (move2.getSuccess()) {
-            doSomethingWithItem(move2);
-            mySecondMessage.setBounds(445, 385, 500, 30);
-            mySecondMessage.setText("You moved up");
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "down");
         } else {
-            mySecondMessage.setBounds(440, 385, 500, 30);
-            mySecondMessage.setText("You can't move up");
+            cantMove("down");
         }
     }
 
@@ -442,12 +445,10 @@ public class GameplayGUI extends JPanel {
         System.out.println(myHero.getMyY() + " " + myHero.getMyX());
         MoveHandler move2 = myMaze.move(Direction.EAST, myHero);
         if (move2.getSuccess()) {
-            doSomethingWithItem(move2);
-            mySecondMessage.setBounds(445, 385, 500, 30);
-            mySecondMessage.setText("You moved up");
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "right");
         } else {
-            mySecondMessage.setBounds(440, 385, 500, 30);
-            mySecondMessage.setText("You can't move up");
+            cantMove("right");
         }
 
     }
@@ -458,41 +459,55 @@ public class GameplayGUI extends JPanel {
 
         MoveHandler move2 = myMaze.move(Direction.WEST, myHero);
         if (move2.getSuccess()) {
-            doSomethingWithItem(move2);
-            mySecondMessage.setBounds(445, 385, 500, 30);
-            mySecondMessage.setText("You moved up");
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "left");
         } else {
-            mySecondMessage.setBounds(440, 385, 500, 30);
-            mySecondMessage.setText("You can't move up");
+            cantMove("left");
         }
 
     }
 
-    private void checkItemInsideRoom() {
-        Room[][] currentRoom = myMaze.getMaze();
-        String item = currentRoom[myHero.getMyY()][myHero.getMyX()].getRoomOccupant();
-        System.out.println(item);
-        switch (item) {
-            case "A":
-                myHero.addPillarCollected();
-                break;
-            case "E":
-                myHero.addPillarCollected();
-                break;
-            case "I":
-                myHero.addPillarCollected();
-                break;
-            case "P":
-                myHero.addPillarCollected();
+    private void updateVisuals(final String theItem, final String theDirection) {
+        switch (theItem) {
+            case "A", "E", "I", "P":
+                ImageIcon pillar = new ImageIcon("images/pillar.png");
+                Image scaledPillar = pillar.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                myItem.setIcon(new ImageIcon(scaledPillar));
+                myItem.setVisible(true);
+                mySecondMessage.setText("You moved " + theDirection + " and found a pillar!");
+                mySecondMessage.setBounds(400, 385, 500, 30);
                 break;
             case "H":
-                myHero.addHealthPotion();
+                ImageIcon potion = new ImageIcon("images/healthpotion.png");
+                Image scaledPotion = potion.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                myItem.setIcon(new ImageIcon(scaledPotion));
+                myItem.setVisible(true);
+                mySecondMessage.setText("You moved " + theDirection + " and found a health potion!");
+                mySecondMessage.setBounds(380, 385, 500, 30);
                 break;
-            case "M":
-                //doSomethingWithItem();
-                //FightScene goes here
+            case "O":
+                int pillarsCollected = myHero.getMyPillarsCollected();
+                if (pillarsCollected < 4) {
+                    mySecondMessage.setText("You found the exit but you haven't collected all the pillars yet!");
+                    mySecondMessage.setBounds(320, 385, 500, 30);
+                } else {
+                    //ExitGUI goes here
+                }
+
+                break;
+            case "":
+                myItem.setVisible(false);
+                mySecondMessage.setText("You moved " + theDirection);
+                mySecondMessage.setBounds(445, 385, 500, 30);
                 break;
         }
+
     }
+
+    private void cantMove(final String theDirection) {
+        mySecondMessage.setBounds(440, 385, 500, 30);
+        mySecondMessage.setText("You can't move " + theDirection);
+    }
+
 
 }
