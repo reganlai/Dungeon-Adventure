@@ -62,12 +62,14 @@ public class FightScene extends JPanel {
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         //repaint();
+
         setAttackButtons();
         setHeroImage("standing");
+        initializeHeroDmg();
         setBackground();
-        //setHeroDmg();
-        setVisible(true);
 
+
+        setVisible(true);
 
         new javax.swing.Timer(30000, e -> doneFight()).start();
     }
@@ -146,10 +148,18 @@ public class FightScene extends JPanel {
 
     // Displays the range of damage that the hero can deal(static, won't be changed)
     private void setHeroDmg() {
-        myHeroDmg.setBounds(300, 160, 190, 30);
         int minDmg = myHero.getMyMinAttack();
         int maxDmg = myHero.getMyMaxAttack();
         myHeroDmg.setText("Damage: " + minDmg + "-" + maxDmg);
+        myHeroDmg.setForeground(Color.WHITE);
+    }
+
+    private void initializeHeroDmg() {
+        myHeroDmg.setText("placeholder");
+        myHeroDmg.setBounds(300, 150, 190, 30);
+
+        myHeroDmg.setForeground(Color.WHITE);
+        myHeroDmg.setVisible(true);
         add(myHeroDmg);
     }
 
@@ -175,8 +185,9 @@ public class FightScene extends JPanel {
 
     public void setHero(final Hero theHero) {
         myHero = theHero;
-        setHeroDmg();
+        //setHeroDmg();
     }
+
 
 
 }

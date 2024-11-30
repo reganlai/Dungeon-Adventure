@@ -244,6 +244,8 @@ public class GameplayGUI extends JPanel {
         return BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK);
     }
 
+
+
     /**
      * Sets the icon of myGameplay JLabel initially to the right image.
      */
