@@ -37,11 +37,16 @@ public class SettingsGUI extends JPanel {
     private JLabel myBackgroundImage;
     private JFrame myMainFrame;
 
+    private final GridBagConstraints myGBC = new GridBagConstraints();
+
 
     public SettingsGUI(final JFrame theMainFrame, final JPanel theCardPanel, final CardLayout theCardLayout) {
         super();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        //setLayout(new GridBagLayout());
         setLayout(null);
+
+
         myMainFrame = theMainFrame;
         myCardPanel = theCardPanel;
         myCardLayout = theCardLayout;
@@ -73,7 +78,7 @@ public class SettingsGUI extends JPanel {
         setHeroBox();
         setDifficultyLabel();
         setDifficultyBox();
-        setBackgroundImage();
+        //setBackgroundImage();
 
     }
 
@@ -153,8 +158,12 @@ public class SettingsGUI extends JPanel {
     }
 
     public void setReadyButton() {
+        myGBC.gridx = 150;
+        myGBC.gridy = getHeight();
+        myGBC.anchor = GridBagConstraints.SOUTH;
+
         myReadyButton.setBounds(X_COORDINATE, 360, 300, 50);
-        //myReadyButton.setText("I'm ready");
+        myReadyButton.setText("I'm ready");
         myReadyButton.setFont(new Font("Arial", Font.BOLD, 20));
         myReadyButton.addActionListener(new ActionListener() {
             @Override
@@ -176,10 +185,19 @@ public class SettingsGUI extends JPanel {
     private void showAnotherPanel(final String theName, final int theHero,
                                   final int theDifficulty) {
 
-        GameplayGUI gamePanel = new GameplayGUI(theName, theHero, theDifficulty, myMainFrame, myCardPanel, myCardLayout);
+        GameplayGUI gamePanel = new GameplayGUI(theName, theHero, theDifficulty,
+                                                    myMainFrame, myCardPanel, myCardLayout);
         myCardPanel.add(gamePanel, "Game");
         myCardLayout.show(myCardPanel, "Game");
 
+    }
+    public void paintComponent(final Graphics theGraphics) {
+        super.paintComponent(theGraphics);
+        final Graphics2D graphics = (Graphics2D) theGraphics;
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        Image backgroundImage = new ImageIcon(BACKGROUND_IMAGE_PATH).getImage();
+        theGraphics.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
     private void setBackgroundImage() {

@@ -1,5 +1,8 @@
 package Model;
 
+import javax.swing.*;
+import java.awt.*;
+
 public abstract class Hero extends DungeonCharacter{
 
     private int myHealthPotions;
@@ -29,7 +32,7 @@ public abstract class Hero extends DungeonCharacter{
         myPillarsCollected = 0;
     }
 
-
+    public abstract ImageIcon getImageIcon();
     public abstract void specialAbility(final DungeonCharacter theOp);
 
     public double getMyChanceToBlock(){

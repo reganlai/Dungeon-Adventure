@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class DungeonGUI {
 
@@ -18,18 +19,16 @@ public class DungeonGUI {
     private final CardLayout myCardLayout;
     /** The parent panel for all the screens. Used by the CardLayout.*/
     private final JPanel myCardPanel;
-
-    /**
+    /** The panel for the home screen.
+     /**
      * The panel for the home screen.
      * This is the screen that is first shows when the game launches.
      */
     private final JPanel myHomePanel;
-    private JLabel myBackgroundLabel;
 
     public DungeonGUI() {
         myMainFrame = new JFrame(WINDOW_TITLE);
-        myHomePanel = new JPanel();
-        myBackgroundLabel = new JLabel();
+        myHomePanel = new BackgroundPanel();
 
         myCardLayout = new CardLayout();
         myCardPanel = new JPanel(myCardLayout);
@@ -39,7 +38,6 @@ public class DungeonGUI {
     }
 
     private void initGui() {
-        setHomePage();
         myCardPanel.add(myHomePanel, "Home");
 
         SettingsGUI settingPanel = new SettingsGUI(myMainFrame, myCardPanel, myCardLayout);
@@ -48,33 +46,41 @@ public class DungeonGUI {
         myMainFrame.add(myCardPanel);
         myMainFrame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         myMainFrame.setIconImage(new ImageIcon(ICON_IMAGE_PATH).getImage());
+
         myMainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myMainFrame.setLocationRelativeTo(null);
-        myMainFrame.setResizable(false);
+        myMainFrame.setResizable(true);
         myMainFrame.setVisible(true);
-
-        myMainFrame.revalidate();
-        myMainFrame.repaint();
-    }
-
-    private void setHomePage() {
-        myHomePanel.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        ImageIcon originalIcon = new ImageIcon(BACKGROUND_IMAGE_PATH);
-        Image originalImage = originalIcon.getImage();
-        Image scaledImage = originalImage.getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
-        myBackgroundLabel.setIcon(new ImageIcon(scaledImage));
-        myBackgroundLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                showSettingsPanel();
-            }
-        });
-        myHomePanel.add(myBackgroundLabel);
-
-        myMainFrame.add(myHomePanel);
     }
 
     private void showSettingsPanel() {
         myCardLayout.show(myCardPanel, "Settings");
+    }
+
+    /*
+     * This class that creates the background of the game.
+     */
+    private class BackgroundPanel extends JPanel {
+        private final Image myBackgroundImage;
+
+        private BackgroundPanel() {
+            myBackgroundImage = new ImageIcon(BACKGROUND_IMAGE_PATH).getImage();
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    showSettingsPanel();
+                }
+            });
+        }
+
+        public void paintComponent(final Graphics theGraphics) {
+            super.paintComponent(theGraphics);
+            final Graphics2D graphics = (Graphics2D) theGraphics;
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            if (myBackgroundImage != null) {
+                theGraphics.drawImage(myBackgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        }
     }
 }

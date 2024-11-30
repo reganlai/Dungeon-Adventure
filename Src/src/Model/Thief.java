@@ -1,6 +1,10 @@
 package Model;
 
+import javax.swing.*;
+
 public class Thief extends Hero {
+
+    private final static ImageIcon THIEF_ICON = new ImageIcon("images/thief_in_dungeon.png");
     private final double mySpecialChance = .4;
     private final double myCaughtChance = .2;
 
@@ -8,6 +12,9 @@ public class Thief extends Hero {
         super(theName, 75, 20, 40, 6, .8,
                 .4, 75,0 ,0);
 
+    }
+    public ImageIcon getImageIcon() {
+        return THIEF_ICON;
     }
 
     @Override

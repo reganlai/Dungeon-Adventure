@@ -33,7 +33,7 @@ public class GameplayGUI extends JPanel {
     private JMenuItem mySave;
     private JMenuItem myLoad;
 
-    private final FightScene myFightScenePanel;
+    private FightScene myFightScenePanel;
 
     /** The CardLayout that deals with the screen changing.*/
     private final CardLayout myCardLayout;
@@ -59,7 +59,6 @@ public class GameplayGUI extends JPanel {
     private JPanel myMazeMap;
 
     private JTextArea myInventoryText;
-    private boolean myEmptyCurrentRoom;
     private JLabel myMessage;
     private JLabel mySecondMessage;
     private JLabel myItem;
@@ -102,9 +101,6 @@ public class GameplayGUI extends JPanel {
         myRightArrow = new JLabel();
         myLeftArrow = new JLabel();
         myItem = new JLabel();
-        myEmptyCurrentRoom = true;
-        myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel, myClass);
-        myCardPanel.add(myFightScenePanel, "Fight");
         setArrows();
         setMyMessage();
         setGameplay();
@@ -255,16 +251,18 @@ public class GameplayGUI extends JPanel {
         if (myClass == 0) {
             myGameplay.setIcon(new ImageIcon("images/thief_in_dungeon.png"));
             myHero = new Thief(myPlayerName);
-            myFightScenePanel.setHero(myHero);
+            //myFightScenePanel.setHero(myHero);
         } else if (myClass == 1) {
             myGameplay.setIcon(new ImageIcon("images/warrior_in_dungeon.png"));
             myHero = new Warrior(myPlayerName);
-            myFightScenePanel.setHero(myHero);
+            //myFightScenePanel.setHero(myHero);
         } else {
             myGameplay.setIcon(new ImageIcon("images/priestess_in_dungeon.png"));
             myHero = new Priestess(myPlayerName);
-            myFightScenePanel.setHero(myHero);
+            //myFightScenePanel.setHero(myHero);
         }
+        myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
+        myCardPanel.add(myFightScenePanel, "Fight");
         myGameplay.setOpaque(true);
         add(myGameplay);
     }

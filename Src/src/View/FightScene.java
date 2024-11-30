@@ -38,16 +38,15 @@ public class FightScene extends JPanel {
     private JLabel myHeroDmg;
     private JLabel myMonsterDmg;
 
-    private int myClass;
+    //private int myClass;
 
     private Hero myHero;
 
-    protected FightScene(final JFrame theMainFrame, final DungeonCharacter theCharacter,
-                         final CardLayout theCardLayout, final JPanel theCardPanel,
-                         final int theHeroClass) {
+    protected FightScene(final JFrame theMainFrame, final Hero theHero,
+                         final CardLayout theCardLayout, final JPanel theCardPanel) {
         setLayout(null);
         myMainFrame = theMainFrame;
-        myCharacter = theCharacter;
+        myHero = theHero;
         myCardLayout = theCardLayout;
         myCardPanel = theCardPanel;
 
@@ -58,14 +57,15 @@ public class FightScene extends JPanel {
         myAttackButton = new JButton("Attack");
         myBlockButton = new JButton("Block");
         mySuperAttack = new JButton("Super Attack");
-        myClass = theHeroClass;
+        //myClass = theHeroClass;
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         //repaint();
 
         setAttackButtons();
-        setHeroImage("standing");
         initializeHeroDmg();
+        setHeroImage("standing");
+
         setBackground();
 
 
@@ -115,27 +115,34 @@ public class FightScene extends JPanel {
     }
 
     private void setHeroImage(final String theStance) {
+
         myHeroImage.setBounds(280, 180, 190, 200);
         myHeroImage.setBackground(Color.BLACK);
         add(myHeroImage);
 
         switch(theStance) {
             case "standing":
-                if (myClass == 0) {
-                    ImageIcon thief = new ImageIcon("images/standingthief.png");
-                    Image scaledThief = thief.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-                    myHeroImage.setIcon(new ImageIcon(scaledThief));
-                } else if (myClass == 1) {
-                    ImageIcon warrior = new ImageIcon("images/standingwarrior.png");
-                    Image scaledWarrior = warrior.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-                    myHeroImage.setIcon(new ImageIcon(scaledWarrior));
-                } else {
-                    ImageIcon priestess = new ImageIcon("images/standingpriestess.png");
-                    Image scaledPriestess = priestess.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-                    myHeroImage.setIcon(new ImageIcon(scaledPriestess));
-                }
+                Image hero =  myHero.getImageIcon().getImage().
+                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+                myHeroImage.setIcon(new ImageIcon(hero));
+                setHeroDmg();
                 break;
+//                if (myClass == 0) {
+//                    ImageIcon thief = new ImageIcon("images/standingthief.png");
+//                    Image scaledThief = thief.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+//                    myHeroImage.setIcon(new ImageIcon(scaledThief));
+//                } else if (myClass == 1) {
+//                    ImageIcon warrior = new ImageIcon("images/standingwarrior.png");
+//                    Image scaledWarrior = warrior.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+//                    myHeroImage.setIcon(new ImageIcon(scaledWarrior));
+//                } else {
+//                    ImageIcon priestess = new ImageIcon("images/standingpriestess.png");
+//                    Image scaledPriestess = priestess.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+//                    myHeroImage.setIcon(new ImageIcon(scaledPriestess));
+//                }
+//                break;
             case "attack":
+                //setHeroDmg();
                 break;
             case "block":
                 break;
@@ -150,16 +157,14 @@ public class FightScene extends JPanel {
     private void setHeroDmg() {
         int minDmg = myHero.getMyMinAttack();
         int maxDmg = myHero.getMyMaxAttack();
+        myHeroDmg.setVisible(true);
         myHeroDmg.setText("Damage: " + minDmg + "-" + maxDmg);
-        myHeroDmg.setForeground(Color.WHITE);
     }
 
     private void initializeHeroDmg() {
-        myHeroDmg.setText("placeholder");
+        //myHeroDmg.setText("placeholder");
         myHeroDmg.setBounds(300, 150, 190, 30);
-
         myHeroDmg.setForeground(Color.WHITE);
-        myHeroDmg.setVisible(true);
         add(myHeroDmg);
     }
 
@@ -178,6 +183,10 @@ public class FightScene extends JPanel {
 
     private void setAttackButtons() {
         myAttackButton.setBounds(300, 380, 150, 40);
+        myAttackButton.addActionListener(theEvent -> {
+            setHeroImage("attack");
+            //other logic
+        });
         mySuperAttack.setBounds(550, 380, 150, 40);
         add(myAttackButton);
         add(mySuperAttack);
