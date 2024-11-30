@@ -1,7 +1,9 @@
 package Model;
 
-public class Skeleton extends Monster {
+import javax.swing.*;
 
+public class Skeleton extends Monster {
+    private final static ImageIcon SKELETON_ICON = new ImageIcon("images/standingskeleton.png");
     public Skeleton() {
         super("Skeleton", 100, 30, 50, 3, .8, 100, .3, 30, 50);
     }
@@ -12,5 +14,9 @@ public class Skeleton extends Monster {
                 "\nClass: Skeleton" +
                 "\nSpecial Ability: Chance to heal " +
                 "(" + (getMyHealChance() * 100) + "%, Heal Range: " + getMyMinHeal() + " - " + getMyMaxHeal() + " HP)";
+    }
+
+    public ImageIcon getImageIcon() {
+        return SKELETON_ICON;
     }
 }

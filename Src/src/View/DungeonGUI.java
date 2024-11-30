@@ -49,7 +49,7 @@ public class DungeonGUI {
 
         myMainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myMainFrame.setLocationRelativeTo(null);
-        myMainFrame.setResizable(true);
+        myMainFrame.setResizable(false);
         myMainFrame.setVisible(true);
     }
 
@@ -79,7 +79,7 @@ public class DungeonGUI {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             if (myBackgroundImage != null) {
-                theGraphics.drawImage(myBackgroundImage, 0, 0, getWidth(), getHeight(), this);
+                theGraphics.drawImage(myBackgroundImage, 0, 0, FRAME_WIDTH, FRAME_HEIGHT, this);
             }
         }
     }

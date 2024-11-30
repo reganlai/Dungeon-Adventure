@@ -1,7 +1,10 @@
 package Model;
 
+import javax.swing.*;
+
 public class Ogre extends Monster {
 
+    private final static ImageIcon OGRE_ICON = new ImageIcon("images/standingogre.png");
     public Ogre() {
         super("Ogre", 200, 30, 30, 2, .6, 200, .1, 30, 60);
     }
@@ -12,5 +15,9 @@ public class Ogre extends Monster {
                 "\nClass: Ogre" +
                 "\nSpecial Ability: Chance to heal " +
                 "(" + (getMyHealChance() * 100) + "%, Heal Range: " + getMyMinHeal() + " - " + getMyMaxHeal() + " HP)";
+    }
+
+    public ImageIcon getImageIcon() {
+        return OGRE_ICON;
     }
 }

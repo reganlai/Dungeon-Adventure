@@ -1,5 +1,6 @@
 package Model;
 
+import javax.swing.*;
 import java.util.Random;
 
 public abstract class Monster extends DungeonCharacter {
@@ -26,6 +27,7 @@ public abstract class Monster extends DungeonCharacter {
         myMaxHeal = theMaxHeal;
     }
 
+    public abstract ImageIcon getImageIcon();
     public double getMyHealChance() {
         return myHealChance;
     }

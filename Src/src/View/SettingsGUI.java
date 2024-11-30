@@ -197,7 +197,7 @@ public class SettingsGUI extends JPanel {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         Image backgroundImage = new ImageIcon(BACKGROUND_IMAGE_PATH).getImage();
-        theGraphics.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        theGraphics.drawImage(backgroundImage, 0, 0, FRAME_WIDTH, FRAME_HEIGHT, this);
     }
 
     private void setBackgroundImage() {
