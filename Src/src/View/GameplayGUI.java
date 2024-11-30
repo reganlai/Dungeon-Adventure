@@ -103,7 +103,7 @@ public class GameplayGUI extends JPanel {
         myLeftArrow = new JLabel();
         myItem = new JLabel();
         myEmptyCurrentRoom = true;
-        myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
+        myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel, myClass);
         myCardPanel.add(myFightScenePanel, "Fight");
         setArrows();
         setMyMessage();
@@ -253,12 +253,15 @@ public class GameplayGUI extends JPanel {
         if (myClass == 0) {
             myGameplay.setIcon(new ImageIcon("images/thief_in_dungeon.png"));
             myHero = new Thief(myPlayerName);
+            myFightScenePanel.setHero(myHero);
         } else if (myClass == 1) {
             myGameplay.setIcon(new ImageIcon("images/warrior_in_dungeon.png"));
             myHero = new Warrior(myPlayerName);
+            myFightScenePanel.setHero(myHero);
         } else {
             myGameplay.setIcon(new ImageIcon("images/priestess_in_dungeon.png"));
             myHero = new Priestess(myPlayerName);
+            myFightScenePanel.setHero(myHero);
         }
         myGameplay.setOpaque(true);
         add(myGameplay);

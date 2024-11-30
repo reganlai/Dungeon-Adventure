@@ -1,6 +1,7 @@
 package View;
 
 import Model.DungeonCharacter;
+import Model.Hero;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,62 +17,166 @@ public class FightScene extends JPanel {
     private final CardLayout myCardLayout;
     /** The parent panel for all the screens. Used by the CardLayout.*/
     private final JPanel myCardPanel;
-    /** The attack button. */
-    private JButton myAttackButton;
+
     /** The block button. */
     private JButton myBlockButton;
-    /** The super attack button that deals more damage. */
-    private JButton mySuperAttack;
+
     /** The hero. */
     private DungeonCharacter myCharacter;
-    /** The HP display. */
-    private JLabel myHpDisplay;
+
     /** The label to display the fight comments. */
     private JLabel myActionCommentDisplay;
 
+    private JLabel myBackgroundImage;
+    private JLabel myHeroImage;
+    private JLabel myMonsterImage;
+    private JButton myAttackButton;
+    private JButton mySuperAttack;
+
+    private JLabel myHeroHp;
+    private JLabel myMonsterHp;
+    private JLabel myHeroDmg;
+    private JLabel myMonsterDmg;
+
+    private int myClass;
+
+    private Hero myHero;
 
     protected FightScene(final JFrame theMainFrame, final DungeonCharacter theCharacter,
-                         final CardLayout theCardLayout, final JPanel theCardPanel) {
+                         final CardLayout theCardLayout, final JPanel theCardPanel,
+                         final int theHeroClass) {
+        setLayout(null);
         myMainFrame = theMainFrame;
         myCharacter = theCharacter;
         myCardLayout = theCardLayout;
         myCardPanel = theCardPanel;
+
+        myBackgroundImage = new JLabel();
+        myHeroImage = new JLabel();
+        myHeroDmg = new JLabel();
+
         myAttackButton = new JButton("Attack");
         myBlockButton = new JButton("Block");
         mySuperAttack = new JButton("Super Attack");
+        myClass = theHeroClass;
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-        repaint();
+        //repaint();
+        setAttackButtons();
+        setHeroImage("standing");
+        setBackground();
+        //setHeroDmg();
         setVisible(true);
 
 
-        new javax.swing.Timer(3000, e -> doneFight()).start();
+        new javax.swing.Timer(30000, e -> doneFight()).start();
     }
+
     private void doneFight() {
         myCardLayout.show(myCardPanel, "Game");
     }
-    protected void paintComponent(Graphics g) {
-        /**Placeholder code. For simulation purposes*/
-        super.paintComponent(g); // Call the parent class's method to ensure proper painting
-        // Cast to Graphics2D for more options
-        Graphics2D g2d = (Graphics2D) g;
 
-        // Set background color (optional)
-        setBackground(Color.RED);
+//    protected void paintComponent(Graphics g) {
+//        /**Placeholder code. For simulation purposes*/
+//        super.paintComponent(g); // Call the parent class's method to ensure proper painting
+//        // Cast to Graphics2D for more options
+//        Graphics2D g2d = (Graphics2D) g;
+//
+//        // Set background color (optional)
+//        //setBackground(Color.RED);
+//        ImageIcon backgroundIcon = new ImageIcon("images/backgroundimage.png");
+//        Image backgroundImage = backgroundIcon.getImage();
+//        g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+//
+//
+//        // Draw a rectangle
+//        g2d.setColor(Color.BLUE);
+//        g2d.fillRect(50, 50, 100, 100);
+//
+//
+//        // Draw a string
+//        g2d.setColor(Color.BLACK);
+//        g2d.setFont(new Font("Arial", Font.BOLD, 16));
+//        g2d.drawString("Fighttttttt!", 50, 200);
+//
+//        // Draw a line
+//        g2d.setColor(Color.GREEN);
+//        g2d.drawLine(50, 250, 300, 250);
+//    }
 
-        // Draw a rectangle
-        g2d.setColor(Color.BLUE);
-        g2d.fillRect(50, 50, 100, 100);
-
-
-        // Draw a string
-        g2d.setColor(Color.BLACK);
-        g2d.setFont(new Font("Arial", Font.BOLD, 16));
-        g2d.drawString("Fighttttttt!", 50, 200);
-
-        // Draw a line
-        g2d.setColor(Color.GREEN);
-        g2d.drawLine(50, 250, 300, 250);
+    private void setBackground() {
+        ImageIcon background = new ImageIcon("images/backgroundimage.png");
+        Image scaledPillar = background.getImage().getScaledInstance(1000, 500, Image.SCALE_SMOOTH);
+        myBackgroundImage.setIcon(new ImageIcon(scaledPillar));
+        myBackgroundImage.setBounds(0,0,FRAME_WIDTH,FRAME_HEIGHT);
+        add(myBackgroundImage);
     }
+
+    private void setHeroImage(final String theStance) {
+        myHeroImage.setBounds(280, 180, 190, 200);
+        myHeroImage.setBackground(Color.BLACK);
+        add(myHeroImage);
+
+        switch(theStance) {
+            case "standing":
+                if (myClass == 0) {
+                    ImageIcon thief = new ImageIcon("images/standingthief.png");
+                    Image scaledThief = thief.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+                    myHeroImage.setIcon(new ImageIcon(scaledThief));
+                } else if (myClass == 1) {
+                    ImageIcon warrior = new ImageIcon("images/standingwarrior.png");
+                    Image scaledWarrior = warrior.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+                    myHeroImage.setIcon(new ImageIcon(scaledWarrior));
+                } else {
+                    ImageIcon priestess = new ImageIcon("images/standingpriestess.png");
+                    Image scaledPriestess = priestess.getImage().getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+                    myHeroImage.setIcon(new ImageIcon(scaledPriestess));
+                }
+                break;
+            case "attack":
+                break;
+            case "block":
+                break;
+        }
+    }
+
+    private void setHeroHp() {
+
+    }
+
+    // Displays the range of damage that the hero can deal(static, won't be changed)
+    private void setHeroDmg() {
+        myHeroDmg.setBounds(300, 160, 190, 30);
+        int minDmg = myHero.getMyMinAttack();
+        int maxDmg = myHero.getMyMaxAttack();
+        myHeroDmg.setText("Damage: " + minDmg + "-" + maxDmg);
+        add(myHeroDmg);
+    }
+
+    private void setMonsterImage() {
+
+    }
+
+    private void setMonsterHp() {
+
+    }
+
+    //Displays the range of damage that the monster can deal(static, won't be changed)
+    private void setMonsterDmg() {
+
+    }
+
+    private void setAttackButtons() {
+        myAttackButton.setBounds(300, 380, 150, 40);
+        mySuperAttack.setBounds(550, 380, 150, 40);
+        add(myAttackButton);
+        add(mySuperAttack);
+    }
+
+    public void setHero(final Hero theHero) {
+        myHero = theHero;
+        setHeroDmg();
+    }
+
 
 }
