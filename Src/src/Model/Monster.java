@@ -28,6 +28,8 @@ public abstract class Monster extends DungeonCharacter {
     }
 
     public abstract ImageIcon getImageIcon();
+    public abstract ImageIcon getAttackImage();
+    public abstract ImageIcon getBlockImage();
     public double getMyHealChance() {
         return myHealChance;
     }

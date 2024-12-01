@@ -4,8 +4,10 @@ import javax.swing.*;
 
 public class Skeleton extends Monster {
     private final static ImageIcon SKELETON_ICON = new ImageIcon("images/standingskeleton.png");
+    private final static ImageIcon SKELETON_ATTACK = new ImageIcon("images/skeletonattack.png");
+    private final static ImageIcon SKELETON_BLOCK = new ImageIcon("images/skeletonblock.png");
     public Skeleton() {
-        super("Skeleton", 100, 30, 50, 3, .8, 100, .3, 30, 50);
+        super("Skeleton", 80, 30, 50, 3, .8, 80, .3, 30, 50);
     }
 
     @Override
@@ -18,5 +20,11 @@ public class Skeleton extends Monster {
 
     public ImageIcon getImageIcon() {
         return SKELETON_ICON;
+    }
+    public ImageIcon getAttackImage() {
+        return SKELETON_ATTACK;
+    }
+    public ImageIcon getBlockImage() {
+        return SKELETON_BLOCK;
     }
 }

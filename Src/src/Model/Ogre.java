@@ -4,9 +4,11 @@ import javax.swing.*;
 
 public class Ogre extends Monster {
 
-    private final static ImageIcon OGRE_ICON = new ImageIcon("images/standingogre.png");
+    private final static ImageIcon STANDING_OGRE = new ImageIcon("images/standingogre.png");
+    private final static ImageIcon OGRE_ATTACK = new ImageIcon("images/ogreattack.png");
+    private final static ImageIcon OGRE_BLOCK = new ImageIcon("images/ogreblock.png");
     public Ogre() {
-        super("Ogre", 200, 30, 30, 2, .6, 200, .1, 30, 60);
+        super("Ogre", 120, 30, 30, 2, .6, 120, .1, 30, 60);
     }
 
     @Override
@@ -18,6 +20,12 @@ public class Ogre extends Monster {
     }
 
     public ImageIcon getImageIcon() {
-        return OGRE_ICON;
+        return STANDING_OGRE;
+    }
+    public ImageIcon getAttackImage() {
+        return OGRE_ATTACK;
+    }
+    public ImageIcon getBlockImage() {
+        return OGRE_BLOCK;
     }
 }

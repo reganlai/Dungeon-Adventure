@@ -33,6 +33,8 @@ public abstract class Hero extends DungeonCharacter{
     }
 
     public abstract ImageIcon getImageIcon();
+    public abstract ImageIcon getAttackImage();
+    public abstract ImageIcon getBlockImage();
     public abstract void specialAbility(final DungeonCharacter theOp);
 
     public double getMyChanceToBlock(){

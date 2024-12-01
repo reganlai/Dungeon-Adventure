@@ -5,7 +5,9 @@ import java.awt.*;
 
 public class Warrior extends Hero {
 
-    private final static ImageIcon WARRIOR_ICON = new ImageIcon("images/standingwarrior.png");
+    private final static ImageIcon STANDING_WARRIOR = new ImageIcon("images/standingwarrior.png");
+    private final static ImageIcon WARRIOR_ATTACK = new ImageIcon("images/warriorattack.png");
+    private final static ImageIcon WARRIOR_BLOCK = new ImageIcon("images/warriorblock.png");
     private final double mySpecialChance;
     private final  int minCrushingBlowDmg = 75;
     private final int maxCrushingBlowDmg = 175;
@@ -13,12 +15,14 @@ public class Warrior extends Hero {
 
 
     public Warrior(final String theName) {
-        super(theName, 125, 35, 60, 4, .8, .2, 125, 0,0);
+        super(theName, 250, 35, 60, 4, .8, .2, 250, 0,0);
         mySpecialChance = .4;
     }
     public ImageIcon getImageIcon() {
-        return WARRIOR_ICON;
+        return STANDING_WARRIOR;
     }
+    public ImageIcon getAttackImage() { return WARRIOR_ATTACK; }
+    public ImageIcon getBlockImage() { return WARRIOR_BLOCK; }
 
     public void specialAbility(final DungeonCharacter theOp) {
         System.out.println(getMyName() + " tries to use Crushing Blow!");

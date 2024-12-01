@@ -4,18 +4,22 @@ import javax.swing.*;
 
 public class Thief extends Hero {
 
-    private final static ImageIcon THIEF_ICON = new ImageIcon("images/thief_in_dungeon.png");
+    private final static ImageIcon STANDING_THIEF = new ImageIcon("images/standingthief.png");
+    private final static ImageIcon THIEF_ATTACK = new ImageIcon("images/thiefattack.png");
+    private final static ImageIcon THIEF_BLOCK = new ImageIcon("images/thiefblock.png");
     private final double mySpecialChance = .4;
     private final double myCaughtChance = .2;
 
     public Thief (final String theName) {
-        super(theName, 75, 20, 40, 6, .8,
-                .4, 75,0 ,0);
+        super(theName, 150, 20, 40, 6, .8,
+                .4, 150,0 ,0);
 
     }
     public ImageIcon getImageIcon() {
-        return THIEF_ICON;
+        return STANDING_THIEF;
     }
+    public ImageIcon getAttackImage() { return THIEF_ATTACK; }
+    public ImageIcon getBlockImage() { return THIEF_BLOCK; }
 
     @Override
     public void specialAbility(final DungeonCharacter theOp) {
