@@ -9,6 +9,7 @@ public class Priestess extends Hero {
     private final static ImageIcon PRIESTESS_ATTACK = new ImageIcon("images/priestessattack.png");
     private final static ImageIcon PRIESTESS_BLOCK = new ImageIcon("images/priestessblock.png");
     private final static ImageIcon PRIESTESS_WON = new ImageIcon("images/priestesswon.png");
+    private final static ImageIcon PRIESTESS_LOST = new ImageIcon("images/priestesslost.png");
     private final int myMinHeal = 20;
     private final int myMaxHeal = 50;
 
@@ -18,6 +19,9 @@ public class Priestess extends Hero {
     }
     public ImageIcon getHeroWonImage() {
         return PRIESTESS_WON;
+    }
+    public ImageIcon getHeroLostImage() {
+        return PRIESTESS_LOST;
     }
     public ImageIcon getImageIcon() {
         return STANDING_PRIESTESS;

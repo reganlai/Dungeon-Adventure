@@ -8,6 +8,7 @@ public class Thief extends Hero {
     private final static ImageIcon THIEF_ATTACK = new ImageIcon("images/thiefattack.png");
     private final static ImageIcon THIEF_BLOCK = new ImageIcon("images/thiefblock.png");
     private final static ImageIcon THIEF_WON = new ImageIcon("images/thiefwon.png");
+    private final static ImageIcon THIEF_LOST = new ImageIcon("images/thieflost.png");
 
     private final double mySpecialChance = .4;
     private final double myCaughtChance = .2;
@@ -20,6 +21,7 @@ public class Thief extends Hero {
     public ImageIcon getHeroWonImage() {
         return THIEF_WON;
     }
+    public ImageIcon getHeroLostImage() { return THIEF_LOST; }
     public ImageIcon getImageIcon() {
         return STANDING_THIEF;
     }
