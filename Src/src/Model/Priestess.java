@@ -1,18 +1,23 @@
 package Model;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Priestess extends Hero {
 
     private final static ImageIcon STANDING_PRIESTESS = new ImageIcon("images/standingpriestess.png");
     private final static ImageIcon PRIESTESS_ATTACK = new ImageIcon("images/priestessattack.png");
     private final static ImageIcon PRIESTESS_BLOCK = new ImageIcon("images/priestessblock.png");
+    private final static ImageIcon PRIESTESS_WON = new ImageIcon("images/priestesswon.png");
     private final int myMinHeal = 20;
     private final int myMaxHeal = 50;
 
     public Priestess(final String theName) {
         super(theName, 150, 25, 45, 5, .7, .3, 150, 0,0);
 
+    }
+    public ImageIcon getHeroWonImage() {
+        return PRIESTESS_WON;
     }
     public ImageIcon getImageIcon() {
         return STANDING_PRIESTESS;

@@ -261,7 +261,7 @@ public class GameplayGUI extends JPanel {
         }
         myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
         myCardPanel.add(myFightScenePanel, "Fight");
-        myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myClass);
+        myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myHero);
         myCardPanel.add(myExitPanel, "Exit");
         myGameplay.setOpaque(true);
         add(myGameplay);
@@ -356,6 +356,7 @@ public class GameplayGUI extends JPanel {
         final String item = newRoom.getRoomOccupant();
 
         if (item == "M") {
+            myFightScenePanel.fight();
             myCardLayout.show(myCardPanel, "Fight");
             theMove.getMyNewRoom().setMyEmptyRoom(true);
         } else if (item == "P" || item == "I" || item == "E" || item == "A") {

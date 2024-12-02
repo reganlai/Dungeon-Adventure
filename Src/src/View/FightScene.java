@@ -70,15 +70,20 @@ public class FightScene extends JPanel {
         mySuperAttack = new JButton("Super Attack");
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
+        //repaint();
+
         setAttackButtons();
         setHeroImage("standing");
+
+
+        setVisible(true);
+        //new javax.swing.Timer(30000, e -> doneFight()).start();
+    }
+    public void fight() {
         generateMonster();
         setHeroDmg();
         setHeroHp();
         setBackground();
-
-        setVisible(true);
-        new javax.swing.Timer(30, e -> doneFight()).start();
     }
 
     private void doneFight() {
@@ -134,6 +139,7 @@ public class FightScene extends JPanel {
                 myHeroImage.setIcon(new ImageIcon(hero));
                 break;
             case "attack":
+                doneFight();
                 break;
             case "block":
                 break;

@@ -8,6 +8,7 @@ public class Warrior extends Hero {
     private final static ImageIcon STANDING_WARRIOR = new ImageIcon("images/standingwarrior.png");
     private final static ImageIcon WARRIOR_ATTACK = new ImageIcon("images/warriorattack.png");
     private final static ImageIcon WARRIOR_BLOCK = new ImageIcon("images/warriorblock.png");
+    private final static ImageIcon WARRIOR_WON = new ImageIcon("images/priestesswon.png");
     private final double mySpecialChance;
     private final  int minCrushingBlowDmg = 75;
     private final int maxCrushingBlowDmg = 175;
@@ -17,6 +18,9 @@ public class Warrior extends Hero {
     public Warrior(final String theName) {
         super(theName, 250, 35, 60, 4, .8, .2, 250, 0,0);
         mySpecialChance = .4;
+    }
+    public ImageIcon getHeroWonImage() {
+        return WARRIOR_WON;
     }
     public ImageIcon getImageIcon() {
         return STANDING_WARRIOR;
