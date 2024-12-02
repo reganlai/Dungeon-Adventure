@@ -4,6 +4,8 @@ import Model.Hero;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ExitGUI extends JPanel {
     private static final int FRAME_WIDTH = 1000;
@@ -14,6 +16,7 @@ public class ExitGUI extends JPanel {
     private final Hero myHero;
 
     private Image myBackgroundImage;
+    private JLabel myBackground;
     private JLabel myYesLabel;
     private JLabel myNoLabel;
 
@@ -28,52 +31,48 @@ public class ExitGUI extends JPanel {
         myHero = theHero;
         myBackgroundImage = myHero.getHeroWonImage().getImage().
                 getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
-
-        //myBackgroundImage = new JLabel();
+        myBackground = new JLabel();
         myYesLabel = new JLabel();
         myNoLabel = new JLabel();
 
 
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        //setBackgroundImage();
+        setYesLabel();
+        setNoLabel();
+        setBackgroundImage();
         setVisible(true);
     }
-    public void paintComponent(final Graphics theGraphics) {
-        super.paintComponent(theGraphics);
-        final Graphics2D graphics = (Graphics2D) theGraphics;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (myBackgroundImage != null) {
-            theGraphics.drawImage(myBackgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
+    private void setBackgroundImage() {
+        myBackground.setBounds(0, -300, FRAME_WIDTH, FRAME_WIDTH);
+        myBackground.setIcon(new ImageIcon(myBackgroundImage));
+
+        myBackground.setVisible(true);
+        add(myBackground);
     }
 
-//    private void setBackgroundImage() {
-//        myBackgroundImage.setBounds(0, 0, FRAME_WIDTH, FRAME_WIDTH);
-//        if (myClass == 0) {
-//            ImageIcon thief = new ImageIcon("images/thiefwon.png");
-//            Image scaledThief = thief.getImage().getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
-//            myBackgroundImage.setIcon(new ImageIcon(scaledThief));
-//        } else if (myClass == 1) {
-//            ImageIcon warrior = new ImageIcon("images/warriorwon.png");
-//            Image scaledWarrior = warrior.getImage().getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
-//            myBackgroundImage.setIcon(new ImageIcon(scaledWarrior));
-//        } else {
-//            ImageIcon priestess = new ImageIcon("images/priestesswon.png");
-//            Image scaledPriestess = priestess.getImage().getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
-//            myBackgroundImage.setIcon(new ImageIcon(scaledPriestess));
-//        }
-//        myBackgroundImage.setVisible(true);
-//        add(myBackgroundImage);
-//    }
-
     private void setYesLabel() {
-
+        myYesLabel.setBounds(460, 380, 45, 30);
+        myYesLabel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                myCardLayout.show(myCardPanel, "Settings");
+            }
+        });
+        myYesLabel.setVisible(true);
+        add(myYesLabel);
     }
 
     private void setNoLabel() {
-
+        myNoLabel.setBounds(520, 380, 40, 30);
+        myNoLabel.setVisible(true);
+        myNoLabel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.exit(0);
+            }
+        });
+        add(myNoLabel);
     }
 
 }
