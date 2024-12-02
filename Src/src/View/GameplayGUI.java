@@ -34,6 +34,7 @@ public class GameplayGUI extends JPanel {
     private JMenuItem myLoad;
 
     private FightScene myFightScenePanel;
+    private ExitGUI myExitPanel;
 
     /** The CardLayout that deals with the screen changing.*/
     private final CardLayout myCardLayout;
@@ -251,18 +252,17 @@ public class GameplayGUI extends JPanel {
         if (myClass == 0) {
             myGameplay.setIcon(new ImageIcon("images/thief_in_dungeon.png"));
             myHero = new Thief(myPlayerName);
-            //myFightScenePanel.setHero(myHero);
         } else if (myClass == 1) {
             myGameplay.setIcon(new ImageIcon("images/warrior_in_dungeon.png"));
             myHero = new Warrior(myPlayerName);
-            //myFightScenePanel.setHero(myHero);
         } else {
             myGameplay.setIcon(new ImageIcon("images/priestess_in_dungeon.png"));
             myHero = new Priestess(myPlayerName);
-            //myFightScenePanel.setHero(myHero);
         }
         myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
         myCardPanel.add(myFightScenePanel, "Fight");
+        myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myClass);
+        myCardPanel.add(myExitPanel, "Exit");
         myGameplay.setOpaque(true);
         add(myGameplay);
     }
@@ -494,7 +494,9 @@ public class GameplayGUI extends JPanel {
                     mySecondMessage.setText("You found the exit but you haven't collected all the pillars yet!");
                     mySecondMessage.setBounds(320, 385, 500, 30);
                 } else {
+                    System.out.println("we have four pillars");
                     //ExitGUI goes here
+                    myCardLayout.show(myCardPanel, "Exit");
                 }
 
                 break;
