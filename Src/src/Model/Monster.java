@@ -3,7 +3,7 @@ package Model;
 import javax.swing.*;
 import java.util.Random;
 
-public abstract class Monster extends DungeonCharacter {
+public class Monster extends DungeonCharacter {
 
     private final double myHealChance;
     private final int myMinHeal;
@@ -22,6 +22,39 @@ public abstract class Monster extends DungeonCharacter {
             final int theAttackSpd, final double theHitChance, final int theMaxHp,
             final double theHealChance, final int theMinHeal, final int theMaxHeal) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
+
+        if (theName == null || theName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Monster name must not be null or empty.");
+        }
+        if (theHp < 0 || theHp > theMaxHp) {
+            throw new IllegalArgumentException("HP must be non-negative and less than or equal to max HP.");
+        }
+        if (theMinAttack < 0 || theMinAttack > theMaxAttack) {
+            throw new IllegalArgumentException("Minimum attack damage must be non-negative and less than or equal to maximum attack damage.");
+        }
+        if (theMaxAttack < 0) {
+            throw new IllegalArgumentException("Maximum attack damage must be non-negative.");
+        }
+        if (theAttackSpd <= 0) {
+            throw new IllegalArgumentException("Attack speed must be positive.");
+        }
+        if (theHitChance < 0.0 || theHitChance > 1.0) {
+            throw new IllegalArgumentException("Hit chance must be between 0.0 and 1.0.");
+        }
+        if (theMaxHp <= 0) {
+            throw new IllegalArgumentException("Max HP must be positive.");
+        }
+        if (theHealChance < 0.0 || theHealChance > 1.0) {
+            throw new IllegalArgumentException("Heal chance must be between 0.0 and 1.0.");
+        }
+        if (theMinHeal < 0 || theMinHeal > theMaxHeal) {
+            throw new IllegalArgumentException("Minimum heal must be non-negative and less than or equal to maximum heal.");
+        }
+        if (theMaxHeal < 0) {
+            throw new IllegalArgumentException("Maximum heal must be non-negative.");
+        }
+
+        // Assign parameters to instance variables
         myHealChance = theHealChance;
         myMinHeal = theMinHeal;
         myMaxHeal = theMaxHeal;

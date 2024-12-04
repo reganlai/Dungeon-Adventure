@@ -49,6 +49,29 @@ public abstract class DungeonCharacter {
                      final int theMaxAttack, final int theAttackSpd, final double theHitChance,
                      final int theMaxHp) {
         super();
+
+        if (theName == null || theName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+        }
+        if (theHp <= 0) {
+            throw new IllegalArgumentException("HP must be greater than zero.");
+        }
+        if (theMinAttack <= 0) {
+            throw new IllegalArgumentException("Minimum attack must be greater than zero.");
+        }
+        if (theMaxAttack <= 0 || theMaxAttack < theMinAttack) {
+            throw new IllegalArgumentException("Maximum attack must be greater than zero and not less than minimum attack.");
+        }
+        if (theAttackSpd <= 0) {
+            throw new IllegalArgumentException("Attack speed must be greater than zero.");
+        }
+        if (theHitChance <= 0 || theHitChance >= 1) {
+            throw new IllegalArgumentException("Hit chance must be between 0 and 1.");
+        }
+        if (theMaxHp <= 0 || theMaxHp < theHp) {
+            throw new IllegalArgumentException("Max HP must be greater than zero and not less than current HP.");
+        }
+
         myName = theName;
         myHp = theHp;
         myMinAttack = theMinAttack;
@@ -176,15 +199,6 @@ public abstract class DungeonCharacter {
 
         if (rand.nextDouble() <= this.myHitChance) {
             int dmg = rand.nextInt(this.myMaxAttack - this.myMinAttack + 1) + this.myMinAttack;
-
-            if (theOp instanceof Hero) {
-                Hero heroOp = (Hero) theOp;
-                if (rand.nextDouble() <= heroOp.getMyChanceToBlock()) {
-                    System.out.println(heroOp.getMyName() + " blocked the attack!");
-                    return;
-                }
-            }
-
             theOp.takeDamage(dmg);
             System.out.println(this.myName + " deals " + dmg + " damage to " + theOp.getMyName() + "!");
         } else {
