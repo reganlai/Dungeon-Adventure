@@ -35,7 +35,6 @@ public class GameplayGUI extends JPanel {
 
     private FightScene myFightScenePanel;
     private ExitGUI myExitPanel;
-    private YouLostGUI myLostPanel;
 
     /** The CardLayout that deals with the screen changing.*/
     private final CardLayout myCardLayout;
@@ -262,10 +261,8 @@ public class GameplayGUI extends JPanel {
         }
         myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
         myCardPanel.add(myFightScenePanel, "Fight");
-        myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myHero);
+        myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myHero, "placeholder");
         myCardPanel.add(myExitPanel, "Exit");
-        myLostPanel = new YouLostGUI(myMainFrame, myCardLayout, myCardPanel, myHero);
-        myCardPanel.add(myLostPanel, "Lost");
         myGameplay.setOpaque(true);
         add(myGameplay);
     }
@@ -498,6 +495,7 @@ public class GameplayGUI extends JPanel {
                     mySecondMessage.setText("You found the exit but you haven't collected all the pillars yet!");
                     mySecondMessage.setBounds(320, 385, 500, 30);
                 } else {
+                    myExitPanel.setGameResult("Won");
                     myCardLayout.show(myCardPanel, "Exit");
                 }
 

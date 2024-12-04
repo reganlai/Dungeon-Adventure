@@ -20,22 +20,27 @@ public class ExitGUI extends JPanel {
     private JLabel myYesLabel;
     private JLabel myNoLabel;
 
+    private String myGameResult;
+
     public ExitGUI(final JFrame theMainFrame,
                    final CardLayout theCardLayout,
                    final JPanel theCardPanel,
-                   final Hero theHero) {
+                   final Hero theHero,
+                   final String theGameResult) {
         setLayout(null);
         myMainFrame = theMainFrame;
         myCardLayout = theCardLayout;
         myCardPanel = theCardPanel;
         myHero = theHero;
-        myBackgroundImage = myHero.getHeroWonImage().getImage().
-                getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
+//        myBackgroundImage = myHero.getHeroWonImage().getImage().
+//                getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
         myBackground = new JLabel();
         myYesLabel = new JLabel();
         myNoLabel = new JLabel();
 
+        myGameResult = theGameResult;
 
+        setMyBackgroundImage();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setYesLabel();
         setNoLabel();
@@ -45,8 +50,6 @@ public class ExitGUI extends JPanel {
 
     private void setBackgroundImage() {
         myBackground.setBounds(0, -300, FRAME_WIDTH, FRAME_WIDTH);
-        myBackground.setIcon(new ImageIcon(myBackgroundImage));
-
         myBackground.setVisible(true);
         add(myBackground);
     }
@@ -73,6 +76,23 @@ public class ExitGUI extends JPanel {
             }
         });
         add(myNoLabel);
+    }
+
+    public void setGameResult(final String theResult) {
+        myGameResult = theResult;
+        setMyBackgroundImage();
+    }
+
+    private void setMyBackgroundImage() {
+        if (myGameResult.equals("Won")) {
+            myBackgroundImage = myHero.getHeroWonImage().getImage().
+                    getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
+            myBackground.setIcon(new ImageIcon(myBackgroundImage));
+        } else {
+            myBackgroundImage = myHero.getHeroLostImage().getImage().
+                    getScaledInstance(FRAME_WIDTH, FRAME_HEIGHT, Image.SCALE_SMOOTH);
+            myBackground.setIcon(new ImageIcon(myBackgroundImage));
+        }
     }
 
 }
