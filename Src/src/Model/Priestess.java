@@ -14,26 +14,40 @@ public class Priestess extends Hero {
     private final int myMaxHeal = 50;
 
     public Priestess(final String theName) {
-        super(theName, 150, 25, 45, 5, .7, .3, 150, 0,0);
+        super(theName, 75, 25, 45, 5, .7, .3, 75);
 
     }
+
+    @Override
+    public ImageIcon getImageIcon(final Action theAction) {
+        ImageIcon imageIcon;
+        switch (theAction) {
+            case ATTACK:
+                imageIcon = PRIESTESS_ATTACK;
+                break;
+            case BLOCK:
+                imageIcon = PRIESTESS_BLOCK;
+                break;
+            default:
+                imageIcon = STANDING_PRIESTESS;
+        }
+        return imageIcon;
+    }
+
     public ImageIcon getHeroWonImage() {
         return PRIESTESS_WON;
     }
     public ImageIcon getHeroLostImage() {
         return PRIESTESS_LOST;
     }
-    public ImageIcon getImageIcon() {
-        return STANDING_PRIESTESS;
-    }
-    public ImageIcon getAttackImage() { return PRIESTESS_ATTACK; }
-    public ImageIcon getBlockImage() { return PRIESTESS_BLOCK; }
 
     @Override
-    public void specialAbility(final DungeonCharacter theOp) {
+    public boolean specialAbility(final Monster theOp, final Action theMonsterAction) {
         int healAmount = (int) (Math.random() * (myMaxHeal - myMinHeal + 1)) + myMinHeal;
         System.out.println(getMyName() + "uses healing ability, restoring" + healAmount + " hp.");
         setMyHp(getMyHp() + healAmount);
+
+        return true;
     }
 
     @Override

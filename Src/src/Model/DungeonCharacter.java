@@ -1,5 +1,6 @@
 package Model;
 
+import javax.swing.*;
 import java.util.Random;
 
 /**
@@ -10,6 +11,10 @@ import java.util.Random;
  * @author Evan Tran
  */
 public abstract class DungeonCharacter {
+
+    private static final int ATTACK_DAMAGE = 25;
+    private static final int HIT_CHANCE = 70;
+
     /** The name of the character */
     private String myName;
 
@@ -17,26 +22,28 @@ public abstract class DungeonCharacter {
     private int myHp;
 
     /** The minimum attack damage the character can deal */
-    private final int myMinAttack;
+    private int myMinAttack;
 
     /** The maximum attack damage the character can deal */
-    private final int myMaxAttack;
+    private int myMaxAttack;
 
     /** The character's attack speed */
-    private final int myAttackSpd;
+    private int myAttackSpd;
 
     /** The probability (0-1) of successfully hitting a target */
-    private final double myHitChance;
+    private double myHitChance;
 
     /** The Max Hp this dungeon character can have */
-    private final int myMaxHp;
+    private int myMaxHp;
     /** The current X position of the character. */
     private int myX;
     /** The current Y position of the character. */
     private int myY;
 
+    private int myShield;
+
     /**
-     * Constructs a Model.DungeonCharacter with the specified attributes.
+     * Constructs a DungeonCharacter with the specified attributes.
      *
      * @param theName the name of the character
      * @param theHp the initial health points
@@ -45,41 +52,79 @@ public abstract class DungeonCharacter {
      * @param theAttackSpd the attack speed of the character
      * @param theHitChance the probability (0-1) that an attack hits
      */
-    DungeonCharacter(final String theName, final int theHp, final int theMinAttack,
-                     final int theMaxAttack, final int theAttackSpd, final double theHitChance,
-                     final int theMaxHp) {
-        super();
+    //@param theHitChance the probability (0-1) that an attack hits
+    protected DungeonCharacter(final String theName, final int theHp, final int theMinAttack,
+                               final int theMaxAttack, final int theAttackSpd, final double theHitChance,
+                               final int theMaxHp) {
+        setName(theName);
+        setHp(theHp);
+        setMinAttack(theMinAttack);
+        setMaxAttack(theMaxAttack, theMinAttack);
+        setAttackSpd(theAttackSpd);
+        setHitChance(theHitChance);
+        setMaxHp(theMaxHp, theHp);
 
-        if (theName == null || theName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be null or empty.");
-        }
-        if (theHp <= 0) {
-            throw new IllegalArgumentException("HP must be greater than zero.");
-        }
-        if (theMinAttack <= 0) {
-            throw new IllegalArgumentException("Minimum attack must be greater than zero.");
-        }
-        if (theMaxAttack <= 0 || theMaxAttack < theMinAttack) {
-            throw new IllegalArgumentException("Maximum attack must be greater than zero and not less than minimum attack.");
-        }
-        if (theAttackSpd <= 0) {
-            throw new IllegalArgumentException("Attack speed must be greater than zero.");
-        }
-        if (theHitChance <= 0 || theHitChance >= 1) {
-            throw new IllegalArgumentException("Hit chance must be between 0 and 1.");
-        }
+        myShield = 100;
+        //myHp = 100;
+    }
+    public abstract ImageIcon getImageIcon(final Action theAction);
+
+    private void setMaxHp(final int theMaxHp, final int theHp) {
         if (theMaxHp <= 0 || theMaxHp < theHp) {
             throw new IllegalArgumentException("Max HP must be greater than zero and not less than current HP.");
+        } else {
+            myMaxHp = theMaxHp;
         }
-
-        myName = theName;
-        myHp = theHp;
-        myMinAttack = theMinAttack;
-        myMaxAttack = theMaxAttack;
-        myAttackSpd = theAttackSpd;
-        myHitChance = theHitChance;
-        myMaxHp = theMaxHp;
     }
+
+    private void setHitChance(final double theHitChance) {
+        if (theHitChance <= 0 || theHitChance >= 1) {
+            throw new IllegalArgumentException("Hit chance must be between 0 and 1.");
+        } else {
+            myHitChance = theHitChance;
+        }
+    }
+
+    private void setAttackSpd(final int theAttackSpd) {
+        if (theAttackSpd <= 0) {
+            throw new IllegalArgumentException("Attack speed must be greater than zero.");
+        } else {
+            myAttackSpd = theAttackSpd;
+        }
+    }
+
+    private void setMaxAttack(final int theMaxAttack, final int theMinAttack) {
+        if (theMaxAttack <= 0 || theMaxAttack < theMinAttack) {
+            throw new IllegalArgumentException("Maximum attack must be greater than zero " +
+                    "and not less than minimum attack.");
+        } else {
+            myMaxAttack = theMaxAttack;
+        }
+    }
+
+    private void setMinAttack(final int theMinAttack) {
+        if (theMinAttack <= 0) {
+            throw new IllegalArgumentException("Minimum attack must be greater than zero.");
+        } else {
+            myMinAttack = theMinAttack;
+        }
+    }
+
+    private void setName(final String theName) {
+        if (theName == null || theName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+        } else {
+            myName = theName;
+        }
+    }
+    private void setHp(final int theHp) {
+        if (theHp <= 0) {
+            throw new IllegalArgumentException("HP must be greater than zero.");
+        } else {
+            myHp = theHp;
+        }
+    }
+
 
     /**
      * Return the current X position on the maze.
@@ -193,17 +238,71 @@ public abstract class DungeonCharacter {
      *
      * @param theOp the opponent being attacked
      */
-    public void attack(DungeonCharacter theOp) {
+    public void attack(Monster theOp, final Action theOpAction) {
         Random rand = new Random();
-        System.out.println(this.myName + " attacks " + theOp.getMyName() + "!");
+        System.out.println(myName + " attacks " + theOp.getMyName() + "!");
 
-        if (rand.nextDouble() <= this.myHitChance) {
-            int dmg = rand.nextInt(this.myMaxAttack - this.myMinAttack + 1) + this.myMinAttack;
-            theOp.takeDamage(dmg);
-            System.out.println(this.myName + " deals " + dmg + " damage to " + theOp.getMyName() + "!");
+        if (Math.random() < myHitChance) {
+            theOp.getmyAdaptiveCounterAttack().recordPlayerAction(Action.ATTACK);
+            int dmg;
+            if (theOpAction == Action.ATTACK) {
+                //Both take damage
+                dmg = rand.nextInt(theOp.getMyMaxAttack() - theOp.getMyMinAttack() + 1)
+                        + theOp.getMyMinAttack();
+                theOp.takeDamage(dmg);
+                System.out.println("Monster takes damage" + dmg);
+                if (Math.random() < theOp.getMyHitChance()) {
+                    dmg = rand.nextInt(myMinAttack - myMinAttack + 1)
+                            + myMinAttack;
+                    System.out.println(theOp.getMyName() + " deals " + dmg + " damage to " + myName + "!");
+
+                    takeDamage(dmg);
+                } else {
+                    System.out.println(myName + " missed the attack!");
+                }
+            } else if (theOpAction == Action.SPECIAL) {
+                //Player takes more damage
+                if (Math.random() < theOp.getMyHitChance()) {
+                    System.out.println(theOp.getMyName() + " deals " + myMaxAttack + " damage to " + myName + "!");
+                    takeDamage(myMaxAttack);
+                } else {
+                    System.out.println(myName + " missed the attack!");
+                }
+
+                dmg = rand.nextInt(theOp.getMyMaxAttack() - theOp.getMyMinAttack() + 1)
+                        + theOp.getMyMinAttack();
+                theOp.takeDamage(dmg);
+                System.out.println("Monster takes damage" + dmg);
+            } else { //If theOp blocks
+                theOp.shieldDamage(Action.ATTACK);
+                //shieldDamage(ATTACK_DAMAGE);
+            }
+
         } else {
-            System.out.println(this.myName + " missed the attack!");
+            System.out.println(myName + " missed the attack!");
         }
+    }
+    public boolean isAlive() {
+        return myHp > 0;
+    }
+
+
+    public void shieldDamage(final Action theOpAction) {
+        if (theOpAction == Action.ATTACK) {
+            //Both take damage
+            if (ATTACK_DAMAGE > myShield) {
+                takeDamage(Math.abs(myShield - ATTACK_DAMAGE));
+                myShield = 0;
+            } else {
+                myShield -= ATTACK_DAMAGE;
+            }
+
+        } else if (theOpAction == Action.SPECIAL) {
+            //Player takes more damage
+            takeDamage(myMaxAttack);
+        }
+        // else both blocked therefore no damage.
+
     }
 
     /**
@@ -213,7 +312,8 @@ public abstract class DungeonCharacter {
      * @param theDmg the damage to be taken
      */
     public void takeDamage(int theDmg) {
-        this.setMyHp(this.myHp - theDmg);
-        if (this.myHp < 0) setMyHp(0);
+
+        System.out.println(this.getMyName() + " took " + theDmg + " damage!!!!!");
+        setMyHp(theDmg >= myHp ? 0 : myHp - theDmg);
     }
 }

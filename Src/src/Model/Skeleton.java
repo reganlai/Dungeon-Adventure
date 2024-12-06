@@ -3,7 +3,7 @@ package Model;
 import javax.swing.*;
 
 public class Skeleton extends Monster {
-    private final static ImageIcon SKELETON_ICON = new ImageIcon("images/standingskeleton.png");
+    private final static ImageIcon STANDING_SKELETON = new ImageIcon("images/standingskeleton.png");
     private final static ImageIcon SKELETON_ATTACK = new ImageIcon("images/skeletonattack.png");
     private final static ImageIcon SKELETON_BLOCK = new ImageIcon("images/skeletonblock.png");
     public Skeleton() {
@@ -18,8 +18,19 @@ public class Skeleton extends Monster {
                 "(" + (getMyHealChance() * 100) + "%, Heal Range: " + getMyMinHeal() + " - " + getMyMaxHeal() + " HP)";
     }
 
-    public ImageIcon getImageIcon() {
-        return SKELETON_ICON;
+    public ImageIcon getImageIcon(final Action theAction) {
+        ImageIcon imageIcon = new ImageIcon();
+        switch (theAction) {
+            case ATTACK:
+                imageIcon = SKELETON_ATTACK;
+                break;
+            case BLOCK:
+                imageIcon = SKELETON_BLOCK;
+                break;
+            default:
+                imageIcon = STANDING_SKELETON;
+        }
+        return imageIcon;
     }
     public ImageIcon getAttackImage() {
         return SKELETON_ATTACK;

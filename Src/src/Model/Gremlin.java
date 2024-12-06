@@ -19,8 +19,20 @@ public class Gremlin extends Monster {
                 "\nSpecial Ability: Chance to heal " +
                 "(" + (getMyHealChance() * 100) + "%, Heal Range: " + getMyMinHeal() + " - " + getMyMaxHeal() + " HP)";
     }
-    public ImageIcon getImageIcon() {
-        return STANDING_GREMLIN;
+    @Override
+    public ImageIcon getImageIcon(final Action theAction) {
+        ImageIcon imageIcon = new ImageIcon();
+        switch (theAction) {
+            case ATTACK:
+                imageIcon = GREMLIN_ATTACK;
+                break;
+            case BLOCK:
+                imageIcon = GREMLIN_BLOCK;
+                break;
+            default:
+                imageIcon = STANDING_GREMLIN;
+        }
+        return imageIcon;
     }
     public ImageIcon getAttackImage() {
         return GREMLIN_ATTACK;

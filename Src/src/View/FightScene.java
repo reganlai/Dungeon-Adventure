@@ -1,18 +1,20 @@
 package View;
 
 import Model.*;
+import Model.Action;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import java.util.Timer;
 
 public class FightScene extends JPanel {
+
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
     /** The main frame shared across different classes to update the same frame.*/
     private final JFrame myMainFrame;
     /** The CardLayout that deals with the screen changing.*/
+    private final ExitGUI myExitPanel;
     private final CardLayout myCardLayout;
     /** The parent panel for all the screens. Used by the CardLayout.*/
     private final JPanel myCardPanel;
@@ -33,7 +35,7 @@ public class FightScene extends JPanel {
     private JLabel myHeroDmg;
 
     private JButton myAttackButton;
-    private JButton mySuperAttack;
+    private JButton mySpecialAttack;
 
     private Monster myMonster;
     private JLabel myMonsterImage;
@@ -46,11 +48,12 @@ public class FightScene extends JPanel {
 
     private Hero myHero;
 
-    protected FightScene(final JFrame theMainFrame, final Hero theHero,
+    protected FightScene(final JFrame theMainFrame, final Hero theHero, final ExitGUI theExitPanel,
                          final CardLayout theCardLayout, final JPanel theCardPanel) {
         setLayout(null);
         myMainFrame = theMainFrame;
         myHero = theHero;
+        myExitPanel = theExitPanel;
         myCardLayout = theCardLayout;
         myCardPanel = theCardPanel;
 
@@ -67,13 +70,10 @@ public class FightScene extends JPanel {
 
         myAttackButton = new JButton("Attack");
         myBlockButton = new JButton("Block");
-        mySuperAttack = new JButton("Super Attack");
+        mySpecialAttack = new JButton("Special");
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
-
-        //repaint();
-
         setAttackButtons();
-        setHeroImage("standing");
+        setHeroImage(Action.STANDBY);
 
 
         setVisible(true);
@@ -82,41 +82,18 @@ public class FightScene extends JPanel {
     public void fight() {
         generateMonster();
         setHeroDmg();
-        setHeroHp();
+        setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
         setBackground();
     }
 
-    private void doneFight() {
-        myCardLayout.show(myCardPanel, "Game");
+    private void doneFight(final boolean theHeroWin) {
+        if (theHeroWin) {
+            myCardLayout.show(myCardPanel, "Game");
+        } else {
+            myExitPanel.setGameResult("Lost");
+            myCardLayout.show(myCardPanel, "Exit");
+        }
     }
-
-//    protected void paintComponent(Graphics g) {
-//        /**Placeholder code. For simulation purposes*/
-//        super.paintComponent(g); // Call the parent class's method to ensure proper painting
-//        // Cast to Graphics2D for more options
-//        Graphics2D g2d = (Graphics2D) g;
-//
-//        // Set background color (optional)
-//        //setBackground(Color.RED);
-//        ImageIcon backgroundIcon = new ImageIcon("images/backgroundimage.png");
-//        Image backgroundImage = backgroundIcon.getImage();
-//        g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-//
-//
-//        // Draw a rectangle
-//        g2d.setColor(Color.BLUE);
-//        g2d.fillRect(50, 50, 100, 100);
-//
-//
-//        // Draw a string
-//        g2d.setColor(Color.BLACK);
-//        g2d.setFont(new Font("Arial", Font.BOLD, 16));
-//        g2d.drawString("Fighttttttt!", 50, 200);
-//
-//        // Draw a line
-//        g2d.setColor(Color.GREEN);
-//        g2d.drawLine(50, 250, 300, 250);
-//    }
 
     private void setBackground() {
         ImageIcon background = new ImageIcon("images/backgroundimage.png");
@@ -126,33 +103,101 @@ public class FightScene extends JPanel {
         add(myBackgroundImage);
     }
 
-    private void setHeroImage(final String theStance) {
+    private void setHeroImage(final Action theAction) {
 
         myHeroImage.setBounds(280, 180, 190, 200);
         myHeroImage.setBackground(Color.BLACK);
         add(myHeroImage);
 
-        switch(theStance) {
-            case "standing":
-                Image hero =  myHero.getImageIcon().getImage().
+        switch(theAction) {
+            case STANDBY:
+                Image hero =  myHero.getImageIcon(Action.STANDBY).getImage().
                         getScaledInstance(190, 200, Image.SCALE_SMOOTH);
                 myHeroImage.setIcon(new ImageIcon(hero));
                 break;
-            case "attack":
-                doneFight();
+            case ATTACK:
+//                Image attack = myHero.getImageIcon(Action.ATTACK).getImage().
+//                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+//                myHeroImage.setIcon(new ImageIcon(attack));
+                attack();
+                //doneFight();
                 break;
-            case "block":
+            case SPECIAL:
+                Image special = myHero.getImageIcon(Action.SPECIAL).getImage().
+                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+                myHeroImage.setIcon(new ImageIcon(special));
+                specialAttack();
                 break;
+            default:
+                //Block
+                Image block = myHero.getImageIcon(Action.BLOCK).getImage().
+                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+                myHeroImage.setIcon(new ImageIcon(block));
+                block();
         }
     }
 
-    private void setHeroHp() {
+    private void attack() {
+        Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
+        if (myHero.isAlive() && myMonster.isAlive()) {
+            //myHeroImage.setIcon(myHero.getAttackImage());
+            myHeroImage.setIcon(new ImageIcon(myHero.getImageIcon(Action.ATTACK).getImage().
+                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
+            myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
+                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
+
+            myHero.attack(myMonster, theOpAction);
+            setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
+            //doneFight(true);
+        }
+
+        if (!myMonster.isAlive() && myHero.isAlive()) {
+            doneFight(true);
+        } else if (myMonster.isAlive() && myHero.isAlive()){
+            //continue
+        } else {
+            doneFight(false);
+        }
+    }
+
+    private void block() {
+        Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
+        myMonster.getmyAdaptiveCounterAttack().recordPlayerAction(Action.BLOCK);
+        if (myHero.isAlive() && myMonster.isAlive()) {
+            myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
+                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
+            myHero.shieldDamage(theOpAction);
+            setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
+        } else if (!myMonster.isAlive() && myHero.isAlive()){
+            doneFight(true);
+        } else {
+            doneFight(false);
+        }
+    }
+
+    private void specialAttack() {
+        Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
+        if (myHero.isAlive() && myMonster.isAlive()) {
+            myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
+                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
+            myHero.specialAbility(myMonster, theOpAction);
+            setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
+        }
+
+        if (!myMonster.isAlive() && myHero.isAlive()) {
+            doneFight(true);
+        } else if (myMonster.isAlive() && myHero.isAlive()){
+            //continue
+        } else {
+            doneFight(false);
+        }
+    }
+
+    protected void setHeroHp(final int theCurrentHP, final int theMaxHP) {
         myHeroHp.setBounds(340, 135, 190, 30);
         myHeroHp.setForeground(Color.WHITE);
-        int currentHp = myHero.getMyHp();
-        int maxHp = myHero.getMyMaxHp();
         myHeroHp.setVisible(true);
-        myHeroHp.setText("HP: " + currentHp + "/" + maxHp);
+        myHeroHp.setText("HP: " + theCurrentHP + "/" + theMaxHP);
         add(myHeroHp);
     }
 
@@ -167,7 +212,6 @@ public class FightScene extends JPanel {
         add(myHeroDmg);
     }
 
-
     private void generateMonster() {
         myMonsterImage.setBounds(530, 180, 190, 200);
 
@@ -176,29 +220,23 @@ public class FightScene extends JPanel {
         switch(randomInt) {
             case 0:
                 myMonster = new Gremlin();
-                Image gremlin =  myMonster.getImageIcon().getImage().
-                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-                myMonsterImage.setIcon(new ImageIcon(gremlin));
                 setMonsterHp();
                 setMonsterDmg();
                 break;
             case 1:
                 myMonster = new Ogre();
-                Image ogre =  myMonster.getImageIcon().getImage().
-                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-                myMonsterImage.setIcon(new ImageIcon(ogre));
                 setMonsterHp();
                 setMonsterDmg();
                 break;
             case 2:
                 myMonster = new Skeleton();
-                Image skeleton =  myMonster.getImageIcon().getImage().
-                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-                myMonsterImage.setIcon(new ImageIcon(skeleton));
                 setMonsterHp();
                 setMonsterDmg();
                 break;
         }
+        Image monster =  myMonster.getImageIcon(Action.STANDBY).getImage().
+                getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+        myMonsterImage.setIcon(new ImageIcon(monster));
         add(myMonsterImage);
     }
 
@@ -226,18 +264,14 @@ public class FightScene extends JPanel {
     private void setAttackButtons() {
         myAttackButton.setBounds(300, 380, 150, 40);
         myAttackButton.addActionListener(theEvent -> {
-            setHeroImage("attack");
+            setHeroImage(Action.ATTACK);
             //other logic
         });
-        mySuperAttack.setBounds(550, 380, 150, 40);
+        mySpecialAttack.setBounds(550, 380, 150, 40);
+        mySpecialAttack.addActionListener(theEvent -> {
+            setHeroImage(Action.SPECIAL);
+        });
         add(myAttackButton);
-        add(mySuperAttack);
+        add(mySpecialAttack);
     }
-
-    public void setHero(final Hero theHero) {
-        myHero = theHero;
-    }
-
-
-
 }

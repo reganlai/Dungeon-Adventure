@@ -259,13 +259,18 @@ public class GameplayGUI extends JPanel {
             myGameplay.setIcon(new ImageIcon("images/priestess_in_dungeon.png"));
             myHero = new Priestess(myPlayerName);
         }
-        myFightScenePanel = new FightScene(myMainFrame, myHero, myCardLayout, myCardPanel);
-        myCardPanel.add(myFightScenePanel, "Fight");
+
         myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myHero, "placeholder");
         myCardPanel.add(myExitPanel, "Exit");
+        myFightScenePanel = new FightScene(myMainFrame, myHero, myExitPanel, myCardLayout, myCardPanel);
+        myCardPanel.add(myFightScenePanel, "Fight");
         myGameplay.setOpaque(true);
         add(myGameplay);
     }
+    public JPanel getMyExitPanel() {
+        return myExitPanel;
+    }
+
 
 
     private void setMyMessage() {

@@ -19,7 +19,6 @@ public class ExitGUI extends JPanel {
     private JLabel myBackground;
     private JLabel myYesLabel;
     private JLabel myNoLabel;
-
     private String myGameResult;
 
     public ExitGUI(final JFrame theMainFrame,
@@ -94,5 +93,4 @@ public class ExitGUI extends JPanel {
             myBackground.setIcon(new ImageIcon(myBackgroundImage));
         }
     }
-
 }

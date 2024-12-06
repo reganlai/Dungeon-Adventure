@@ -14,9 +14,12 @@ import java.util.Random;
  */
 public abstract class Hero extends DungeonCharacter {
 
+    private static final int BLOCK_CHANCE = 30;
+
+    private final double myChanceToBlock;
     private int myHealthPotions;
     private int myVisionPotions;
-    private final double myChanceToBlock;
+    //private final double myChanceToBlock;
     private int myPillarsCollected;
 
 
@@ -29,51 +32,43 @@ public abstract class Hero extends DungeonCharacter {
      * @param theMaxAttack     the maximum attack damage
      * @param theAttackSpd     the attack speed of the hero
      * @param theHitChance     the probability (0-1) that an attack hits
-     * @param theChanceToBlock the probability (0-1) that the hero blocks an attack
      * @param theMaxHp         the maximum health points of the hero
-     * @param theHealthPotions the number of health potions the hero starts with
-     * @param theVisionPotions the number of vision potions the hero starts with
      */
-    Hero(String theName,
-         int theHp,
-         int theMinAttack, int theMaxAttack, int theAttackSpd, double theHitChance,
-         double theChanceToBlock, int theMaxHp, int theHealthPotions, int theVisionPotions) {
+    //@param theChanceToBlock the probability (0-1) that the hero blocks an attack
+    protected Hero(final String theName,final int theHp, final int theMinAttack,
+                   final int theMaxAttack, final  int theAttackSpd, final double theHitChance,
+                   final double theChanceToBlock, int theMaxHp) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
+//    Hero(String theName,
+//         int theHp,
+//         int theMinAttack, int theMaxAttack, int theAttackSpd, double theHitChance,
+//        double theChanceToBlock, int theMaxHp, int theHealthPotions, int theVisionPotions) {
+//            super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
 
-        if (theChanceToBlock <= 0 || theChanceToBlock >= 1) {
-            throw new IllegalArgumentException("Chance to block must be between 0 and 1.");
-        }
-        if (theHealthPotions < 0) {
-            throw new IllegalArgumentException("Health potions cannot be negative.");
-        }
-        if (theVisionPotions < 0) {
-            throw new IllegalArgumentException("Vision potions cannot be negative.");
-        }
+//        if (theChanceToBlock <= 0 || theChanceToBlock >= 1) {
+//            throw new IllegalArgumentException("Chance to block must be between 0 and 1.");
+//        }
 
         myChanceToBlock = theChanceToBlock;
-        myHealthPotions = theHealthPotions;
-        myVisionPotions = theVisionPotions;
         myPillarsCollected = 0;
     }
 
-    public abstract ImageIcon getImageIcon();
+    public abstract ImageIcon getImageIcon(final Action theAction);
     public abstract ImageIcon getHeroWonImage();
     public abstract ImageIcon getHeroLostImage();
-    public abstract ImageIcon getAttackImage();
-    public abstract ImageIcon getBlockImage();
 
     /**
      * Represents the Hero's special ability.
      * @param theOp is the opponent that the special ability will target.
      */
-    public abstract void specialAbility(final DungeonCharacter theOp);
+    public abstract boolean specialAbility(final Monster theOp, final Action theMonsterAction);
 
     /**
      * @return the chance (0-1) of the hero blocking an attack
      */
-    public double getMyChanceToBlock() {
-        return myChanceToBlock;
-    }
+//    public double getMyChanceToBlock() {
+//        return myChanceToBlock;
+//    }
 
     /**
      * @return the number of health potions the hero currently has
@@ -158,13 +153,10 @@ public abstract class Hero extends DungeonCharacter {
     public void takeDamage(int theDmg) {
         Random rand = new Random();
 
-        if (rand.nextDouble() <= this.getMyChanceToBlock()) {
-            System.out.println(this.getMyName() + " blocked the attack!");
+        if (Math.random() > myChanceToBlock) {
+            setMyHp(theDmg >= getMyHp() ? 0 : getMyHp() - theDmg);
         } else {
-            setMyHp(getMyHp() - theDmg);
-            if (getMyHp() < 0) {
-                setMyHp(0);
-            }
+            System.out.println(this.getMyName() + " blocked the attack!");
         }
     }
 

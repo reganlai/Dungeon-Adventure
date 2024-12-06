@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Monster extends DungeonCharacter {
 
+    private final AdaptiveCounterAttack myAdaptiveCounterAttack;
     private final double myHealChance;
     private final int myMinHeal;
     private final int myMaxHeal;
@@ -22,6 +23,7 @@ public class Monster extends DungeonCharacter {
             final int theAttackSpd, final double theHitChance, final int theMaxHp,
             final double theHealChance, final int theMinHeal, final int theMaxHeal) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
+        //super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theMaxHp);
 
         if (theName == null || theName.trim().isEmpty()) {
             throw new IllegalArgumentException("Monster name must not be null or empty.");
@@ -58,11 +60,14 @@ public class Monster extends DungeonCharacter {
         myHealChance = theHealChance;
         myMinHeal = theMinHeal;
         myMaxHeal = theMaxHeal;
+        myAdaptiveCounterAttack = new AdaptiveCounterAttack();
     }
 
-    public abstract ImageIcon getImageIcon();
-    public abstract ImageIcon getAttackImage();
-    public abstract ImageIcon getBlockImage();
+    public AdaptiveCounterAttack getmyAdaptiveCounterAttack() {
+        return myAdaptiveCounterAttack;
+    }
+
+
     public double getMyHealChance() {
         return myHealChance;
     }
@@ -75,7 +80,7 @@ public class Monster extends DungeonCharacter {
         return myMaxHeal;
     }
 
-    public void heal(){
+    public void heal() {
         Random rand = new Random();
         if (rand.nextDouble() <= this.myHealChance) {
             int healAmount = rand.nextInt(this.myMaxHeal - this.myMinHeal + 1) + this.myMinHeal;
@@ -92,18 +97,16 @@ public class Monster extends DungeonCharacter {
         }
     }
 
-    @Override
-    public void attack(final DungeonCharacter theOp) {
-        super.attack(theOp);
-        if(getMyHp() > 0) {
-            heal();
-        }
-    }
     public String toString() {
         return "Model.Monster: " + this.getMyName() +
                 "\nHit Points: " + this.getMyHp() +
                 "\nAttack Speed: " + this.getMyAttackSpd() +
                 "\nChance to Heal: " + this.myHealChance +
                 "\nHeal Range: " + this.myMinHeal + " - " + this.myMinHeal;
+    }
+
+    @Override
+    public ImageIcon getImageIcon(final Action theAction) {
+        return null;
     }
 }

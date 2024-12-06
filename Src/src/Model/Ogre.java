@@ -19,8 +19,19 @@ public class Ogre extends Monster {
                 "(" + (getMyHealChance() * 100) + "%, Heal Range: " + getMyMinHeal() + " - " + getMyMaxHeal() + " HP)";
     }
 
-    public ImageIcon getImageIcon() {
-        return STANDING_OGRE;
+    public ImageIcon getImageIcon(final Action theAction) {
+        ImageIcon imageIcon = new ImageIcon();
+        switch (theAction) {
+            case ATTACK:
+                imageIcon = OGRE_ATTACK;
+                break;
+            case BLOCK:
+                imageIcon = OGRE_BLOCK;
+                break;
+            default:
+                imageIcon = STANDING_OGRE;
+        }
+        return imageIcon;
     }
     public ImageIcon getAttackImage() {
         return OGRE_ATTACK;
