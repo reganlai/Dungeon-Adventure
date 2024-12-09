@@ -89,8 +89,8 @@ public class Monster extends DungeonCharacter {
                 setMyHp(getMyMaxHp());
                 System.out.println(getMyName() + "healed for " + (hp - getMyMaxHp()) + " points!" );
             } else {
-            setMyHp(hp);
-            System.out.println(getMyName() + " healed for " + healAmount + " points!");
+                setMyHp(hp);
+                System.out.println(getMyName() + " healed for " + healAmount + " points!");
             }
         } else {
             System.out.println(getMyName() + " tried to heal but failed!");

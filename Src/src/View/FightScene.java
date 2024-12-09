@@ -81,6 +81,7 @@ public class FightScene extends JPanel {
         //new javax.swing.Timer(30000, e -> doneFight()).start();
     }
     protected void fight() {
+        revertHeroImage();
         generateMonster();
         paintScreen();
     }
@@ -119,9 +120,10 @@ public class FightScene extends JPanel {
 
         switch(theAction) {
             case STANDBY:
-                Image hero =  myHero.getImageIcon(Action.STANDBY).getImage().
-                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-                myHeroImage.setIcon(new ImageIcon(hero));
+                revertHeroImage();
+//                Image hero =  myHero.getImageIcon(Action.STANDBY).getImage().
+//                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+//                myHeroImage.setIcon(new ImageIcon(hero));
                 break;
             case ATTACK:
 //                Image attack = myHero.getImageIcon(Action.ATTACK).getImage().
@@ -138,7 +140,7 @@ public class FightScene extends JPanel {
                 break;
             default:
                 //Block
-                Image block = myHero.getImageIcon(Action.BLOCK).getImage().
+                Image block = myHero.getImageIcon(Action.STANDBY).getImage().
                         getScaledInstance(190, 200, Image.SCALE_SMOOTH);
                 myHeroImage.setIcon(new ImageIcon(block));
                 block();
@@ -294,7 +296,7 @@ public class FightScene extends JPanel {
         });
         myBlockButton.setBounds(300, 380, 100, 40);
         myBlockButton.addActionListener(event -> {
-            setAction(Action.ATTACK);
+            setAction(Action.BLOCK);
         });
         mySpecialAttack.setBounds(400, 380, 100, 40);
         mySpecialAttack.addActionListener(theEvent -> {
@@ -303,5 +305,11 @@ public class FightScene extends JPanel {
         add(myAttackButton);
         add(myBlockButton);
         add(mySpecialAttack);
+    }
+
+    private void revertHeroImage() {
+        Image hero =  myHero.getImageIcon(Action.STANDBY).getImage().
+                getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+        myHeroImage.setIcon(new ImageIcon(hero));
     }
 }
