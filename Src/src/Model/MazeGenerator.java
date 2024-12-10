@@ -1,6 +1,8 @@
 package Model;/*
  * TCSS 360 - Dungeon Adventure
  */
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +18,9 @@ import java.util.Set;
  * @author George Njane
  * @version 1.0
  */
-public final class MazeGenerator {
+public final class MazeGenerator implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 7567907344024427690L;
 
     private static final int DEFAULT_SIZE = 1;
 

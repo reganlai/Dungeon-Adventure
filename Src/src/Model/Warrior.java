@@ -2,8 +2,12 @@ package Model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serial;
+import java.io.Serializable;
 
-public class Warrior extends Hero {
+public class Warrior extends Hero implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 3733480867287879417L;
 
     private final static ImageIcon STANDING_WARRIOR = new ImageIcon("images/standingwarrior.png");
     private final static ImageIcon WARRIOR_ATTACK = new ImageIcon("images/warriorattack.png");
@@ -11,6 +15,7 @@ public class Warrior extends Hero {
     private final static ImageIcon WARRIOR_WON = new ImageIcon("images/warriorwon.png");
     private final static ImageIcon WARRIOR_LOST = new ImageIcon("images/warriorlost.png");
     private final static double SPECIAL_CHANCE = 0.4;
+
     private final  int minCrushingBlowDmg = 75;
     private final int maxCrushingBlowDmg = 175;
 

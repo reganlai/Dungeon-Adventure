@@ -1,6 +1,8 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -12,9 +14,12 @@ import java.util.Random;
  *
  * @author Evan Tran
  */
-public abstract class Hero extends DungeonCharacter {
+public abstract class Hero extends DungeonCharacter implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -1047079817127925147L;
     private static final int BLOCK_CHANCE = 30;
+
 
     private final double myChanceToBlock;
     private int myHealthPotions;

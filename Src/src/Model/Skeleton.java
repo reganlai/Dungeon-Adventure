@@ -1,11 +1,18 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 
-public class Skeleton extends Monster {
+public class Skeleton extends Monster implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 7306928187856730197L;
+
     private final static ImageIcon STANDING_SKELETON = new ImageIcon("images/standingskeleton.png");
     private final static ImageIcon SKELETON_ATTACK = new ImageIcon("images/skeletonattack.png");
     private final static ImageIcon SKELETON_BLOCK = new ImageIcon("images/skeletonblock.png");
+
+
     public Skeleton() {
         super("Skeleton", 80, 30, 50, 3, .8, 80, .3, 30, 50);
     }

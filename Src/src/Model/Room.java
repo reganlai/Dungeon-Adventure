@@ -2,13 +2,18 @@ package Model;/*
  * TCSS 360 - Dungeon Adventure
  */
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * The class responsible for a room's condition.
  *
  * @author George Njane
  * @version 1.0
  */
-public final class Room {
+public final class Room implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -1715826836614884268L;
     /** */
     private final Wall myRoomWalls;
     /** */

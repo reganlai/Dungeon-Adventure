@@ -1,12 +1,18 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 
-public class Ogre extends Monster {
+public class Ogre extends Monster implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -2680791313423148912L;
 
     private final static ImageIcon STANDING_OGRE = new ImageIcon("images/standingogre.png");
     private final static ImageIcon OGRE_ATTACK = new ImageIcon("images/ogreattack.png");
     private final static ImageIcon OGRE_BLOCK = new ImageIcon("images/ogreblock.png");
+
+
     public Ogre() {
         super("Ogre", 120, 30, 30, 2, .6, 120, .1, 30, 60);
     }

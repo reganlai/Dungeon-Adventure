@@ -2,13 +2,18 @@ package Model;/*
  * TCSS 360 - Dungeon Adventure
  */
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * A class representing the four walls of a room and their current state.
  *
  * @author George Njane
  * @version 1.0
  */
-public final class Wall {
+public final class Wall implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -4390761889770933482L;
     /** The north wall of the room. */
     private WallType myNorthWall;
 

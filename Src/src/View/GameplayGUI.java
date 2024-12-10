@@ -1,18 +1,12 @@
 package View;
 
-import Model.Direction;
-import Model.Hero;
-import Model.MazeGenerator;
-import Model.MoveHandler;
-import Model.Priestess;
-import Model.Room;
-import Model.Thief;
-import Model.Warrior;
-import Model.WallType;
+import Model.*;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class GameplayGUI extends JPanel {
     private static final int FRAME_WIDTH = 1000;
@@ -147,6 +141,12 @@ public class GameplayGUI extends JPanel {
         });
         myGameplayMenu.add(myInventory);
         myGameplayMenu.addSeparator();
+        mySave.addActionListener(event-> {
+            saveGame();
+        });
+        myLoad.addActionListener(event-> {
+            loadGame();
+        });
         myGameplayMenu.add(mySave);
         myGameplayMenu.add(myLoad);
         myHelp.add(myInstructions);
@@ -517,6 +517,42 @@ public class GameplayGUI extends JPanel {
     private void cantMove(final String theDirection) {
         mySecondMessage.setBounds(440, 385, 500, 30);
         mySecondMessage.setText("You can't move " + theDirection);
+    }
+
+    public void saveGame() {
+        GameState gs = new GameState(myMaze, myPlayerName, myClass, myDifficulty, myHero);
+
+        try{
+            try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("game_save.dat"))){
+                oos.writeObject(gs);
+                System.out.println("Game saved successfully.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to save game.");
+        }
+    }
+
+    public void loadGame() {
+        try {
+
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("game_save.dat"))) {
+                GameState gs = (GameState) ois.readObject();
+
+                myMaze = gs.getMyMaze();
+                myPlayerName = gs.getMyPlayerName();
+                myClass = gs.getMyClass();
+                myDifficulty = gs.getMyDifficulty();
+                myHero = gs.getMyHero();
+
+                initializeMapPopup();
+                updateMapDisplay();
+                System.out.println("Game Loaded sucessfuly.");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load game");
+        }
     }
 
 

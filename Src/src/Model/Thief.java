@@ -1,14 +1,19 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 
-public class Thief extends Hero {
+public class Thief extends Hero implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -8405930066486030078L;
 
     private final static ImageIcon STANDING_THIEF = new ImageIcon("images/standingthief.png");
     private final static ImageIcon THIEF_ATTACK = new ImageIcon("images/thiefattack.png");
     private final static ImageIcon THIEF_BLOCK = new ImageIcon("images/thiefblock.png");
     private final static ImageIcon THIEF_WON = new ImageIcon("images/thiefwon.png");
     private final static ImageIcon THIEF_LOST = new ImageIcon("images/thieflost.png");
+
 
     private final double mySpecialChance = .4;
     private final double myCaughtChance = .2;

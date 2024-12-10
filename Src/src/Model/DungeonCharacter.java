@@ -1,6 +1,8 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -10,10 +12,13 @@ import java.util.Random;
  *
  * @author Evan Tran
  */
-public abstract class DungeonCharacter {
+public abstract class DungeonCharacter implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -6818388129184736745L;
     private static final int ATTACK_DAMAGE = 25;
     private static final int HIT_CHANCE = 70;
+
 
     /** The name of the character */
     private String myName;

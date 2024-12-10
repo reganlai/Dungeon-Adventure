@@ -2,14 +2,19 @@ package Model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serial;
+import java.io.Serializable;
 
-public class Priestess extends Hero {
+public class Priestess extends Hero implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2956966238326498914L;
 
     private final static ImageIcon STANDING_PRIESTESS = new ImageIcon("images/standingpriestess.png");
     private final static ImageIcon PRIESTESS_ATTACK = new ImageIcon("images/priestessattack.png");
     private final static ImageIcon PRIESTESS_BLOCK = new ImageIcon("images/priestessblock.png");
     private final static ImageIcon PRIESTESS_WON = new ImageIcon("images/priestesswon.png");
     private final static ImageIcon PRIESTESS_LOST = new ImageIcon("images/priestesslost.png");
+
     private final int myMinHeal = 20;
     private final int myMaxHeal = 50;
 

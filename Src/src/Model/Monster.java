@@ -1,10 +1,14 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Monster extends DungeonCharacter {
+public class Monster extends DungeonCharacter implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 6331983131408066245L;
     private final AdaptiveCounterAttack myAdaptiveCounterAttack;
     private final double myHealChance;
     private final int myMinHeal;

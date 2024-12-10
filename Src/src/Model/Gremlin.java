@@ -1,11 +1,17 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 
-public class Gremlin extends Monster {
+public class Gremlin extends Monster implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -7924722377231472270L;
+
     private final static ImageIcon STANDING_GREMLIN = new ImageIcon("images/standinggremlin.png");
     private final static ImageIcon GREMLIN_ATTACK = new ImageIcon("images/gremlinattack.png");
     private final static ImageIcon GREMLIN_BLOCK = new ImageIcon("images/gremlinblock.png");
+
     public Gremlin() {
         super("Gremlin", 60, 10, 20, 5, .8, 60, .4, 20, 40);
 
