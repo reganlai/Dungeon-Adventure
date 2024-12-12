@@ -7,20 +7,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
+/**
+ * The FightScene class is responsible for handling fights between the user and the monster.
+ *
+ * @author Regan Lai
+ * @author George Njane
+ * @version 1.0
+ */
 public class FightScene extends JPanel {
 
+    /** Width for JPanel*/
     private static final int FRAME_WIDTH = 1000;
+
+    /** Height for JPanel*/
     private static final int FRAME_HEIGHT = 500;
+
     /** The main frame shared across different classes to update the same frame.*/
     private final JFrame myMainFrame;
+
     /** The CardLayout that deals with the screen changing.*/
     private final ExitGUI myExitPanel;
+
+    /** The CardLayout that deals with the screen changing.*/
     private final CardLayout myCardLayout;
+
     /** The parent panel for all the screens. Used by the CardLayout.*/
     private final JPanel myCardPanel;
-
-    /** The block button. */
-    private JButton myBlockButton;
 
     /** The hero. */
     private DungeonCharacter myCharacter;
@@ -28,26 +40,50 @@ public class FightScene extends JPanel {
     /** The label to display the fight comments. */
     private JLabel myActionCommentDisplay;
 
+    /** JLabel that stores only the background image. */
     private JLabel myBackgroundImage;
 
+    /** JLabel that stores only the hero image. */
     private JLabel myHeroImage;
+
+    /** JLabel that displays the hero's hp in "xxx/xxx" format. */
     private JLabel myHeroHp;
+
+    /** JLabel that displays the hero's damage in "xx/xx" format. */
     private JLabel myHeroDmg;
 
+    /** JButton that handles the hero's attacks. */
     private JButton myAttackButton;
+
+    /** JButton that handles the hero's blocks. */
+    private JButton myBlockButton;
+
+    /** JButton that handles the hero's special attacks. */
     private JButton mySpecialAttack;
 
+    /** The monster that the user is fighting. */
     private Monster myMonster;
+
+    /** JLabel that stores only the monster image. */
     private JLabel myMonsterImage;
+
+    /** JLabel that displays the monster's hp in "xxx/xxx" format. */
     private JLabel myMonsterHp;
+
+    /** JLabel that displays the monster's damage in "xx/xx" format. */
     private JLabel myMonsterDmg;
 
-
-
-    //private int myClass;
-
+    /** The hero that the user is using. */
     private Hero myHero;
 
+    /**
+     * Initializes the GUI.
+     * @param theMainFrame JFrame shared across different classes
+     * @param theHero the hero that the user is using right now
+     * @param theExitPanel potentially needing to show this panel in case user loses
+     * @param theCardLayout CardLayout that deals with the screen changing
+     * @param theCardPanel parent panel for all the screens
+     */
     protected FightScene(final JFrame theMainFrame, final Hero theHero, final ExitGUI theExitPanel,
                          final CardLayout theCardLayout, final JPanel theCardPanel) {
         setLayout(null);
@@ -76,25 +112,34 @@ public class FightScene extends JPanel {
         setActionButtons();
         setAction(Action.STANDBY);
 
-
         setVisible(true);
-        //new javax.swing.Timer(30000, e -> doneFight()).start();
     }
+
+    /**
+     * Starts the fight between the user and monster.
+     */
     protected void fight() {
-        revertHeroImage();
         generateMonster();
         paintScreen();
     }
-    private void paintScreen() {
-        //setHeroDmg();
 
+    /**
+     * Calls methods that sets up the GUI.
+     */
+    private void paintScreen() {
+        setHeroDmg();
         setMonsterHp();
         setHeroHp();
-        //setMonsterDmg();
+        setMonsterDmg();
         setBackground();
         repaint();
     }
 
+    /**
+     * Checks if user won the fight.
+     * Goes back to Dungeon if user wins.
+     * Goes to Exit if user loses.
+     */
     private void doneFight(final boolean theHeroWin) {
         if (theHeroWin) {
             myCardLayout.show(myCardPanel, "Game");
@@ -104,14 +149,20 @@ public class FightScene extends JPanel {
         }
     }
 
+    /**
+     * Hero uses special attack.
+     */
     private void setBackground() {
         ImageIcon background = new ImageIcon("images/backgroundimage.png");
-        Image scaledPillar = background.getImage().getScaledInstance(1000, 500, Image.SCALE_SMOOTH);
-        myBackgroundImage.setIcon(new ImageIcon(scaledPillar));
+        Image scaledBackground = background.getImage().getScaledInstance(1000, 500, Image.SCALE_SMOOTH);
+        myBackgroundImage.setIcon(new ImageIcon(scaledBackground));
         myBackgroundImage.setBounds(0,0,FRAME_WIDTH,FRAME_HEIGHT);
         add(myBackgroundImage);
     }
 
+    /**
+     * Sets the action chosen by the user, and changes the image of the hero accordingly.
+     */
     private void setAction(final Action theAction) {
 
         myHeroImage.setBounds(280, 180, 190, 200);
@@ -120,17 +171,12 @@ public class FightScene extends JPanel {
 
         switch(theAction) {
             case STANDBY:
-                revertHeroImage();
-//                Image hero =  myHero.getImageIcon(Action.STANDBY).getImage().
-//                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-//                myHeroImage.setIcon(new ImageIcon(hero));
+                Image hero =  myHero.getImageIcon(Action.STANDBY).getImage().
+                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
+                myHeroImage.setIcon(new ImageIcon(hero));
                 break;
             case ATTACK:
-//                Image attack = myHero.getImageIcon(Action.ATTACK).getImage().
-//                        getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-//                myHeroImage.setIcon(new ImageIcon(attack));
                 attack();
-                //doneFight();
                 break;
             case SPECIAL:
                 Image special = myHero.getImageIcon(Action.SPECIAL).getImage().
@@ -139,27 +185,25 @@ public class FightScene extends JPanel {
                 specialAttack();
                 break;
             default:
-                //Block
-                Image block = myHero.getImageIcon(Action.STANDBY).getImage().
+                Image block = myHero.getImageIcon(Action.BLOCK).getImage().
                         getScaledInstance(190, 200, Image.SCALE_SMOOTH);
                 myHeroImage.setIcon(new ImageIcon(block));
                 block();
         }
     }
 
+    /**
+     * Hero uses attack.
+     */
     private void attack() {
         Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
         if (myHero.isAlive() && myMonster.isAlive()) {
-            //myHeroImage.setIcon(myHero.getAttackImage());
             myHeroImage.setIcon(new ImageIcon(myHero.getImageIcon(Action.ATTACK).getImage().
                     getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
             myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
                     getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
 
             myHero.attack(myMonster, theOpAction);
-            //setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
-
-            //doneFight(true);
         }
 
         if (!myMonster.isAlive() && myHero.isAlive()) {
@@ -172,6 +216,9 @@ public class FightScene extends JPanel {
         paintScreen();
     }
 
+    /**
+     * Hero uses block.
+     */
     private void block() {
         Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
         myMonster.getmyAdaptiveCounterAttack().recordPlayerAction(Action.BLOCK);
@@ -192,6 +239,9 @@ public class FightScene extends JPanel {
         paintScreen();
     }
 
+    /**
+     * Hero uses special attack.
+     */
     private void specialAttack() {
         Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
         if (myHero.isAlive() && myMonster.isAlive()) {
@@ -214,6 +264,9 @@ public class FightScene extends JPanel {
 
     }
 
+    /**
+     * Displays the hero's hp in "xxx/xxx" format.
+     */
     protected void setHeroHp() {
         myHeroHp.setBounds(340, 135, 190, 30);
         myHeroHp.setForeground(Color.WHITE);
@@ -224,7 +277,9 @@ public class FightScene extends JPanel {
         add(myHeroHp);
     }
 
-    // Displays the range of damage that the hero can deal(static, won't be changed)
+    /**
+     * Displays the monster's hp in "xxx/xxx" format.
+     */
     private void setMonsterHp() {
         myMonsterHp.setBounds(590, 135, 190, 30);
         myMonsterHp.setForeground(Color.WHITE);
@@ -235,6 +290,9 @@ public class FightScene extends JPanel {
         add(myMonsterHp);
     }
 
+    /**
+     * Displays the range of damage that the hero can deal(static, won't be changed)
+     */
     private void setHeroDmg() {
         myHeroDmg.setBounds(340, 150, 190, 30);
         myHeroDmg.setForeground(Color.WHITE);
@@ -245,7 +303,9 @@ public class FightScene extends JPanel {
         add(myHeroDmg);
     }
 
-    //Displays the range of damage that the monster can deal(static, won't be changed)
+    /**
+     * Displays the range of damage that the monster can deal(static, won't be changed)
+     */
     private void setMonsterDmg() {
         myMonsterDmg.setBounds(590, 150, 190, 30);
         myMonsterDmg.setForeground(Color.WHITE);
@@ -256,6 +316,9 @@ public class FightScene extends JPanel {
         add(myMonsterDmg);
     }
 
+    /**
+     * Generates a random monster for user to fight.
+     */
     private void generateMonster() {
         myMonsterImage.setBounds(530, 180, 190, 200);
 
@@ -264,18 +327,12 @@ public class FightScene extends JPanel {
         switch(randomInt) {
             case 0:
                 myMonster = new Gremlin();
-                //setMonsterHp();
-                //setMonsterDmg();
                 break;
             case 1:
                 myMonster = new Ogre();
-                //setMonsterHp();
-                //setMonsterDmg();
                 break;
             case 2:
                 myMonster = new Skeleton();
-//                setMonsterHp();
-//                setMonsterDmg();
                 break;
         }
 
@@ -287,16 +344,19 @@ public class FightScene extends JPanel {
         paintScreen();
     }
 
+    /**
+     * Sets the position for the action buttons(attack, block, special).
+     * And then adds action listeners to the buttons.
+     */
     private void setActionButtons() {
         myAttackButton.setBounds(200, 380, 100, 40);
 
         myAttackButton.addActionListener(theEvent -> {
             setAction(Action.ATTACK);
-            //other logic
         });
         myBlockButton.setBounds(300, 380, 100, 40);
         myBlockButton.addActionListener(event -> {
-            setAction(Action.BLOCK);
+            setAction(Action.ATTACK);
         });
         mySpecialAttack.setBounds(400, 380, 100, 40);
         mySpecialAttack.addActionListener(theEvent -> {
@@ -305,11 +365,5 @@ public class FightScene extends JPanel {
         add(myAttackButton);
         add(myBlockButton);
         add(mySpecialAttack);
-    }
-
-    private void revertHeroImage() {
-        Image hero =  myHero.getImageIcon(Action.STANDBY).getImage().
-                getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-        myHeroImage.setIcon(new ImageIcon(hero));
     }
 }

@@ -3,6 +3,11 @@ package Controller;
 import View.DungeonGUI;
 import java.awt.EventQueue;
 
+/**
+ * The DungeonDriver class acts as the entry point for this program.
+ * @author George Njane
+ * @version 1.0
+ */
 public class DungeonDriver {
 
     /**

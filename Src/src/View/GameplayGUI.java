@@ -8,58 +8,108 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
+/**
+ * The GameplayGUI handles user traversing within the dungeon.
+ *
+ * @author Regan Lai
+ * @author George Njane
+ * @author Evan Tran
+ * @version 1.0
+ */
 public class GameplayGUI extends JPanel {
+
+    /** Width for JPanel*/
     private static final int FRAME_WIDTH = 1000;
+
+    /** Height for JPanel*/
     private static final int FRAME_HEIGHT = 500;
+
     /** The main frame shared across different classes to update the same frame.*/
     private final JFrame myMainFrame;
-    /** The menu bar that holds all the menus.*/
-    private final JMenuBar myMenubar;
-    /** The Gameplay menu. This menu holds the map.*/
-    private final JMenu myGameplayMenu;
-    /** The map menu. */
-    private final JMenuItem myMap;
-    /** The help menu. */
-    private final JMenu myHelp;
-    /** The menu item that displays the game instructions.*/
-    private final JMenuItem myInstructions;
-    private final JMenuItem myInventory;
-    private JMenuItem mySave;
-    private JMenuItem myLoad;
-
-    private FightScene myFightScenePanel;
-    private ExitGUI myExitPanel;
 
     /** The CardLayout that deals with the screen changing.*/
     private final CardLayout myCardLayout;
+
     /** The parent panel for all the screens. Used by the CardLayout.*/
     private final JPanel myCardPanel;
+
+    /** The menu bar that holds all the menus.*/
+    private final JMenuBar myMenubar;
+
+    /** The Gameplay menu. This menu holds the map.*/
+    private final JMenu myGameplayMenu;
+
+    /** The map menu. */
+    private final JMenuItem myMap;
+
+    /** The help menu. */
+    private final JMenu myHelp;
+
+    /** The menu item that displays the game instructions.*/
+    private final JMenuItem myInstructions;
+
+    /** The menu item that displays the user's inventory.*/
+    private final JMenuItem myInventory;
+
+    /** The menu item that saves the game.*/
+    private JMenuItem mySave;
+
+    /** The menu item that loads previously saved game.*/
+    private JMenuItem myLoad;
+
+    /** FightScene that handles user and monster fighting.*/
+    private FightScene myFightScenePanel;
+
+    /** ExitGUI that acts as the exit when the user has won.*/
+    private ExitGUI myExitPanel;
+
+
     private JMenuItem myControls;
 
     private JLabel myGameplay;
+
     /** The maze that the player is in. */
     private MazeGenerator myMaze;
+
     /** The player name. */
     private String myPlayerName;
+
+    /** Int that represents the chosen hero class. */
     private int myClass;
+
     /** The difficulty level. */
     private int myDifficulty;
 
     /** The hero that the user chose*/
     private Hero myHero;
-    //private DungeonCharacter myHero;
 
+    /** The map of the dungeon*/
     private JDialog myMapPopup;
 
+    /** The map of the dungeon*/
     private JPanel myMazeMap;
 
-    private JTextArea myInventoryText;
+    /** A message that welcomes the user to the dungeon.*/
     private JLabel myMessage;
+
+    /** A second message that tells if the user moved in a certain direction, can't move in that certain direction,
+     *  or picked up an item.
+    */
     private JLabel mySecondMessage;
+
+    /** The item that the user picked up in the dungeon.*/
     private JLabel myItem;
+
+    /** Up arrow that allows user to move up(JLabel)*/
     private JLabel myUpArrow;
+
+    /** Down arrow that allows user to move down(JLabel)*/
     private JLabel myDownArrow;
+
+    /** Right arrow that allows user to move right(JLabel)*/
     private JLabel myRightArrow;
+
+    /** Left arrow that allows user to move left(JLabel)*/
     private JLabel myLeftArrow;
 
 
@@ -210,32 +260,24 @@ public class GameplayGUI extends JPanel {
         Border north, south, west, east;
         int top, left, bottom, right;
         if (myMaze.getMaze()[theRow][theCol].getNorthWall() == WallType.HORIZONTAL_WALL) {
-            //north = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
             top = 3;
         } else {
-            //north = BorderFactory.createDashedBorder(Color.RED, 1, 3);
             top = 1;
         }
         if (myMaze.getMaze()[theRow][theCol].getSouthWall() == WallType.HORIZONTAL_WALL) {
-            //south = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
             bottom = 3;
         } else {
-            //south = BorderFactory.createDashedBorder(Color.RED, 2, 2);
             bottom = 1;
         }
         if (myMaze.getMaze()[theRow][theCol].getWestWall() == WallType.VERTICAL_WALL) {
-            //west = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
             left = 3;
         } else {
-            //west = BorderFactory.createDashedBorder(Color.RED, 2, 2);
             left = 1;
 
         }
         if (myMaze.getMaze()[theRow][theCol].getEastWall() == WallType.VERTICAL_WALL) {
-            //east = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
             right = 3;
         } else {
-            //east = BorderFactory.createDashedBorder(Color.RED, 2, 2);
             right = 1;
         }
         return BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK);
@@ -329,7 +371,7 @@ public class GameplayGUI extends JPanel {
         });
     }
 
-    private void keyboardArrowClicked() {
+    protected void keyboardArrowClicked() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
 
             if (e.getID() == KeyEvent.KEY_PRESSED) {
@@ -363,6 +405,7 @@ public class GameplayGUI extends JPanel {
         if (item == "M") {
             myFightScenePanel.fight();
             myCardLayout.show(myCardPanel, "Fight");
+
             theMove.getMyNewRoom().setMyEmptyRoom(true);
         } else if (item == "P" || item == "I" || item == "E" || item == "A") {
             myHero.addPillarCollected();
@@ -378,6 +421,8 @@ public class GameplayGUI extends JPanel {
 
 
 
+
+
         // Prompt user to pick or leave the item.
         // Do logic for if the picked up the item, say health potion, set the myEmptyCurrentRoom to true.
         // This will let the program know that that room should now be empty after the user moves to another room.
@@ -385,6 +430,7 @@ public class GameplayGUI extends JPanel {
         updateMapDisplay();
         return item;
     }
+    
 
     private void upArrowClicked() {
         myUpArrow.addMouseListener(new MouseAdapter() {

@@ -9,6 +9,10 @@ public class SettingsGUI extends JPanel {
 
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
+    private CardLayout myCardLayout;
+    private JLabel myBackgroundImage;
+    private JFrame myMainFrame;
+
     private static final int X_COORDINATE = 150;
     private static final int LABEL_WIDTH = 150;
     private static final int LABEL_HEIGHT = 30;
@@ -33,9 +37,7 @@ public class SettingsGUI extends JPanel {
 
     private JPanel myCardPanel;
 
-    private CardLayout myCardLayout;
-    private JLabel myBackgroundImage;
-    private JFrame myMainFrame;
+
 
     private final GridBagConstraints myGBC = new GridBagConstraints();
 
