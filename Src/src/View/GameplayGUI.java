@@ -8,126 +8,65 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-/**
- * The GameplayGUI handles user traversing within the dungeon.
- *
- * @author Regan Lai
- * @author George Njane
- * @author Evan Tran
- * @version 1.0
- */
 public class GameplayGUI extends JPanel {
 
-    /** Width for JPanel*/
+    @Serial
+    private static final long serialVersionUID = -2026133901785737381L;
     private static final int FRAME_WIDTH = 1000;
-
-    /** Height for JPanel*/
     private static final int FRAME_HEIGHT = 500;
-
     /** The main frame shared across different classes to update the same frame.*/
-    private final JFrame myMainFrame;
+    private JFrame myMainFrame;
+    /** The menu bar that holds all the menus.*/
+    private transient JMenuBar myMenubar;
+    /** The Gameplay menu. This menu holds the map.*/
+    private transient JMenu myGameplayMenu;
+    /** The map menu. */
+    private transient JMenuItem myMap;
+    /** The help menu. */
+    private transient JMenu myHelp;
+    /** The menu item that displays the game instructions.*/
+    private transient JMenuItem myInstructions;
+    private transient JMenuItem myInventory;
+    private transient JMenuItem mySave;
+    private transient JMenuItem myLoad;
+
+    private transient FightScene myFightScenePanel;
+    private transient ExitGUI myExitPanel;
 
     /** The CardLayout that deals with the screen changing.*/
-    private final CardLayout myCardLayout;
-
+    private transient CardLayout myCardLayout;
     /** The parent panel for all the screens. Used by the CardLayout.*/
-    private final JPanel myCardPanel;
-
-    /** The menu bar that holds all the menus.*/
-    private final JMenuBar myMenubar;
-
-    /** The Gameplay menu. This menu holds the map.*/
-    private final JMenu myGameplayMenu;
-
-    /** The map menu. */
-    private final JMenuItem myMap;
-
-    /** The help menu. */
-    private final JMenu myHelp;
-
-    /** The menu item that displays the game instructions.*/
-    private final JMenuItem myInstructions;
-
-    /** The menu item that displays the user's inventory.*/
-    private final JMenuItem myInventory;
-
-    /** The menu item that saves the game.*/
-    private JMenuItem mySave;
-
-    /** The menu item that loads previously saved game.*/
-    private JMenuItem myLoad;
-
-    /** FightScene that handles user and monster fighting.*/
-    private FightScene myFightScenePanel;
-
-    /** ExitGUI that acts as the exit when the user has won.*/
-    private ExitGUI myExitPanel;
-
-    /** JMenuItem that shows how to navigate around the dungeon.*/
-    private JMenuItem myControls;
-
-    /** JLabel that shows the image of the hero.*/
-    private JLabel myGameplay;
-
+    private transient JPanel myCardPanel;
+    private transient JMenuItem myControls;
+    private transient JLabel myGameplay;
     /** The maze that the player is in. */
     private MazeGenerator myMaze;
-
     /** The player name. */
     private String myPlayerName;
-
-    /** Int that represents the chosen hero class. */
     private int myClass;
-
     /** The difficulty level. */
     private int myDifficulty;
 
     /** The hero that the user chose*/
     private Hero myHero;
+    private transient JDialog myMapPopup;
 
-    /** The map of the dungeon*/
-    private JDialog myMapPopup;
+    private transient JPanel myMazeMap;
 
-    /** The map of the dungeon*/
-    private JPanel myMazeMap;
+    private boolean myIsNewGame;
+    private transient JLabel myMessage;
+    private transient JLabel mySecondMessage;
+    private transient JLabel myItem;
+    private transient JLabel myUpArrow;
+    private transient JLabel myDownArrow;
+    private transient JLabel myRightArrow;
+    private transient JLabel myLeftArrow;
 
-    /** A message that welcomes the user to the dungeon.*/
-    private JLabel myMessage;
-
-    /** A second message that tells if the user moved in a certain direction, can't move in that certain direction,
-     *  or picked up an item.
-    */
-    private JLabel mySecondMessage;
-
-    /** The item that the user picked up in the dungeon.*/
-    private JLabel myItem;
-
-    /** Up arrow that allows user to move up(JLabel)*/
-    private JLabel myUpArrow;
-
-    /** Down arrow that allows user to move down(JLabel)*/
-    private JLabel myDownArrow;
-
-    /** Right arrow that allows user to move right(JLabel)*/
-    private JLabel myRightArrow;
-
-    /** Left arrow that allows user to move left(JLabel)*/
-    private JLabel myLeftArrow;
-
-
-
-    /**
-     * Initializes the GUI.
-     * @param thePlayerName name that user entered
-     * @param theClass int representation of the hero class chosen
-     * @param theDifficulty int representation of the difficulty chosen by user
-     * @param theMainFrame JFrame shared across different classes
-     * @param theCardPanel parent panel for all the screens
-     * @param theCardLayout CardLayout that deals with the screen changing
-     */
     public GameplayGUI(final String thePlayerName,
                        final int theClass,
                        final int theDifficulty,
-                       final JFrame theMainFrame,
+                       final boolean theIsNewGame,
+                       final DungeonGUI theMainFrame,
                        final JPanel theCardPanel,
                        final CardLayout theCardLayout) {
         super();
@@ -138,6 +77,16 @@ public class GameplayGUI extends JPanel {
         myMainFrame = theMainFrame;
         myCardPanel = theCardPanel;
         myCardLayout = theCardLayout;
+        myIsNewGame = theIsNewGame;
+        init();
+        setArrows();
+        setMyMessage();
+        setGameplay();
+        //initGameScreen();
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+    }
+
+    private void init() {
         myMenubar = new JMenuBar();
         myGameplayMenu = new JMenu("Gameplay");
         myMap = new JMenuItem("Map");
@@ -155,16 +104,10 @@ public class GameplayGUI extends JPanel {
         myRightArrow = new JLabel();
         myLeftArrow = new JLabel();
         myItem = new JLabel();
-        setArrows();
-        setMyMessage();
-        setGameplay();
         initGameScreen();
-        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        //initGameScreen();
     }
 
-    /**
-     * Calls methods that sets up the GUI.
-     */
     private void initGameScreen() {
         keyboardArrowClicked();
         upArrowClicked();
@@ -178,58 +121,60 @@ public class GameplayGUI extends JPanel {
         setMenuBar();
     }
 
-    /**
-     * Initializes maze according to difficulty level the user has chosen.
-     */
     private void initMaze() {
-        switch (myDifficulty) {
-            case 0:
-                myMaze = new MazeGenerator(6,6);
-                break;
-            case 1:
-                myMaze = new MazeGenerator(10,10);
-                break;
-            default:
-                myMaze = new MazeGenerator(12,12);
+        if (myIsNewGame) {
+            switch (myDifficulty) {
+                case 0:
+                    myMaze = new MazeGenerator(6, 6);
+                    break;
+                case 1:
+                    myMaze = new MazeGenerator(10, 10);
+                    break;
+                default:
+                    myMaze = new MazeGenerator(12, 12);
 
+            }
+            myHero.setMyY(myMaze.getMySpawnInRow());
+            myHero.setMyX(myMaze.getMySpawnInCol());
         }
-        myHero.setMyY(myMaze.getMySpawnInRow());
-        myHero.setMyX(myMaze.getMySpawnInCol());
+    }
+    protected void setMyMaze(MazeGenerator theMaze) {
+        myMaze = theMaze;
     }
 
-    /**
-     * Sets and displays menu bar.
-     */
     private void setMenuBar() {
         //
         myGameplayMenu.add(myMap);
         myGameplayMenu.addSeparator();
-        myInventory.addActionListener(event-> {
-            InventoryGUI inventory = new InventoryGUI(myHero);
-        });
+//        myInventory.addActionListener(event-> {
+//            InventoryGUI inventory = new InventoryGUI(myHero);
+//        });
         myGameplayMenu.add(myInventory);
         myGameplayMenu.addSeparator();
         mySave.addActionListener(event-> {
             saveGame();
         });
         myLoad.addActionListener(event-> {
-            loadGame();
+            //loadGame();
         });
         myGameplayMenu.add(mySave);
-        myGameplayMenu.add(myLoad);
+        //myGameplayMenu.add(myLoad);
         myHelp.add(myInstructions);
         myHelp.add(myControls);
 
 
         myMenubar.add(myGameplayMenu);
         myMenubar.add(myHelp);
+        if (myMainFrame == null) {
+            myMainFrame = new JFrame();
+
+        }
         myMainFrame.setJMenuBar(myMenubar);
 
-    }
+        //myMenubar.setVisible(true);
+        //myMainFrame.add(myMenubar);
 
-    /**
-     * Adds action listener to myMap(JMenuItem) that is going to display the map of the dungeon.
-     */
+    }
     public void setMap() {
         myMap.addActionListener(new ActionListener() {
             @Override
@@ -242,10 +187,6 @@ public class GameplayGUI extends JPanel {
             }
         });
     }
-
-    /**
-     * Shows the map.
-     */
     private void initializeMapPopup() {
         GridLayout mazeGrid = new GridLayout(myMaze.getRows(), myMaze.getCol());
         myMapPopup = new JDialog(myMainFrame,"Map");
@@ -261,10 +202,6 @@ public class GameplayGUI extends JPanel {
         myMapPopup.add(myMazeMap);
         myMapPopup.setLocationRelativeTo(myMainFrame);
     }
-
-    /**
-     * Updates the map when the user moves.
-     */
     private void updateMapDisplay() {
         Component[] gridTo1DArray = myMazeMap.getComponents();
 
@@ -275,7 +212,6 @@ public class GameplayGUI extends JPanel {
                 //Clear old data
                 currRoom.removeAll();
                 currRoom.add(new JLabel(myMaze.getMaze()[row][col].toRoomString()));
-                //currRoom.add(new JLabel(myMaze.getMaze()[row][col].getRoomOccupant()));
                 Border currRoomWallsStatus = createRoomWalls(row, col, currRoom);
                 currRoom.setBorder(currRoomWallsStatus);
             }
@@ -284,11 +220,7 @@ public class GameplayGUI extends JPanel {
         myMazeMap.repaint();
     }
 
-    /**
-     * Creates room walls in the map.
-     */
     private Border createRoomWalls(final int theRow, final int theCol, final JPanel thePanel) {
-        Border north, south, west, east;
         int top, left, bottom, right;
         if (myMaze.getMaze()[theRow][theCol].getNorthWall() == WallType.HORIZONTAL_WALL) {
             top = 3;
@@ -313,7 +245,6 @@ public class GameplayGUI extends JPanel {
         }
         return BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK);
     }
-
     /**
      * Sets the icon of myGameplay JLabel initially to the right image.
      */
@@ -331,17 +262,17 @@ public class GameplayGUI extends JPanel {
             myHero = new Priestess(myPlayerName);
         }
 
-        myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myHero, "placeholder");
+        //myExitPanel = new ExitGUI(myMainFrame, myCardLayout, myCardPanel, myHero, "placeholder");
         myCardPanel.add(myExitPanel, "Exit");
-        myFightScenePanel = new FightScene(myMainFrame, myHero, myExitPanel, myCardLayout, myCardPanel);
+        //myFightScenePanel = new FightScene(myMainFrame, myHero, myExitPanel, myCardLayout, myCardPanel);
         myCardPanel.add(myFightScenePanel, "Fight");
         myGameplay.setOpaque(true);
         add(myGameplay);
     }
+    public JPanel getMyExitPanel() {
+        return myExitPanel;
+    }
 
-    /**
-     * Message that welcomes user to the dungeon.
-     */
     private void setMyMessage() {
         myMessage.setText("Welcome to the dungeon, " + myPlayerName);
         myMessage.setBounds(370, 370, 500, 30);
@@ -354,9 +285,6 @@ public class GameplayGUI extends JPanel {
         add(mySecondMessage);
     }
 
-    /**
-     * Sets position and size of arrow JLabels, then add mouse listeners to them.
-     */
     private void setArrows() {
         myItem.setBounds(540, 265, 100, 100);
         add(myItem);
@@ -379,9 +307,6 @@ public class GameplayGUI extends JPanel {
         add(myLeftArrow);
     }
 
-    /**
-     * Displays JOptionPane that shows user how to win the game.
-     */
     private void setInstructions() {
         myInstructions.addActionListener(e ->{
             JOptionPane.showMessageDialog(null,
@@ -394,9 +319,6 @@ public class GameplayGUI extends JPanel {
         });
     }
 
-    /**
-     * Displays JOptionPane that shows user how to navigate around the dungeon.
-     */
     private void setControls() {
         myControls.addActionListener(e ->{
             JOptionPane.showMessageDialog(null,
@@ -407,10 +329,7 @@ public class GameplayGUI extends JPanel {
         });
     }
 
-    /**
-     * Adds listeners to keyboard arrow keys such that user can user arrow keys to move around the dungeon as well.
-     */
-    protected void keyboardArrowClicked() {
+    private void keyboardArrowClicked() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
 
             if (e.getID() == KeyEvent.KEY_PRESSED) {
@@ -435,7 +354,7 @@ public class GameplayGUI extends JPanel {
 
     /**
      * Does the necessary action based on what the player encountered.
-     * @param theMove the move that the user made
+     * @param theMove
      */
     private synchronized String doSomethingWithItem(final MoveHandler theMove) {
         final Room newRoom = theMove.getMyNewRoom();
@@ -444,7 +363,6 @@ public class GameplayGUI extends JPanel {
         if (item == "M") {
             myFightScenePanel.fight();
             myCardLayout.show(myCardPanel, "Fight");
-
             theMove.getMyNewRoom().setMyEmptyRoom(true);
         } else if (item == "P" || item == "I" || item == "E" || item == "A") {
             myHero.addPillarCollected();
@@ -458,130 +376,17 @@ public class GameplayGUI extends JPanel {
             }
         }
 
+
+
+        // Prompt user to pick or leave the item.
+        // Do logic for if the picked up the item, say health potion, set the myEmptyCurrentRoom to true.
+        // This will let the program know that that room should now be empty after the user moves to another room.
+        // If they don't pick up the item, set it to false to keep that item in that room.
         updateMapDisplay();
         return item;
     }
 
-    /**
-     * Adds mouse listener to the up arrow JLabel.
-     */
-    private void upArrowClicked() {
-        myUpArrow.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                movingUp();
-            }
-        });
-    }
-
-    /**
-     * Adds mouse listener to the down arrow JLabel.
-     */
-    private void downArrowClicked() {
-        myDownArrow.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                movingDown();
-            }
-        });
-    }
-
-    /**
-     * Adds mouse listener to the left arrow JLabel.
-     */
-    private void leftArrowClicked() {
-        myLeftArrow.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                movingLeft();
-            }
-        });
-    }
-
-    /**
-     * Adds mouse listener to the right arrow JLabel.
-     */
-    private void rightArrowClicked() {
-        myRightArrow.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                movingRight();
-            }
-        });
-    }
-
-    /**
-     * Logic for moving up in the dungeon.
-     */
-    private void movingUp() {
-        System.out.println(myMaze.toString());
-        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-
-        MoveHandler move2 = myMaze.move(Direction.NORTH, myHero);
-        if (move2.getSuccess()) {
-            final String item = doSomethingWithItem(move2);
-            updateVisuals(item, "up");
-        } else {
-            cantMove("up");
-        }
-    }
-
-    /**
-     * Logic for moving down in the dungeon.
-     */
-    private void movingDown() {
-        System.out.println(myMaze.toString());
-        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-
-        MoveHandler move2 = myMaze.move(Direction.SOUTH, myHero);
-        if (move2.getSuccess()) {
-            final String item = doSomethingWithItem(move2);
-            updateVisuals(item, "down");
-        } else {
-            cantMove("down");
-        }
-    }
-
-    /**
-     * Logic for moving right in the dungeon.
-     */
-    private void movingRight() {
-        System.out.println(myMaze.toString());
-        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-        MoveHandler move2 = myMaze.move(Direction.EAST, myHero);
-        if (move2.getSuccess()) {
-            final String item = doSomethingWithItem(move2);
-            updateVisuals(item, "right");
-        } else {
-            cantMove("right");
-        }
-
-    }
-
-    /**
-     * Logic for moving left in the dungeon.
-     */
-    private void movingLeft() {
-        System.out.println(myMaze.toString());
-        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
-
-        MoveHandler move2 = myMaze.move(Direction.WEST, myHero);
-        if (move2.getSuccess()) {
-            final String item = doSomethingWithItem(move2);
-            updateVisuals(item, "left");
-        } else {
-            cantMove("left");
-        }
-
-    }
-
-    /**
-     * Updates the background image when user goes into new room.
-     * @param theItem pillar/health potion/ monster/ exit
-     * @param theDirection the direction the user moved in
-     */
-    private void updateVisuals(final String theItem, final String theDirection) {
+    public void updateVisuals(final String theItem, final String theDirection) {
         switch (theItem) {
             case "A", "E", "I", "P":
                 ImageIcon pillar = new ImageIcon("images/pillar.png");
@@ -619,54 +424,124 @@ public class GameplayGUI extends JPanel {
 
     }
 
-    /**
-     * Updates mySecondMessage JLabel when user is unable to move in a certain direction.
-     * @param theDirection String representation of the direction user moved in
-     */
+    private void upArrowClicked() {
+        myUpArrow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                movingUp();
+            }
+        });
+    }
+
+    private void downArrowClicked() {
+        myDownArrow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                movingDown();
+            }
+        });
+    }
+
+    private void leftArrowClicked() {
+        myLeftArrow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                movingLeft();
+            }
+        });
+    }
+
+    private void rightArrowClicked() {
+        myRightArrow.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                movingRight();
+            }
+        });
+    }
+
+    private void movingUp() {
+        System.out.println(myMaze.toString());
+        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+        MoveHandler move2 = myMaze.move(Direction.NORTH, myHero);
+        if (move2.getSuccess()) {
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "up");
+        } else {
+            cantMove("up");
+        }
+    }
+
+    private void movingDown() {
+        System.out.println(myMaze.toString());
+        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+        MoveHandler move2 = myMaze.move(Direction.SOUTH, myHero);
+        if (move2.getSuccess()) {
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "down");
+        } else {
+            cantMove("down");
+        }
+    }
+
+    private void movingRight() {
+        System.out.println(myMaze.toString());
+        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+        MoveHandler move2 = myMaze.move(Direction.EAST, myHero);
+        if (move2.getSuccess()) {
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "right");
+        } else {
+            cantMove("right");
+        }
+    }
+
+    private void movingLeft() {
+        System.out.println(myMaze.toString());
+        System.out.println(myHero.getMyY() + " " + myHero.getMyX());
+
+        MoveHandler move2 = myMaze.move(Direction.WEST, myHero);
+        if (move2.getSuccess()) {
+            final String item = doSomethingWithItem(move2);
+            updateVisuals(item, "left");
+        } else {
+            cantMove("left");
+        }
+
+    }
+
     private void cantMove(final String theDirection) {
         mySecondMessage.setBounds(440, 385, 500, 30);
         mySecondMessage.setText("You can't move " + theDirection);
     }
 
-    /**
-     * Saves the game.
-     */
     public void saveGame() {
-        GameState gs = new GameState(myMaze, myPlayerName, myClass, myDifficulty, myHero);
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("game_save.dat"))) {
 
-        try{
-            try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("game_save.dat"))){
-                oos.writeObject(gs);
-                System.out.println("Game saved successfully.");
-            }
+            out.writeObject(this);
+
+//                myMaze = gs.getMyMaze();
+//                myPlayerName = gs.getMyPlayerName();
+//                myClass = gs.getMyClass();
+//                myDifficulty = gs.getMyDifficulty();
+//                myHero = gs.getMyHero();
+                //myGameplayGui = gs.getGameplayGui;
+            //myFightScenePanel = new FightScene(myMainFrame, myHero, myExitPanel, myCardLayout, myCardPanel);
+            //setMap();
+            initializeMapPopup();
+            updateMapDisplay();
+            System.out.println("Game Saved sucessfuly.");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to save game.");
+            System.out.println("Failed to save game");
         }
     }
-
-    /**
-     * Loads previously saved game.
-     */
-    public void loadGame() {
-        try {
-
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("game_save.dat"))) {
-                GameState gs = (GameState) ois.readObject();
-
-                myMaze = gs.getMyMaze();
-                myPlayerName = gs.getMyPlayerName();
-                myClass = gs.getMyClass();
-                myDifficulty = gs.getMyDifficulty();
-                myHero = gs.getMyHero();
-
-                initializeMapPopup();
-                updateMapDisplay();
-                System.out.println("Game Loaded sucessfuly.");
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load game");
-        }
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();  // Default deserialization for other fields
+        init();  // Reinitialize the transient field
+        System.out.println("Gameplay init2");
     }
 }

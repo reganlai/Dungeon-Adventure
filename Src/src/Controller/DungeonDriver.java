@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.MazeGenerator;
 import View.DungeonGUI;
 import java.awt.EventQueue;
 
@@ -10,6 +11,7 @@ import java.awt.EventQueue;
  */
 public class DungeonDriver {
 
+
     /**
      * Private constructor to prevent construction of instances.
      */
@@ -17,11 +19,15 @@ public class DungeonDriver {
         // do nothing
     }
     public static void main(String[] args) {
+        DungeonGUI view = new DungeonGUI();
+        DungeonController controller = new DungeonController(view);
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new DungeonGUI();
+                //new DungeonController(view).startGame();
+                controller.startGame();
             }
+
         });
     }
 }

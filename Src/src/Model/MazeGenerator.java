@@ -21,17 +21,11 @@ import java.util.Set;
 public final class MazeGenerator implements Serializable {
     @Serial
     private static final long serialVersionUID = 7567907344024427690L;
-
-    private static final int DEFAULT_SIZE = 1;
-
-
     private static final int ITEM_PERCENTAGE = 10;
 
     private final Random myRandom = new Random();
 
     private final Map<Integer, Set<Integer>> myOccupiedRooms;
-
-    //private final DungeonCharacter myCharacter;
 
     private final int mySpawnInRow;
 
@@ -48,8 +42,7 @@ public final class MazeGenerator implements Serializable {
     /** */
     private int myCols;
 
-    public MazeGenerator(final int theRows, final int theCols /*final DungeonCharacter theCharacter*/) {
-        //myCharacter = theCharacter;
+    public MazeGenerator(final int theRows, final int theCols) {
         myAddedItemsCount = 0;
         myOccupiedRooms = new HashMap<>();
         myRows = theRows;
@@ -136,10 +129,18 @@ public final class MazeGenerator implements Serializable {
         boolean chooseRow = myRandom.nextBoolean();
         if (chooseRow) { // Chooses a room for the exit that is on the border of the maze.
             exitRow = myRandom.nextInt(myRows);
-            myMaze[exitRow][exitCol].setRoomOccupant("O");
+            // Ensure exit is not in an already occupied spot in this row
+            while (myOccupiedRooms.get(exitRow) != null && myOccupiedRooms.get(exitRow).contains(exitCol)) {
+                exitRow = myRandom.nextInt(myRows); // Randomly choose again until valid spot
+            }
+            myMaze[exitRow][exitCol].setRoomOccupant("O");  // Set exit at random spot
         } else {
             exitCol = myRandom.nextInt(myCols);
-            myMaze[exitRow][exitCol].setRoomOccupant("O");
+            // Check and avoid occupied spots
+            while (myOccupiedRooms.get(exitRow) != null && myOccupiedRooms.get(exitRow).contains(exitCol)) {
+                exitCol = myRandom.nextInt(myCols); // Randomly choose again until valid spot
+            }
+            myMaze[exitRow][exitCol].setRoomOccupant("O");  // Set exit at random spot
         }
         addValueToMap(exitRow, exitCol);
 
@@ -334,7 +335,7 @@ public final class MazeGenerator implements Serializable {
             strBuilder.append("\n");
             for (int col = 0; col < myCols; col++) {
                 strBuilder.append(myMaze[row][col].getWestWall().getWallSymbol());
-                strBuilder.append(myMaze[row][col].roomWallToString());
+                strBuilder.append(myMaze[row][col].getRoomOccupant() == "" ? " " : myMaze[row][col].getRoomOccupant());
                 strBuilder.append(myMaze[row][col].getEastWall().getWallSymbol()).append(" ");
             }
             strBuilder.append("\n");

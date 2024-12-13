@@ -14,6 +14,7 @@ public class Priestess extends Hero implements Serializable {
     private final static ImageIcon PRIESTESS_BLOCK = new ImageIcon("images/priestessblock.png");
     private final static ImageIcon PRIESTESS_WON = new ImageIcon("images/priestesswon.png");
     private final static ImageIcon PRIESTESS_LOST = new ImageIcon("images/priestesslost.png");
+    private final static ImageIcon PRIESTESS_IN_DUNGEON = new ImageIcon("images/priestess_in_dungeon.png");
 
     private final int myMinHeal = 20;
     private final int myMaxHeal = 50;
@@ -21,6 +22,11 @@ public class Priestess extends Hero implements Serializable {
     public Priestess(final String theName) {
         super(theName, 75, 25, 45, 5, .7, .3, 75);
 
+    }
+
+    @Override
+    public ImageIcon getHeroInDungeon() {
+        return PRIESTESS_IN_DUNGEON;
     }
 
     @Override

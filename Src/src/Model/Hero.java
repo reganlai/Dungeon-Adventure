@@ -18,9 +18,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -1047079817127925147L;
-    private static final int BLOCK_CHANCE = 30;
-
-
     private final double myChanceToBlock;
     private int myHealthPotions;
     private int myVisionPotions;
@@ -57,7 +54,7 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
         myChanceToBlock = theChanceToBlock;
         myPillarsCollected = 0;
     }
-
+    public abstract ImageIcon getHeroInDungeon();
     public abstract ImageIcon getImageIcon(final Action theAction);
     public abstract ImageIcon getHeroWonImage();
     public abstract ImageIcon getHeroLostImage();
@@ -135,6 +132,7 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
         } else {
             System.out.println(getMyName() + " has no potions left!");
         }
+
     }
 
     /**

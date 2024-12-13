@@ -1,12 +1,13 @@
 package Model;
 
+import View.GameplayGUI;
+
 import java.io.Serial;
 import java.io.Serializable;
 
 public class GameState implements Serializable {
     @Serial
     private static final long serialVersionUID = -4114671064039142465L;
-
     private final MazeGenerator myMaze;
     private final String myPlayerName;
     private final int myClass;
@@ -15,11 +16,12 @@ public class GameState implements Serializable {
 
     public GameState(final MazeGenerator theMaze, final String thePlayerName, final int theClass,
                      final int theDifficulty, final Hero theHero) {
-        this.myMaze = theMaze;
-        this.myPlayerName = thePlayerName;
-        this.myClass = theClass;
-        this.myDifficulty = theDifficulty;
-        this.myHero = theHero;
+        myMaze = theMaze;
+        myPlayerName = thePlayerName;
+        myClass = theClass;
+        myDifficulty = theDifficulty;
+        myHero = theHero;
+
     }
 
     public MazeGenerator getMyMaze() {
@@ -40,5 +42,8 @@ public class GameState implements Serializable {
 
     public Hero getMyHero() {
         return myHero;
+    }
+    public String toString() {
+        return myPlayerName + "_save.dat";
     }
 }

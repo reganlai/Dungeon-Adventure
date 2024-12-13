@@ -14,6 +14,7 @@ public class Warrior extends Hero implements Serializable {
     private final static ImageIcon WARRIOR_BLOCK = new ImageIcon("images/warriorblock.png");
     private final static ImageIcon WARRIOR_WON = new ImageIcon("images/warriorwon.png");
     private final static ImageIcon WARRIOR_LOST = new ImageIcon("images/warriorlost.png");
+    private final static ImageIcon WARRIOR_IN_DUNGEON = new ImageIcon("images/warrior_in_dungeon.png");
     private final static double SPECIAL_CHANCE = 0.4;
 
     private final  int minCrushingBlowDmg = 75;
@@ -24,6 +25,11 @@ public class Warrior extends Hero implements Serializable {
     public Warrior(final String theName) {
         super(theName, 125, 35, 60, 4, .8, .2, 125);
         //super(theName, 250, 35, 60, 4, .2, 250, 0,0);
+    }
+
+    @Override
+    public ImageIcon getHeroInDungeon() {
+        return WARRIOR_IN_DUNGEON;
     }
 
     @Override

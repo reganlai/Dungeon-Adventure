@@ -39,10 +39,4 @@ public class Skeleton extends Monster implements Serializable {
         }
         return imageIcon;
     }
-    public ImageIcon getAttackImage() {
-        return SKELETON_ATTACK;
-    }
-    public ImageIcon getBlockImage() {
-        return SKELETON_BLOCK;
-    }
 }

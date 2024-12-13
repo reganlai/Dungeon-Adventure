@@ -49,7 +49,11 @@ public final class Room implements Serializable {
         return myRoomWalls;
     }
     public void setVisiting(final String thePlayer) {
-        myStatus = (myItem == "" ? thePlayer : myItem + ", " + thePlayer);
+        StringBuilder str = new StringBuilder();
+        str.append(myItem);
+        str.append(" ");
+        str.append(thePlayer);
+        myStatus = (myItem == "" ? thePlayer : str.toString());
     }
     public void setVisited() {
         if (myEmptyRoom == true) {
@@ -121,7 +125,11 @@ public final class Room implements Serializable {
         str.append(myRoomWalls.getNorthWall().getWallSymbol());
         str.append("\n");
         str.append(myRoomWalls.getEastWall().getWallSymbol());
-        str.append(myItem);
+        if (myItem == "") {
+            str.append(" ");
+        } else {
+            str.append(myItem);
+        }
         str.append(myRoomWalls.getWestWall().getWallSymbol());
         str.append("\n");
         str.append(myRoomWalls.getSouthWall().getWallSymbol());

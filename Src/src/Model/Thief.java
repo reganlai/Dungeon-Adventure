@@ -13,6 +13,7 @@ public class Thief extends Hero implements Serializable {
     private final static ImageIcon THIEF_BLOCK = new ImageIcon("images/thiefblock.png");
     private final static ImageIcon THIEF_WON = new ImageIcon("images/thiefwon.png");
     private final static ImageIcon THIEF_LOST = new ImageIcon("images/thieflost.png");
+    private final static ImageIcon THIEF_IN_DUNGEON = new ImageIcon("images/thief_in_dungeon.png");
 
 
     private final double mySpecialChance = .4;
@@ -24,6 +25,9 @@ public class Thief extends Hero implements Serializable {
         super(theName, 150, 20, 40, 6,
                 .8, 0.4, 150);
 
+    }
+    public ImageIcon getHeroInDungeon() {
+        return THIEF_IN_DUNGEON;
     }
     public ImageIcon getImageIcon(final Action theAction) {
         ImageIcon imageIcon;
@@ -65,16 +69,6 @@ public class Thief extends Hero implements Serializable {
             success = true;
         }
 
-//        if(Math.random() < myCaughtChance) {
-//            System.out.println(getMyName() + " was caught!");
-//        } else if (Math.random() < mySpecialChance) {
-//            System.out.println("Surprise Attack successful! " + getMyName() + " lands an extra attack!");
-//            this.attack(theOp);
-//            this.attack(theOp);
-//        } else {
-//            System.out.println(getMyName() + " performs a regular attack.");
-//            attack(theOp);
-//        }
         return success;
     }
 

@@ -16,9 +16,6 @@ public abstract class DungeonCharacter implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -6818388129184736745L;
-    private static final int ATTACK_DAMAGE = 25;
-    private static final int HIT_CHANCE = 70;
-
 
     /** The name of the character */
     private String myName;
@@ -255,7 +252,6 @@ public abstract class DungeonCharacter implements Serializable {
                 dmg = rand.nextInt(theOp.getMyMaxAttack() - theOp.getMyMinAttack() + 1)
                         + theOp.getMyMinAttack();
                 theOp.takeDamage(dmg);
-                System.out.println("Monster takes damage" + dmg);
                 if (Math.random() < theOp.getMyHitChance()) {
                     dmg = rand.nextInt(myMinAttack - myMinAttack + 1)
                             + myMinAttack;
@@ -263,24 +259,22 @@ public abstract class DungeonCharacter implements Serializable {
 
                     takeDamage(dmg);
                 } else {
-                    System.out.println(myName + " missed the attack!");
+                    System.out.println(theOp.getMyName() + " missed the attack!");
                 }
             } else if (theOpAction == Action.SPECIAL) {
                 //Player takes more damage
                 if (Math.random() < theOp.getMyHitChance()) {
                     System.out.println(theOp.getMyName() + " deals " + myMaxAttack + " damage to " + myName + "!");
-                    takeDamage(myMaxAttack);
+                    takeDamage(myMaxAttack / 2);
                 } else {
-                    System.out.println(myName + " missed the attack!");
+                    System.out.println(theOp.getMyName() + " missed the attack!");
                 }
 
                 dmg = rand.nextInt(theOp.getMyMaxAttack() - theOp.getMyMinAttack() + 1)
                         + theOp.getMyMinAttack();
                 theOp.takeDamage(dmg);
-                System.out.println("Monster takes damage" + dmg);
             } else { //If theOp blocks
                 theOp.shieldDamage(Action.ATTACK);
-                //shieldDamage(ATTACK_DAMAGE);
             }
 
         } else {
@@ -293,13 +287,17 @@ public abstract class DungeonCharacter implements Serializable {
 
 
     public void shieldDamage(final Action theOpAction) {
+        Random rand = new Random();
+        System.out.println(this.getMyName() + " blocks.");
         if (theOpAction == Action.ATTACK) {
+            int dmg = rand.nextInt(myMaxAttack - myMinAttack + 1)
+                    + myMinAttack;
             //Both take damage
-            if (ATTACK_DAMAGE > myShield) {
-                takeDamage(Math.abs(myShield - ATTACK_DAMAGE));
+            if (dmg > myShield) {
+                takeDamage(Math.abs(myShield - dmg));
                 myShield = 0;
             } else {
-                myShield -= ATTACK_DAMAGE;
+                myShield -= dmg;
             }
 
         } else if (theOpAction == Action.SPECIAL) {
@@ -317,8 +315,7 @@ public abstract class DungeonCharacter implements Serializable {
      * @param theDmg the damage to be taken
      */
     public void takeDamage(int theDmg) {
-
-        System.out.println(this.getMyName() + " took " + theDmg + " damage!!!!!");
         setMyHp(theDmg >= myHp ? 0 : myHp - theDmg);
+        System.out.println(this.getMyName() + " took " + theDmg + " damage!!!!!");
     }
 }

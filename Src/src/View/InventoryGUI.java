@@ -1,53 +1,32 @@
 package View;
 
-import Model.Hero;
-
+import Controller.DungeonController;
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-/**
- * The InventoryGUI class displays the items that the user currently have.
- *
- * @author Regan Lai
- * @version 1.0
- */
 public class InventoryGUI extends JFrame {
 
-    /** Width for JFrame*/
     private static final int FRAME_WIDTH = 700;
-
-    /** Height for JFrame*/
     private static final int FRAME_HEIGHT = 300;
+    private final PropertyChangeSupport myPCS = new PropertyChangeSupport(this);
 
-    /** JLabel that holds the health potion image. */
     private JLabel myHealthPotionImage;
-
-    /** JLabel that holds the number of health potion the user has. */
     private JLabel myHealthPotionCount;
-
-    /** Button that allows user to use health potion. */
     private JButton myUseHealthPotion;
 
-    /** JLabel that holds the health pillar image. */
     private JLabel myPillarImage;
-
-    /** JLabel that holds the number of pillars the user has. */
     private JLabel myPillarCount;
+    private DungeonController myController;
 
-    /** The hero user is using. */
-    private Hero myHero;
-
-    /**
-     * Initializes the GUI.
-     * @param theHero the hero that the user is using right now
-     */
-    public InventoryGUI(Hero theHero) {
+    public InventoryGUI(final DungeonController theController) {
+        myController = theController;
         myHealthPotionImage = new JLabel();
         myHealthPotionCount = new JLabel();
         myUseHealthPotion = new JButton();
         myPillarImage = new JLabel();
         myPillarCount = new JLabel();
-        myHero = theHero;
 
         setTitle("Inventory");
         setIconImage(new ImageIcon("images/bag.png").getImage());
@@ -65,9 +44,6 @@ public class InventoryGUI extends JFrame {
         setVisible(true);
     }
 
-    /**
-     * Sets the position and size of the JLabel that holds the health potion image.
-     */
     private void setHealthPotionImage() {
         myHealthPotionImage.setBounds(15, 15, 100, 100);
         ImageIcon originalIcon = new ImageIcon("images/healthpotion.png");
@@ -77,35 +53,27 @@ public class InventoryGUI extends JFrame {
         add(myHealthPotionImage);
     }
 
-    /**
-     * Displays the number of health potion the user has currently.
-     */
     private void setHealthPotionCount() {
         myHealthPotionCount.setBounds(150, 40, 200, 50);
-        myHealthPotionCount.setText("Health Potion: x " + myHero.getMyHealthPotions());
+        myHealthPotionCount.setText("Health Potion: x " + myController.getHero().getMyHealthPotions());
         myHealthPotionCount.setFont(new Font("Arial", Font.PLAIN, 20));
         add(myHealthPotionCount);
     }
 
-    /**
-     * Sets the position and size of the JButton that allows user to use health potion.
-     */
     private void setUseHealthPotionButton() {
         myUseHealthPotion.setBounds(500, 40, 150, 40);
         myUseHealthPotion.setText("Use");
         myUseHealthPotion.setVisible(true);
 
-        myUseHealthPotion.addActionListener(e ->{
-            myHero.usePotion();
+        myUseHealthPotion.addActionListener(e -> {
+            myPCS.firePropertyChange("use", null, null);
+            myController.getHero().usePotion();
             setHealthPotionCount();
         });
 
         add(myUseHealthPotion);
     }
 
-    /**
-     * Sets the position and size of the JLabel that holds the image of the pillar.
-     */
     private void setPillarImage() {
         myPillarImage.setBounds(15, 145, 100, 100);
         ImageIcon originalIcon = new ImageIcon("images/pillar.png");
@@ -115,13 +83,27 @@ public class InventoryGUI extends JFrame {
         add(myPillarImage);
     }
 
-    /**
-     * Displays the number of pillars the user has currently.
-     */
     private void setPillarCount() {
         myPillarCount.setBounds(150, 170, 200, 50);
-        myPillarCount.setText("Pillars Collected: x " + myHero.getMyPillarsCollected() + "/4");
+        myPillarCount.setText("Pillars Collected: x " + myController.getHero().getMyPillarsCollected() + "/4");
         myPillarCount.setFont(new Font("Arial", Font.PLAIN, 20));
         add(myPillarCount);
+    }
+    /**
+     * Adds a listener for property change events in this class.
+     *
+     * @param theListener A property change listener to add.
+     */
+    public void addPropertyChangeListener(final PropertyChangeListener theListener) {
+        myPCS.addPropertyChangeListener(theListener);
+    }
+
+    /**
+     * Removes a listener for property change events from this class.
+     *
+     * @param theListener A property change listener to remove.
+     */
+    public void removePropertyChangeListener(final PropertyChangeListener theListener) {
+        myPCS.removePropertyChangeListener(theListener);
     }
 }
