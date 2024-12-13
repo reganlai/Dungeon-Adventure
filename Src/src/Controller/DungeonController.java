@@ -243,9 +243,6 @@ public class DungeonController implements Serializable {
             FileOutputStream fos = new FileOutputStream("game_adv.sav");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(this);
-            //oos.writeObject(myMainView);
-//            oos.writeObject(myHero);
-//            oos.writeObject(myMainView);
             oos.flush();
             oos.close();
 

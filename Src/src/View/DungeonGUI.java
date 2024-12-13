@@ -1,17 +1,17 @@
 package View;
 
 import Controller.DungeonController;
-
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.Serial;
-import java.io.Serializable;
 
 public class DungeonGUI extends JFrame {
-    @Serial
-    private static final long serialVersionUID = -7503476143259759311L;
     private static final String WINDOW_TITLE = "Dungeon Adventure";
     private static final String ICON_IMAGE_PATH = "images/torch.png";
     private static final String BACKGROUND_IMAGE_PATH = "images/home.jpg";
@@ -23,7 +23,7 @@ public class DungeonGUI extends JFrame {
     private transient ExitGUI myExitPanel;
     private transient FightScene myFightScene;
     private JPanel myCurrentPanel;
-     /**
+    /**
      * The panel for the home screen.
      * This is the screen that is first shows when the game launches.
      */
@@ -35,14 +35,13 @@ public class DungeonGUI extends JFrame {
     }
 
     public void initGui(final DungeonController theController, final SettingsPanel theSettings) {
-        //myMainFrame = new JFrame(WINDOW_TITLE);
         myHomePanel = new BackgroundPanel();
 
         myController = theController;
         mySettingsPanel = theSettings;
         myExitPanel = new ExitGUI(this, myController);
         myGameplayPanel = new GameplayPanel(this, myController, myExitPanel);
-        myFightScene = new FightScene(this, myController);
+        myFightScene = new FightScene(myController);
 
         myCurrentPanel = myHomePanel;
         add(myCurrentPanel);
@@ -55,8 +54,6 @@ public class DungeonGUI extends JFrame {
     }
     public void start(final boolean theFirstGame) {
         if (!theFirstGame) {
-            //getJMenuBar().setVisible(false);
-            //initGui();
             this.dispose();
             DungeonController controller = new DungeonController(new DungeonGUI());
             controller.startGame();
@@ -135,27 +132,7 @@ public class DungeonGUI extends JFrame {
         reconstruct();
     }
 
-//    public void setController(final DungeonController theLoadedController) {
-//        JLabel testLabel = new JLabel("Test Label - Component Added");
-//        testLabel.setBounds(10, 10, 200, 30);  // Position the label at the top left of the panel
-//        testLabel.setVisible(true);
-//        myController = theLoadedController;
-//        myFightScene.setController(myController);
-//        myGameplayPanel = new GameplayPanel(this, myController, myExitPanel);
-//        myGameplayPanel.init();
-//        removeAll();
-//        add(testLabel);
-//        revalidate();
-//        repaint();
-//    }
-
     private void reconstruct() {
-
-//        myGameplayPanel.init();
-//        remove(myCurrentPanel);
-//        myCurrentPanel = myGameplayPanel;
-//        System.out.println(myController.getHero().getMyName());
-//        add(myCurrentPanel);
         revalidate();
         repaint();
     }
@@ -163,7 +140,6 @@ public class DungeonGUI extends JFrame {
     public void setScreen() {
         remove(myCurrentPanel);
         myCurrentPanel = myGameplayPanel;
-        //add(myCurrentPanel);
         reconstruct();
     }
 

@@ -1,14 +1,21 @@
 package View;
 
-import Controller.DungeonController;
-
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.Serializable;
 
 public class SettingsPanel extends JPanel {
     private static final int FRAME_WIDTH = 1000;
@@ -46,7 +53,6 @@ public class SettingsPanel extends JPanel {
         super();
         myMainFrame = theMainFrame;
         myPcs = new PropertyChangeSupport(this);
-        //myController = theController;
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLayout(null);
         init();
@@ -78,8 +84,6 @@ public class SettingsPanel extends JPanel {
         setHeroBox();
         setDifficultyLabel();
         setDifficultyBox();
-        //setBackgroundImage();
-
     }
     private void setSelectedHero() {
         mySelectedHero.setBounds(650, 40, 200, 370);
@@ -163,7 +167,6 @@ public class SettingsPanel extends JPanel {
         });
 
         myReadyButton.setBounds(X_COORDINATE, 360, 300, 50);
-        //myReadyButton.setText("I'm ready");
         myReadyButton.setFont(new Font("Arial", Font.BOLD, 20));
         myReadyButton.addActionListener(new ActionListener() {
             @Override
@@ -175,7 +178,7 @@ public class SettingsPanel extends JPanel {
             }
         });
         myReadyButton.setVisible(true);
-        //myLoadButton.setVisible(true);
+        myLoadButton.setVisible(true);
         add(myLoadButton);
         add(myReadyButton);
         revalidate();
@@ -190,14 +193,13 @@ public class SettingsPanel extends JPanel {
     protected int getDifficultyLevel() {
         return myDifficultyLevel;
     }
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        myPcs.addPropertyChangeListener(listener);
+    public void addPropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(theListener);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        myPcs.removePropertyChangeListener(listener);
+    public void removePropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.removePropertyChangeListener(theListener);
     }
-
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);
         final Graphics2D graphics = (Graphics2D) theGraphics;

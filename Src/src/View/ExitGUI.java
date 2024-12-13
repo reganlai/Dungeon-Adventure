@@ -1,8 +1,10 @@
 package View;
 
 import Controller.DungeonController;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -10,20 +12,11 @@ public class ExitGUI extends JPanel {
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
     private final DungeonGUI myMainFrame;
-
     private final DungeonController myController;
-
     private Image myBackgroundImage;
     private JLabel myBackground;
     private JLabel myYesLabel;
     private JLabel myNoLabel;
-//    private String myGameResult;
-
-//    public ExitGUI(final JFrame theMainFrame,
-//                   final CardLayout theCardLayout,
-//                   final JPanel theCardPanel,
-//                   final Hero theHero,
-//                   final String theGameResult) {
     public ExitGUI(final DungeonGUI theMainFrame, final DungeonController theController) {
         setLayout(null);
         myMainFrame = theMainFrame;

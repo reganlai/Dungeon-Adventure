@@ -1,7 +1,5 @@
 package View;
-
 import Controller.DungeonController;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -12,14 +10,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Image;
-
 public class GameplayPanel extends JPanel {
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
     private static KeyBindingsManager myKeyBindingManager;
     private final DungeonController myController;
     private final ExitGUI myExitPanel;
-
     private DungeonGUI myMainFrame;
     private JMenuBar myMenubar;
     private JMenu myGameplayMenu;
@@ -33,7 +29,6 @@ public class GameplayPanel extends JPanel {
     private JLabel myMessage;
     private JLabel mySecondMessage;
     private JLabel myItem;
-
     protected GameplayPanel(final DungeonGUI theMainFrame, final DungeonController theController,
                             final ExitGUI theExitPanel) {
         super();
@@ -45,15 +40,12 @@ public class GameplayPanel extends JPanel {
         myMessage = new JLabel();
         mySecondMessage = new JLabel();
         myHeroAndBackGround = new JLabel();
-
         add(myItem);
         myItem.setBounds(540, 265, 100, 100);
-
     }
     protected void init() {
         myKeyBindingManager = new KeyBindingsManager(this, myController);
         myKeyBindingManager.keyboardArrowClicked();
-
         myMenubar = new JMenuBar();
         myGameplayMenu = new JMenu("Gameplay");
         myMap = new JMenuItem("Map");
@@ -62,25 +54,19 @@ public class GameplayPanel extends JPanel {
         myInventory = new JMenuItem("Inventory");
         myControls = new JMenuItem("Controls");
         mySave = new JMenuItem("Save");
-
         setMenuBar();
         setMyMessage();
         setHeroLabel();
-
         setInstructions();
         setControls();
-
         SwingUtilities.invokeLater(() -> myInstructions.doClick());
     }
-
     private void setHeroLabel() {
         myHeroAndBackGround.setBounds(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
         myHeroAndBackGround.setIcon(myController.getHero().getHeroInDungeon());
         myHeroAndBackGround.setOpaque(true);
         add(myHeroAndBackGround);
-
     }
-
     private void setMyMessage() {
         myMessage.setText("Welcome to the dungeon!");
         myMessage.setBounds(400, 370, 500, 30);
@@ -104,33 +90,20 @@ public class GameplayPanel extends JPanel {
         mySave.addActionListener(event-> {
             myController.saveGame();
         });
-//        myLoad.addActionListener(event-> {
-//            //loadGame();
-//        });
+
         myGameplayMenu.add(mySave);
-        //myGameplayMenu.add(myLoad);
         myHelp.add(myInstructions);
         myHelp.add(myControls);
-
-
         myMenubar.add(myGameplayMenu);
         myMenubar.add(myHelp);
-//        if (myMainFrame == null) {
-//            myMainFrame = new JFrame();
-//
-//        }
+
         myMainFrame.setJMenuBar(myMenubar);
-
-        //myMenubar.setVisible(true);
-        //myMainFrame.add(myMenubar);
-
     }
     private void setMap() {
         myMap.addActionListener(e -> {
             myMainFrame.showMap();
         });
     }
-
     public JLabel getMessageLabel() {
         return mySecondMessage;
     }
@@ -145,7 +118,6 @@ public class GameplayPanel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
         });
     }
-
     private void setControls() {
         myControls.addActionListener(e ->{
             JOptionPane.showMessageDialog(myMainFrame,
@@ -182,7 +154,6 @@ public class GameplayPanel extends JPanel {
                     myExitPanel.setGameResult("Won");
                     myMainFrame.exit();
                 }
-
                 break;
             default:
                 myItem.setVisible(false);

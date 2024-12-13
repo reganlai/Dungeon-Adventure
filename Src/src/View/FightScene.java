@@ -11,46 +11,27 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class FightScene extends JPanel implements PropertyChangeListener {
-
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 500;
     private static final int STANDBY = 0;
     private static final int ATTACK = 1;
     private static final int BLOCK = 2;
     private static final int SPECIAL = 3;
-    /** The main frame shared across different classes to update the same frame.*/
-    private final DungeonGUI myMainFrame;
-    /** The CardLayout that deals with the screen changing.*/
-
     private DungeonController myController;
-//    private final ExitGUI myExitPanel;
-//    private final CardLayout myCardLayout;
-//    /** The parent panel for all the screens. Used by the CardLayout.*/
-//    private final JPanel myCardPanel;
-
     /** The block button. */
     private JButton myBlockButton;
-
-    /** The label to display the fight comments. */
-    private JLabel myActionCommentDisplay;
-
     private JLabel myBackgroundImage;
-
     private JLabel myHeroImage;
     private JLabel myHeroHp;
     private JLabel myHeroDmg;
-
     private JButton myAttackButton;
     private JButton mySpecialAttack;
     private JLabel myMonsterImage;
     private JLabel myMonsterHp;
     private JLabel myMonsterDmg;
 
-//    protected FightScene(final JFrame theMainFrame, final Hero theHero, final ExitGUI theExitPanel,
-//                         final CardLayout theCardLayout, final JPanel theCardPanel) {
-    protected FightScene(final DungeonGUI theMainFrame, final DungeonController theController) {
+    protected FightScene(final DungeonController theController) {
         setLayout(null);
-        myMainFrame = theMainFrame;
         myController = theController;
 
         myBackgroundImage = new JLabel();
@@ -80,17 +61,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
         setBackground();
         repaint();
     }
-
-    private void doneFight(final boolean theHeroWin) {
-        System.out.println(theHeroWin);
-//        if (theHeroWin) {
-//            myCardLayout.show(myCardPanel, "Game");
-//        } else {
-//            myExitPanel.setGameResult("Lost");
-//            myCardLayout.show(myCardPanel, "Exit");
-//        }
-    }
-
     private void setBackground() {
         ImageIcon background = new ImageIcon("images/backgroundimage.png");
         Image scaledPillar = background.getImage().getScaledInstance(1000, 500, Image.SCALE_SMOOTH);
@@ -100,24 +70,20 @@ public class FightScene extends JPanel implements PropertyChangeListener {
     }
 
     private void setAction(final int theAction) {
-
         myHeroImage.setBounds(280, 180, 190, 200);
         myHeroImage.setBackground(Color.BLACK);
         add(myHeroImage);
-
         myHeroImage.setIcon(new ImageIcon(myController.getMyHeroImage(theAction).getImage().
                 getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
 
         switch(theAction) {
             case ATTACK:
                 attack();
-                //doneFight();
                 break;
             case SPECIAL:
                 specialAttack();
                 break;
             case BLOCK:
-                //Block
                 block();
         }
     }
@@ -133,28 +99,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
 
     private void attack() {
         myController.attack();
-//        Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
-//        if (myHero.isAlive() && myMonster.isAlive()) {
-//            //myHeroImage.setIcon(myHero.getAttackImage());
-//            myHeroImage.setIcon(new ImageIcon(myHero.getImageIcon(Action.ATTACK).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//            myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//
-//            myHero.attack(myMonster, theOpAction);
-//            //setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
-//
-//            //doneFight(true);
-//        }
-//
-//        if (!myMonster.isAlive() && myHero.isAlive()) {
-//            doneFight(true);
-//        } else if (myMonster.isAlive() && myHero.isAlive()){
-//            //continue
-//        } else {
-//            doneFight(false);
-//        }
-//        paintScreen();
     }
 
     private void block() {
@@ -163,24 +107,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
 
     private void specialAttack() {
         myController.special();
-//        Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
-//        if (myHero.isAlive() && myMonster.isAlive()) {
-//            myHeroImage.setIcon(new ImageIcon(myHero.getImageIcon(Action.ATTACK).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//            myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//            myHero.specialAbility(myMonster, theOpAction);
-//            //setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
-//        }
-//
-//        if (!myMonster.isAlive() && myHero.isAlive()) {
-//            doneFight(true);
-//        } else if (myMonster.isAlive() && myHero.isAlive()){
-//            //continue
-//        } else {
-//            doneFight(false);
-//        }
-//        paintScreen();
     }
 
     protected void setHeroHp() {
@@ -230,30 +156,8 @@ public class FightScene extends JPanel implements PropertyChangeListener {
         myMonsterImage.setBounds(530, 180, 190, 200);
 
         myController.setMonster();
-
-//        final Random random = new Random();
-//        int randomInt = random.nextInt(3);
-//        switch(randomInt) {
-//            case 0:
-//                myMonster = new Gremlin();
-//                //setMonsterHp();
-//                //setMonsterDmg();
-//                break;
-//            case 1:
-//                myMonster = new Ogre();
-//                //setMonsterHp();
-//                //setMonsterDmg();
-//                break;
-//            case 2:
-//                myMonster = new Skeleton();
-////                setMonsterHp();
-////                setMonsterDmg();
-//                break;
-//        }
-
         Image monster = myController.getMyMonsterImage(STANDBY).getImage().
                 getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-
         myMonsterImage.setIcon(new ImageIcon(monster));
         add(myMonsterImage);
 
@@ -265,7 +169,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
 
         myAttackButton.addActionListener(theEvent -> {
             setAction(ATTACK);
-            //other logic
         });
         myBlockButton.setBounds(300, 380, 100, 40);
         myBlockButton.addActionListener(event -> {
@@ -279,13 +182,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
         add(myBlockButton);
         add(mySpecialAttack);
     }
-
-//    private void revertHeroImage() {
-//        Image hero =  myController.getHero().getImageIcon(Action.STANDBY).getImage().
-//                getScaledInstance(190, 200, Image.SCALE_SMOOTH);
-//        myHeroImage.setIcon(new ImageIcon(hero));
-//    }
-
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (theEvt.getPropertyName().equals("use")) {
