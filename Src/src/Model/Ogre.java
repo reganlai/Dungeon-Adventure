@@ -26,17 +26,11 @@ public class Ogre extends Monster implements Serializable {
     }
 
     public ImageIcon getImageIcon(final Action theAction) {
-        ImageIcon imageIcon;
-        switch (theAction) {
-            case ATTACK:
-                imageIcon = OGRE_ATTACK;
-                break;
-            case BLOCK:
-                imageIcon = OGRE_BLOCK;
-                break;
-            default:
-                imageIcon = STANDING_OGRE;
-        }
+        ImageIcon imageIcon = switch (theAction) {
+            case ATTACK -> OGRE_ATTACK;
+            case BLOCK -> OGRE_BLOCK;
+            default -> STANDING_OGRE;
+        };
         return imageIcon;
     }
 }
