@@ -365,4 +365,6 @@ public abstract class DungeonCharacter implements Serializable {
         setMyHp(theDmg >= myHp ? 0 : myHp - theDmg);
         System.out.println(this.getMyName() + " took " + theDmg + " damage!!!!!");
     }
+
+    public abstract ImageIcon getImageIcon(javax.swing.Action theAction);
 }

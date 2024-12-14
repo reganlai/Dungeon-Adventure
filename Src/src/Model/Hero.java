@@ -26,8 +26,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
     /** The number of health potions collected by the user. */
     private int myHealthPotions;
 
-    /** The number of vision potions collected by the user. */
-    private int myVisionPotions;
 
     /** The number of pillars collected by the user. */
     private int myPillarsCollected;
@@ -84,12 +82,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
         return myHealthPotions;
     }
 
-    /**
-     * @return the number of vision potions the hero currently has
-     */
-    public int getMyVisionPotions() {
-        return myVisionPotions;
-    }
 
     /**
      * @return the number of pillars the hero has collected
@@ -105,12 +97,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
         myHealthPotions++;
     }
 
-    /**
-     * Increments the number of vision potions the hero has by 1.
-     */
-    public void addVisionPotion() {
-        myVisionPotions++;
-    }
 
     /**
      * Increments the number of pillars collected by the hero by 1.
@@ -140,18 +126,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
 
     }
 
-    /**
-     * Uses a vision potion, which could reveal additional parts of the dungeon.
-     * If the hero has no vision potions, this method will notify the user.
-     */
-    public void useVisionPotion() {
-        if (myVisionPotions > 0) {
-            myVisionPotions--;
-            System.out.println(getMyName() + " used a vision potion!");
-        } else {
-            System.out.println(getMyName() + " has no vision potions left!");
-        }
-    }
 
     /**
      * Helper method to apply damage while rolling chance to block the damage.
@@ -178,7 +152,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
     public String toString() {
         return "Hero: " + getMyName() +
                 "\nHp: " + getMyHp() +
-                "\nHealing Potions: " + getMyHealthPotions() +
-                "\nVision Potions: " + getMyVisionPotions();
+                "\nHealing Potions: " + getMyHealthPotions();
     }
 }
