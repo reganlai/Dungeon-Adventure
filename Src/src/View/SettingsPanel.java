@@ -46,7 +46,6 @@ public class SettingsPanel extends JPanel {
         super();
         myMainFrame = theMainFrame;
         myPcs = new PropertyChangeSupport(this);
-        //myController = theController;
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLayout(null);
         init();
@@ -68,6 +67,7 @@ public class SettingsPanel extends JPanel {
         myLoadButton = new JButton("Load");
         initOptions();
     }
+
     private void initOptions() {
         setSettingsButton();
         setSelectedHero();
@@ -78,9 +78,8 @@ public class SettingsPanel extends JPanel {
         setHeroBox();
         setDifficultyLabel();
         setDifficultyBox();
-        //setBackgroundImage();
-
     }
+
     private void setSelectedHero() {
         mySelectedHero.setBounds(650, 40, 200, 370);
         mySelectedHero.setOpaque(true);

@@ -262,6 +262,7 @@ public class DungeonController implements Serializable {
     private SettingsPanel getMySettingsPanel() {
         return mySettingsPanel;
     }
+
     private void loadGame() {
         try (FileInputStream fis = new FileInputStream("game_adv.sav");
              ObjectInputStream ois = new ObjectInputStream(fis)) {

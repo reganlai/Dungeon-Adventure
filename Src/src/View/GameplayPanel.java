@@ -66,7 +66,6 @@ public class GameplayPanel extends JPanel {
         setMenuBar();
         setMyMessage();
         setHeroLabel();
-
         setInstructions();
         setControls();
 
@@ -92,6 +91,7 @@ public class GameplayPanel extends JPanel {
         add(myMessage);
         add(mySecondMessage);
     }
+
     private void setMenuBar() {
         myGameplayMenu.add(myMap);
         setMap();
@@ -104,27 +104,16 @@ public class GameplayPanel extends JPanel {
         mySave.addActionListener(event-> {
             myController.saveGame();
         });
-//        myLoad.addActionListener(event-> {
-//            //loadGame();
-//        });
+
         myGameplayMenu.add(mySave);
-        //myGameplayMenu.add(myLoad);
         myHelp.add(myInstructions);
         myHelp.add(myControls);
 
-
         myMenubar.add(myGameplayMenu);
         myMenubar.add(myHelp);
-//        if (myMainFrame == null) {
-//            myMainFrame = new JFrame();
-//
-//        }
         myMainFrame.setJMenuBar(myMenubar);
-
-        //myMenubar.setVisible(true);
-        //myMainFrame.add(myMenubar);
-
     }
+
     private void setMap() {
         myMap.addActionListener(e -> {
             myMainFrame.showMap();

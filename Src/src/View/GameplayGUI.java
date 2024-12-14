@@ -105,7 +105,6 @@ public class GameplayGUI extends JPanel {
         myLeftArrow = new JLabel();
         myItem = new JLabel();
         initGameScreen();
-        //initGameScreen();
     }
 
     private void initGameScreen() {
@@ -522,15 +521,6 @@ public class GameplayGUI extends JPanel {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("game_save.dat"))) {
 
             out.writeObject(this);
-
-//                myMaze = gs.getMyMaze();
-//                myPlayerName = gs.getMyPlayerName();
-//                myClass = gs.getMyClass();
-//                myDifficulty = gs.getMyDifficulty();
-//                myHero = gs.getMyHero();
-                //myGameplayGui = gs.getGameplayGui;
-            //myFightScenePanel = new FightScene(myMainFrame, myHero, myExitPanel, myCardLayout, myCardPanel);
-            //setMap();
             initializeMapPopup();
             updateMapDisplay();
             System.out.println("Game Saved sucessfuly.");

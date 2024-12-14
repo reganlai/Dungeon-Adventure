@@ -5,8 +5,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Image;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -23,10 +23,7 @@ public class FightScene extends JPanel implements PropertyChangeListener {
     /** The CardLayout that deals with the screen changing.*/
 
     private DungeonController myController;
-//    private final ExitGUI myExitPanel;
-//    private final CardLayout myCardLayout;
-//    /** The parent panel for all the screens. Used by the CardLayout.*/
-//    private final JPanel myCardPanel;
+
 
     /** The block button. */
     private JButton myBlockButton;
@@ -73,13 +70,14 @@ public class FightScene extends JPanel implements PropertyChangeListener {
         generateMonster();
     }
     public void paintScreen() {
-        //setHeroDmg();
+        setHeroDmg();
         setMonsterHp();
         setHeroHp();
-        //setMonsterDmg();
+        setMonsterDmg();
         setBackground();
         repaint();
     }
+
 
     private void doneFight(final boolean theHeroWin) {
         System.out.println(theHeroWin);
@@ -111,13 +109,11 @@ public class FightScene extends JPanel implements PropertyChangeListener {
         switch(theAction) {
             case ATTACK:
                 attack();
-                //doneFight();
                 break;
             case SPECIAL:
                 specialAttack();
                 break;
             case BLOCK:
-                //Block
                 block();
         }
     }
@@ -133,28 +129,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
 
     private void attack() {
         myController.attack();
-//        Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
-//        if (myHero.isAlive() && myMonster.isAlive()) {
-//            //myHeroImage.setIcon(myHero.getAttackImage());
-//            myHeroImage.setIcon(new ImageIcon(myHero.getImageIcon(Action.ATTACK).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//            myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//
-//            myHero.attack(myMonster, theOpAction);
-//            //setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
-//
-//            //doneFight(true);
-//        }
-//
-//        if (!myMonster.isAlive() && myHero.isAlive()) {
-//            doneFight(true);
-//        } else if (myMonster.isAlive() && myHero.isAlive()){
-//            //continue
-//        } else {
-//            doneFight(false);
-//        }
-//        paintScreen();
     }
 
     private void block() {
@@ -163,24 +137,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
 
     private void specialAttack() {
         myController.special();
-//        Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
-//        if (myHero.isAlive() && myMonster.isAlive()) {
-//            myHeroImage.setIcon(new ImageIcon(myHero.getImageIcon(Action.ATTACK).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//            myMonsterImage.setIcon(new ImageIcon(myMonster.getImageIcon(theOpAction).getImage().
-//                    getScaledInstance(190, 200, Image.SCALE_SMOOTH)));
-//            myHero.specialAbility(myMonster, theOpAction);
-//            //setHeroHp(myHero.getMyHp(), myHero.getMyMaxHp());
-//        }
-//
-//        if (!myMonster.isAlive() && myHero.isAlive()) {
-//            doneFight(true);
-//        } else if (myMonster.isAlive() && myHero.isAlive()){
-//            //continue
-//        } else {
-//            doneFight(false);
-//        }
-//        paintScreen();
     }
 
     protected void setHeroHp() {
@@ -230,27 +186,6 @@ public class FightScene extends JPanel implements PropertyChangeListener {
         myMonsterImage.setBounds(530, 180, 190, 200);
 
         myController.setMonster();
-
-//        final Random random = new Random();
-//        int randomInt = random.nextInt(3);
-//        switch(randomInt) {
-//            case 0:
-//                myMonster = new Gremlin();
-//                //setMonsterHp();
-//                //setMonsterDmg();
-//                break;
-//            case 1:
-//                myMonster = new Ogre();
-//                //setMonsterHp();
-//                //setMonsterDmg();
-//                break;
-//            case 2:
-//                myMonster = new Skeleton();
-////                setMonsterHp();
-////                setMonsterDmg();
-//                break;
-//        }
-
         Image monster = myController.getMyMonsterImage(STANDBY).getImage().
                 getScaledInstance(190, 200, Image.SCALE_SMOOTH);
 
