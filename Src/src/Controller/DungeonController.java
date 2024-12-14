@@ -11,15 +11,39 @@ import java.awt.*;
 import java.io.*;
 import java.util.Random;
 
+/**
+ * The controller of this program.
+ *
+ * @author George Njane
+ * @version 1.0
+ */
 public class DungeonController implements Serializable {
+
+    /** The maze(dungeon) generated and used. */
     private MazeGenerator myMaze;
+
+    /** DungeonGUI. */
     private DungeonGUI myMainView;
+
+    /** The SettingsPanel. */
     private SettingsPanel mySettingsPanel;
+
+    /** The Hero used by the user. */
     private Hero myHero;
+
+    /** JDialog holding the map. */
     private JDialog myMapDialog;
+
+    /** The JPanel representation of the map. */
     private JPanel myMapPanel;
+
+    /** The monster that the user is fighting. */
     private Monster myMonster;
 
+    /**
+     * Initializes the controller.
+     * @param theMainView DungeonGUI
+     */
     public DungeonController(final DungeonGUI theMainView) {
         myMainView = theMainView;
         mySettingsPanel = new SettingsPanel(theMainView);
@@ -31,6 +55,9 @@ public class DungeonController implements Serializable {
         });
     }
 
+    /**
+     * User moves in that certain direction.
+     */
     public void move(final int theDir) {
         Direction dir = Direction.WEST;
         MoveHandler move;
@@ -48,6 +75,9 @@ public class DungeonController implements Serializable {
         }
     }
 
+    /**
+     * Updates the GUI according to what's picked up in the dungeon.
+     */
     private void doSomethingWithItem(final MoveHandler theMove) {
         final Room newRoom = theMove.getMyNewRoom();
         final String item = newRoom.getRoomOccupant();
@@ -74,6 +104,9 @@ public class DungeonController implements Serializable {
         renderMap();
     }
 
+    /**
+     * Randomly generates a maze.
+     */
     private void generateMaze(final int theDifficultyLevel) {
         switch (theDifficultyLevel) {
             case 0:
@@ -89,6 +122,10 @@ public class DungeonController implements Serializable {
         myHero.setMyX(myMaze.getMySpawnInCol());
         setMap();
     }
+
+    /**
+     * Creates layout for the map.
+     */
     private void setMap() {
         //myMapDialog = new JDialog();
         GridLayout mazeGrid = new GridLayout(myMaze.getRows(), myMaze.getCol());
@@ -105,6 +142,10 @@ public class DungeonController implements Serializable {
         myMapDialog.add(myMapPanel);
         myMapDialog.setLocationRelativeTo(myMainView);
     }
+
+    /**
+     * Creates layout for the map.
+     */
     public void renderMap() {
         Component[] gridTo1DArray = myMapPanel.getComponents();
 
@@ -123,6 +164,10 @@ public class DungeonController implements Serializable {
         myMapPanel.repaint();
 
     }
+
+    /**
+     * Creates walls for each room in the map.
+     */
     private Border createRoomWalls(final int theRow, final int theCol, final JPanel thePanel) {
         int top, left, bottom, right;
         if (myMaze.getMaze()[theRow][theCol].getNorthWall() == WallType.HORIZONTAL_WALL) {
@@ -148,35 +193,50 @@ public class DungeonController implements Serializable {
         return BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK);
     }
 
+    /**
+     * Creates a new hero according to the user's selection.
+     */
     public void setGameSetting(final String thePlayerName, final int theHeroSelection, final int theDifficultyLevel) {
         if (theHeroSelection == 0) {
-            //myGameplay.setIcon(new ImageIcon("images/thief_in_dungeon.png"));
             myHero = new Thief(thePlayerName);
         } else if (theHeroSelection == 1) {
-            //myGameplay.setIcon(new ImageIcon("images/warrior_in_dungeon.png"));
             myHero = new Warrior(thePlayerName);
         } else {
-            //myGameplay.setIcon(new ImageIcon("images/priestess_in_dungeon.png"));
             myHero = new Priestess(thePlayerName);
         }
         generateMaze(theDifficultyLevel);
     }
 
+    /**
+     * @return returns image icon depending on whether user had won or not.
+     */
     public ImageIcon getHeroImageBasedOnResults(String theResults) {
         return theResults == "Won" ? myHero.getHeroWonImage() : myHero.getHeroLostImage();
     }
 
+    /**
+     * @return the map dialog.
+     */
     public JDialog getMapDialog() {
         return myMapDialog;
     }
-
+     /**
+     * @return the hero.
+     */
     public Hero getHero() {
         return myHero;
     }
+
+    /**
+     * @return the monster.
+     */
     public Monster getMyMonster() {
         return myMonster;
     }
 
+    /**
+     * Generates monster.
+     */
     public void setMonster() {
         final Random random = new Random();
         int randomInt = random.nextInt(3);
@@ -198,6 +258,10 @@ public class DungeonController implements Serializable {
                 break;
         }
     }
+
+    /**
+     * @return hero's image according to its action.
+     */
     public ImageIcon getMyHeroImage(final int theAction) {
         ImageIcon image = myHero.getImageIcon(Action.STANDBY);
         switch (theAction) {
@@ -212,6 +276,10 @@ public class DungeonController implements Serializable {
         }
         return image;
     }
+
+    /**
+     * @return monster image according to its current action.
+     */
     public ImageIcon getMyMonsterImage(final int theAction) {
         ImageIcon image = myMonster.getImageIcon(Action.STANDBY);
         switch (theAction) {
@@ -226,6 +294,10 @@ public class DungeonController implements Serializable {
         }
         return image;
     }
+
+    /**
+     * Saves game.
+     */
     public void saveGame() {
         try {
             FileOutputStream fos = new FileOutputStream("game_adv.sav");
@@ -241,13 +313,24 @@ public class DungeonController implements Serializable {
             System.out.println(e.getClass() + ": " + e.getMessage());
         }
     }
+
+    /**
+     * @return DungeonGUI.
+     */
     private DungeonGUI getMyMainView() {
         return myMainView;
     }
+
+    /**
+     * @return SettingsPanel.
+     */
     private SettingsPanel getMySettingsPanel() {
         return mySettingsPanel;
     }
 
+    /**
+     * Loads previously saved game.
+     */
     private void loadGame() {
         try (FileInputStream fis = new FileInputStream("game_adv.sav");
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -274,6 +357,9 @@ public class DungeonController implements Serializable {
 
     }
 
+    /**
+     * User attacks monster.
+     */
     public void attack() {
         Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
         if (myHero.isAlive() && myMonster.isAlive()) {
@@ -292,6 +378,10 @@ public class DungeonController implements Serializable {
         myMainView.getMyFightScene().paintScreen();
         // continue the fight otherwise.
     }
+
+    /**
+     * User blocks.
+     */
     public void block() {
         Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
         myMonster.getmyAdaptiveCounterAttack().recordPlayerAction(Action.BLOCK);
@@ -312,6 +402,9 @@ public class DungeonController implements Serializable {
         // continue the fight otherwise.
     }
 
+    /**
+     * User uses special.
+     */
     public void special() {
         Action theOpAction = myMonster.getmyAdaptiveCounterAttack().generateAttack();
         if (myHero.isAlive() && myMonster.isAlive()) {
@@ -331,6 +424,9 @@ public class DungeonController implements Serializable {
         // continue the fight otherwise.
     }
 
+    /**
+     * Starts the game.
+     */
     public void startGame() {
         myMainView.initGui(this, mySettingsPanel);
     }
