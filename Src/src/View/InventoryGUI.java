@@ -1,17 +1,18 @@
 package View;
 
 import Controller.DungeonController;
-import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 
 public class InventoryGUI extends JFrame {
 
     private static final int FRAME_WIDTH = 700;
     private static final int FRAME_HEIGHT = 300;
-    private final PropertyChangeSupport myPCS = new PropertyChangeSupport(this);
-
     private JLabel myHealthPotionImage;
     private JLabel myHealthPotionCount;
     private JButton myUseHealthPotion;
@@ -64,13 +65,10 @@ public class InventoryGUI extends JFrame {
         myUseHealthPotion.setBounds(500, 40, 150, 40);
         myUseHealthPotion.setText("Use");
         myUseHealthPotion.setVisible(true);
-
         myUseHealthPotion.addActionListener(e -> {
-            myPCS.firePropertyChange("use", null, null);
             myController.getHero().usePotion();
             setHealthPotionCount();
         });
-
         add(myUseHealthPotion);
     }
 
@@ -88,22 +86,5 @@ public class InventoryGUI extends JFrame {
         myPillarCount.setText("Pillars Collected: x " + myController.getHero().getMyPillarsCollected() + "/4");
         myPillarCount.setFont(new Font("Arial", Font.PLAIN, 20));
         add(myPillarCount);
-    }
-    /**
-     * Adds a listener for property change events in this class.
-     *
-     * @param theListener A property change listener to add.
-     */
-    public void addPropertyChangeListener(final PropertyChangeListener theListener) {
-        myPCS.addPropertyChangeListener(theListener);
-    }
-
-    /**
-     * Removes a listener for property change events from this class.
-     *
-     * @param theListener A property change listener to remove.
-     */
-    public void removePropertyChangeListener(final PropertyChangeListener theListener) {
-        myPCS.removePropertyChangeListener(theListener);
     }
 }

@@ -1,21 +1,19 @@
 package View;
 
 import Controller.DungeonController;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.io.Serializable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class KeyBindingsManager {
+public class KeyBindingsManager extends MouseAdapter {
 
     private final static int UP = 0;
     private final static int DOWN = 1;
     private final static int RIGHT = 2;
     private final static int LEFT = 3;
-
-
     private final GameplayPanel myPanel;
     private final DungeonController myController;
     private JLabel myUpArrow;
@@ -50,6 +48,20 @@ public class KeyBindingsManager {
         myPanel.add(myRightArrow);
         myPanel.add(myDownArrow);
         myPanel.add(myLeftArrow);
+
+        addMouseClickListener(myUpArrow, UP);
+        addMouseClickListener(myDownArrow, DOWN);
+        addMouseClickListener(myLeftArrow, LEFT);
+        addMouseClickListener(myRightArrow, RIGHT);
+    }
+
+    private void addMouseClickListener(final JLabel theArrow, int theDirection) {
+        theArrow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                myController.move(theDirection);
+            }
+        });
     }
     public void keyboardArrowClicked() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
@@ -77,7 +89,6 @@ public class KeyBindingsManager {
         });
     }
     private void moving(final int theDir) {
-        System.out.println("Now moving");
         myController.move(theDir);
     }
 }
