@@ -44,16 +44,16 @@ public final class MazeGenerator implements Serializable {
     private final int myItemsPercent;
 
     /** The dungeon as a 2d array*/
-    private Room myMaze[][];
+    private Room[][] myMaze;
 
     /** How many items have been added to the dungeon. */
-    private int myAddedItemsCount;
+    private int myOccupiedRoomsCount;
 
     /** How many rows this dungeon have. */
-    private int myRows;
+    private final int myRows;
 
     /** How many columns this dungeon have. */
-    private int myCols;
+    private final int myCols;
 
     /**
      * Creates a maze.
@@ -61,7 +61,7 @@ public final class MazeGenerator implements Serializable {
      * @param theRows the number of rows this dungeon has
      */
     public MazeGenerator(final int theRows, final int theCols) {
-        myAddedItemsCount = 0;
+        myOccupiedRoomsCount = 0;
         myOccupiedRooms = new HashMap<>();
         myRows = theRows;
         myCols = theCols;
@@ -149,9 +149,9 @@ public final class MazeGenerator implements Serializable {
         myMaze[mySpawnInRow][mySpawnInCol].setRoomOccupant("i"); //Entrance
         addValueToMap(mySpawnInRow, mySpawnInCol);
         myMaze[mySpawnInRow][mySpawnInCol].setVisitStatus(true);
+        myOccupiedRoomsCount++;
 
         dfs(mySpawnInRow, mySpawnInCol);
-
 
         int exitRow = 0, exitCol = 0;
         boolean chooseRow = myRandom.nextBoolean();
@@ -171,6 +171,7 @@ public final class MazeGenerator implements Serializable {
             myMaze[exitRow][exitCol].setRoomOccupant("O");  // Set exit at random spot
         }
         addValueToMap(exitRow, exitCol);
+        myOccupiedRoomsCount++;
 
         setRoomOccupant("M", myItemsPercent); // Add the items of the room (e.g. Monster, Health, Pillar) randomly. One per room.
         setRoomOccupant("A", 1); // Abstraction
@@ -220,12 +221,10 @@ public final class MazeGenerator implements Serializable {
                     newCol++;
             }
             if (isInBound(newRow, newCol) && !myMaze[newRow][newCol].getVisitStatus()) {
-                //System.err.print(dir + " ");
                 myMaze[newRow][newCol].setVisitStatus(true);
                 openDoor(myMaze[row][col], myMaze[newRow][newCol], dir);
                 dfs(newRow, newCol);
             }
-
         }
     }
 
@@ -294,11 +293,10 @@ public final class MazeGenerator implements Serializable {
             } else {
                 addValueToMap(row, col);
                 myMaze[row][col].setRoomOccupant(theItem);
-                myAddedItemsCount++;
                 itemsCount++;
             }
         }
-
+        myOccupiedRoomsCount += itemsCount;
     }
 
     /**
@@ -332,17 +330,6 @@ public final class MazeGenerator implements Serializable {
     }
 
     /**
-     * The room class has a getRoomOccupant class that can also
-     * return the item currently in a room.
-     *
-     * @param theHero the current hero object.
-     * @return A string representation of the room's occupant.
-     */
-    private String whatInTheRoom(DungeonCharacter theHero) {
-        return myMaze[theHero.getMyX()][theHero.getMyY()].toString();
-    }
-
-    /**
      * A toString representation of the 2-Dimensional graphical maze.
      *
      * @return a string representing the 2D graphical
@@ -358,7 +345,7 @@ public final class MazeGenerator implements Serializable {
             strBuilder.append("\n");
             for (int col = 0; col < myCols; col++) {
                 strBuilder.append(myMaze[row][col].getWestWall().getWallSymbol());
-                strBuilder.append(myMaze[row][col].getRoomOccupant() == "" ? " " : myMaze[row][col].getRoomOccupant());
+                strBuilder.append(myMaze[row][col].getRoomOccupant().equals("") ? " " : myMaze[row][col].getRoomOccupant());
                 strBuilder.append(myMaze[row][col].getEastWall().getWallSymbol()).append(" ");
             }
             strBuilder.append("\n");

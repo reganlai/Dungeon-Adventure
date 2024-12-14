@@ -64,7 +64,7 @@ public final class Room implements Serializable {
     /**
      * @return return whether this room is empty or not
      */
-    private boolean getEmptyRoom() {
+    public boolean getEmptyRoom() {
         return myEmptyRoom;
     }
 
@@ -84,14 +84,14 @@ public final class Room implements Serializable {
         str.append(myItem);
         str.append(" ");
         str.append(thePlayer);
-        myStatus = (myItem == "" ? thePlayer : str.toString());
+        myStatus = (myItem.equals("") ? thePlayer : str.toString());
     }
 
     /**
      * Clears the item in the room if the room is visited.
      */
     public void setVisited() {
-        if (myEmptyRoom == true) {
+        if (myEmptyRoom) {
             myStatus = "";
             myItem = "";
         } else {
@@ -104,7 +104,7 @@ public final class Room implements Serializable {
      *
      * @param theItem the item that is being added to the room, pillar, potion, exit, or monster
      */
-    protected void setRoomOccupant(final String theItem) {
+    public void setRoomOccupant(final String theItem) {
         myItem = theItem;
         myStatus = theItem;
     }
@@ -122,7 +122,6 @@ public final class Room implements Serializable {
      */
     protected void setVisitStatus(final boolean theVisitStatus) {
         myVisitStatus = theVisitStatus;
-
     }
 
     /**
@@ -178,6 +177,8 @@ public final class Room implements Serializable {
     }
 
     /**
+     * The west side wall.
+     *
      * @return the wall type of the room west of this room.
      */
     public WallType getWestWall() {
@@ -186,6 +187,7 @@ public final class Room implements Serializable {
 
     /**
      * Sets the wall type of the room west of this room.
+     *
      * @param theWestWall the wall type
      */
     public void setWestWall(final WallType theWestWall) {
@@ -200,14 +202,14 @@ public final class Room implements Serializable {
     }
 
     /**
-     * toString used for debugging.
+     *
      */
     public String roomWallToString() {
         StringBuilder str = new StringBuilder();
         str.append(myRoomWalls.getNorthWall().getWallSymbol());
         str.append("\n");
         str.append(myRoomWalls.getEastWall().getWallSymbol());
-        if (myItem == "") {
+        if (myItem.equals("")) {
             str.append(" ");
         } else {
             str.append(myItem);
