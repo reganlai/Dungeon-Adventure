@@ -9,9 +9,25 @@ package Model;/*
  * @version 1.0
  */
 public enum WallType {
+
+    /**
+     * String representation of a horizontal wall.
+     */
     HORIZONTAL_WALL("***"),
+
+    /**
+     * String representation of a horizontal door.
+     */
     HORIZONTAL_DOOR("*_*"),
+
+    /**
+     * String representation of a vertical wall.
+     */
     VERTICAL_WALL("*"),
+
+    /**
+     * String representation of a vertical door.
+     */
     VERTICAL_DOOR("|");
 
     private final String myWallSymbol;

@@ -14,6 +14,7 @@ import java.util.Random;
  */
 public abstract class DungeonCharacter implements Serializable {
 
+    /** A generated serialization ID. */
     @Serial
     private static final long serialVersionUID = -6818388129184736745L;
 
@@ -37,11 +38,14 @@ public abstract class DungeonCharacter implements Serializable {
 
     /** The Max Hp this dungeon character can have */
     private int myMaxHp;
+
     /** The current X position of the character. */
     private int myX;
+
     /** The current Y position of the character. */
     private int myY;
 
+    /** Amount of shield a dungeon character can have. */
     private int myShield;
 
     /**
@@ -67,10 +71,19 @@ public abstract class DungeonCharacter implements Serializable {
         setMaxHp(theMaxHp, theHp);
 
         myShield = 100;
-        //myHp = 100;
     }
+
+    /**
+     * @return the default image of the dungeon character(standby).
+     */
     public abstract ImageIcon getImageIcon(final Action theAction);
 
+
+    /**
+     * Sets the maximum hp the dungeon character can have.
+     * @param theMaxHp the maximum hp the dungeon character can have
+     * @param theHp hp that the dungeon character currently has
+     */
     private void setMaxHp(final int theMaxHp, final int theHp) {
         if (theMaxHp <= 0 || theMaxHp < theHp) {
             throw new IllegalArgumentException("Max HP must be greater than zero and not less than current HP.");
@@ -79,6 +92,10 @@ public abstract class DungeonCharacter implements Serializable {
         }
     }
 
+    /**
+     * Sets the chance of the dungeon character hitting the opponent.
+     * @param theHitChance the chance of the dungeon character hitting the opponent
+     */
     private void setHitChance(final double theHitChance) {
         if (theHitChance <= 0 || theHitChance >= 1) {
             throw new IllegalArgumentException("Hit chance must be between 0 and 1.");
@@ -87,6 +104,10 @@ public abstract class DungeonCharacter implements Serializable {
         }
     }
 
+    /**
+     * Sets thow many attacks the dungeon character can do in one turn.
+     * @param theAttackSpd how many attacks the dungeon character can do in one turn
+     */
     private void setAttackSpd(final int theAttackSpd) {
         if (theAttackSpd <= 0) {
             throw new IllegalArgumentException("Attack speed must be greater than zero.");
@@ -95,6 +116,11 @@ public abstract class DungeonCharacter implements Serializable {
         }
     }
 
+    /**
+     * Sets the max damage the dungeon character can do.
+     * @param theMaxAttack the maximum damage the dungeon character can do to the opponent
+     * @param theMinAttack the minimum damage the dungeon character can do to the opponent
+     */
     private void setMaxAttack(final int theMaxAttack, final int theMinAttack) {
         if (theMaxAttack <= 0 || theMaxAttack < theMinAttack) {
             throw new IllegalArgumentException("Maximum attack must be greater than zero " +
@@ -104,6 +130,10 @@ public abstract class DungeonCharacter implements Serializable {
         }
     }
 
+    /**
+     * Sets the min damage the dungeon character can do.
+     * @param theMinAttack the minimum damage the dungeon character can do to the opponent
+     */
     private void setMinAttack(final int theMinAttack) {
         if (theMinAttack <= 0) {
             throw new IllegalArgumentException("Minimum attack must be greater than zero.");
@@ -112,6 +142,10 @@ public abstract class DungeonCharacter implements Serializable {
         }
     }
 
+    /**
+     * Sets name of the dungeon character.
+     * @param theName name of the dungeon character
+     */
     private void setName(final String theName) {
         if (theName == null || theName.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
@@ -119,6 +153,11 @@ public abstract class DungeonCharacter implements Serializable {
             myName = theName;
         }
     }
+
+    /**
+     * Sets the current hp that the dungeon character has.
+     * @param theHp current hp that the dungeon character has
+     */
     private void setHp(final int theHp) {
         if (theHp <= 0) {
             throw new IllegalArgumentException("HP must be greater than zero.");
@@ -136,6 +175,7 @@ public abstract class DungeonCharacter implements Serializable {
     public int getMyX() {
         return myX;
     }
+
     /**
      * Return the current Y position on the maze.
      *
@@ -281,11 +321,18 @@ public abstract class DungeonCharacter implements Serializable {
             System.out.println(myName + " missed the attack!");
         }
     }
+
+    /**
+     * @return true if dungeon character is alive, false otherwise.
+     */
     public boolean isAlive() {
         return myHp > 0;
     }
 
-
+    /**
+     * Dungeon character shields damage.
+     * @param theOpAction the action chosen by the opposite party
+     */
     public void shieldDamage(final Action theOpAction) {
         Random rand = new Random();
         System.out.println(this.getMyName() + " blocks.");

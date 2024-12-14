@@ -30,10 +30,7 @@ public class MonsterFactory {
                     (int) data[3],     // Maximum damage
                     (int) data[4],     // Attack speed
                     (double) data[5],  // Chance to hit
-                    (int) data[6],     // Maximum hit points
-                    (double) data[7],  // Heal chance
-                    (int) data[8],     // Minimum heal
-                    (int) data[9]      // Maximum heal
+                    (int) data[6]     // Maximum hit points
             );
         } catch (final SQLException e) {
             throw new IllegalArgumentException("Failed to load the stats of: " + theType, e);

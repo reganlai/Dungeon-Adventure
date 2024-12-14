@@ -16,14 +16,21 @@ import java.util.Random;
  */
 public abstract class Hero extends DungeonCharacter implements Serializable {
 
+    /** A generated serialization ID. */
     @Serial
     private static final long serialVersionUID = -1047079817127925147L;
-    private final double myChanceToBlock;
-    private int myHealthPotions;
-    private int myVisionPotions;
-    //private final double myChanceToBlock;
-    private int myPillarsCollected;
 
+    /** The Hero's chance to block. */
+    private final double myChanceToBlock;
+
+    /** The number of health potions collected by the user. */
+    private int myHealthPotions;
+
+    /** The number of vision potions collected by the user. */
+    private int myVisionPotions;
+
+    /** The number of pillars collected by the user. */
+    private int myPillarsCollected;
 
     /**
      * Constructs a Hero with the specified attributes.
@@ -36,27 +43,32 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      * @param theHitChance     the probability (0-1) that an attack hits
      * @param theMaxHp         the maximum health points of the hero
      */
-    //@param theChanceToBlock the probability (0-1) that the hero blocks an attack
     protected Hero(final String theName,final int theHp, final int theMinAttack,
                    final int theMaxAttack, final  int theAttackSpd, final double theHitChance,
                    final double theChanceToBlock, int theMaxHp) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
-//    Hero(String theName,
-//         int theHp,
-//         int theMinAttack, int theMaxAttack, int theAttackSpd, double theHitChance,
-//        double theChanceToBlock, int theMaxHp, int theHealthPotions, int theVisionPotions) {
-//            super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
-
-//        if (theChanceToBlock <= 0 || theChanceToBlock >= 1) {
-//            throw new IllegalArgumentException("Chance to block must be between 0 and 1.");
-//        }
-
         myChanceToBlock = theChanceToBlock;
         myPillarsCollected = 0;
     }
+
+    /**
+     * @return the image that represents the hero standing in the dungeon.
+     */
     public abstract ImageIcon getHeroInDungeon();
+
+    /**
+     * @return the image of the hero according to action chosen by user.
+     */
     public abstract ImageIcon getImageIcon(final Action theAction);
+
+    /**
+     * @return the image that represents the hero winning the game.
+     */
     public abstract ImageIcon getHeroWonImage();
+
+    /**
+     * @return the image that represents the hero losing the game.
+     */
     public abstract ImageIcon getHeroLostImage();
 
     /**
@@ -64,13 +76,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      * @param theOp is the opponent that the special ability will target.
      */
     public abstract boolean specialAbility(final Monster theOp, final Action theMonsterAction);
-
-    /**
-     * @return the chance (0-1) of the hero blocking an attack
-     */
-//    public double getMyChanceToBlock() {
-//        return myChanceToBlock;
-//    }
 
     /**
      * @return the number of health potions the hero currently has
