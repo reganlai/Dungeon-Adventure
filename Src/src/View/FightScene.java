@@ -1,3 +1,6 @@
+/*
+ * TCSS 360 - Dungeon Adventure
+ */
 package View;
 
 import Controller.DungeonController;
@@ -7,8 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Image;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * GUI that shows the fighting between user and monster.
@@ -16,7 +17,7 @@ import java.beans.PropertyChangeListener;
  * @author George Njane
  * @version 1.0
  */
-public class FightScene extends JPanel implements PropertyChangeListener {
+public class FightScene extends JPanel {
 
     /** JPanel width in pixels. */
     private static final int FRAME_WIDTH = 1000;
@@ -271,16 +272,5 @@ public class FightScene extends JPanel implements PropertyChangeListener {
         add(myAttackButton);
         add(myBlockButton);
         add(mySpecialAttack);
-    }
-
-    /**
-     * Property change listener for this class.
-     */
-    @Override
-    public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (theEvt.getPropertyName().equals("use")) {
-            setHeroHp();
-            repaint();
-        }
     }
 }

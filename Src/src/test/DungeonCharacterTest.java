@@ -7,10 +7,9 @@ import Model.MonsterFactory;
 import Model.Warrior;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.swing.*;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit tests for the DungeonCharacter class.

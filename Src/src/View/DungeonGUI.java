@@ -1,7 +1,9 @@
+/*
+ * TCSS 360 - Dungeon Adventure
+ */
 package View;
 
 import Controller.DungeonController;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -20,6 +22,7 @@ import java.io.File;
  * GUI that is being shown right when the program is launched.
  *
  * @author George Njane
+ * @author Regan Lai
  * @version 1.0
  */
 public class DungeonGUI extends JFrame {

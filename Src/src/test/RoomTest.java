@@ -1,14 +1,5 @@
-/**
- * Unit tests for the {@link Model.Room} class.
- * This class verifies the behavior of various methods in the {@code Room} class
- * such as setting and getting wall types, room occupants, and handling room state.
- *
- * <p>Tests ensure the correctness of:
- * <ul>
- *   <li>Setting and retrieving room occupants</li>
- *   <li>Managing wall types (north, south, east, west walls)</li>
- *   <li>Room state changes when a player visits or collects items</li>
- * </ul>
+/*
+ * TCSS 360 - Dungeon Adventure
  */
 package test;
 

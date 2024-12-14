@@ -15,7 +15,7 @@ import java.awt.Image;
  * GUI where most of the gameplay exists.
  *
  * @author George Njane
- * @autho Regan Lai
+ * @author Regan Lai
  * @version 1.0
  */
 public class GameplayPanel extends JPanel {

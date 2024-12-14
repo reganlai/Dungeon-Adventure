@@ -1,13 +1,31 @@
+/*
+ * TCSS 360 - Dungeon Adventure
+ */
 package Controller;
-
-import Model.*;
 import Model.Action;
+import Model.Action;
+import Model.Direction;
+import Model.Hero;
+import Model.MazeGenerator;
+import Model.Monster;
+import Model.MonsterFactory;
+import Model.MoveHandler;
+import Model.Priestess;
+import Model.Room;
+import Model.Thief;
+import Model.WallType;
+import Model.Warrior;
 import View.DungeonGUI;
 import View.SettingsPanel;
-
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridLayout;
 import java.io.*;
 import java.util.Random;
 
@@ -17,7 +35,11 @@ import java.util.Random;
  * @author George Njane
  * @version 1.0
  */
-public class DungeonController implements Serializable {
+public class DungeonController implements java.io.Serializable {
+
+    /** A generated serialization ID. */
+    @Serial
+    private static final long serialVersionUID = 2912734733664585654L;
 
     /** The maze(dungeon) generated and used. */
     private MazeGenerator myMaze;

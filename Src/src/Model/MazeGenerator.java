@@ -1,6 +1,8 @@
-package Model;/*
+/*
  * TCSS 360 - Dungeon Adventure
  */
+package Model;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public final class MazeGenerator implements Serializable {
 
     /** A generated serialization ID. */
     @Serial
-    private static final long serialVersionUID = 7567907344024427690L;
+    private static final long serialVersionUID = 2911050522968644397L;
 
     /** The percent of the item is going to take up in the dungeon(in squares). */
     private static final int ITEM_PERCENTAGE = 10;

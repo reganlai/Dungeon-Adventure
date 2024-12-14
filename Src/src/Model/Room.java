@@ -1,6 +1,7 @@
-package Model;/*
+/*
  * TCSS 360 - Dungeon Adventure
  */
+package Model;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public final class Room implements Serializable {
 
     /** A generated serialization ID. */
     @Serial
-    private static final long serialVersionUID = -1715826836614884268L;
+    private static final long serialVersionUID = 7493688377577152568L;
 
     /** The walls around this room. */
     private final Wall myRoomWalls;

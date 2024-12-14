@@ -1,24 +1,30 @@
+/*
+ * TCSS 360 - Dungeon Adventure
+ */
 package Model;
-
-
 /**
- * Monster's counterattack according to user's behaviors.
+ * The {@code MoveHandler} class handles the movement logic of a hero/player
+ * within a maze-like dungeon. It determines whether a move in a specified
+ * direction is possible and updates the hero's position and the room state accordingly.
+ * This class is immutable and ensures thread-safety by synchronizing the static
+ * move method.
  *
  * @author George Njane
  * @version 1.0
  */
 public final class MoveHandler {
 
-    /** Whether user can move into their chosen direction. */
+    /** Indicates whether the move was successful. */
     private final boolean mySuccess;
 
-    /** A new room. */
+    /** The room the hero moved into, if the move was successful. */
     private final Room myNewRoom;
 
     /**
-     * Initializes the class.
-     * @param theSuccess whether the user can move into their chosen direction
-     * @param theNewRoom the room that the user moved into
+     * Initializes a new {@code MoveHandler} object with the move status and the new room.
+     *
+     * @param theSuccess true if the move was successful; false otherwise.
+     * @param theNewRoom the room the hero moved into; null if the move was unsuccessful.
      */
     private MoveHandler(final boolean theSuccess, final Room theNewRoom) {
         mySuccess = theSuccess;
@@ -26,27 +32,35 @@ public final class MoveHandler {
     }
 
     /**
-     * @return returns whether user can move into their chosen direction.
+     * Retrieves the success status of the move.
+     *
+     * @return true if the move was successful; false otherwise.
      */
     public boolean getSuccess() {
         return mySuccess;
     }
 
     /**
-     * @return returns a new room.
+     * Retrieves the room the hero moved into.
+     *
+     * @return the new {@link Room} if the move was successful; {@code null} otherwise.
      */
     public Room getMyNewRoom() {
         return myNewRoom;
     }
 
     /**
+     * Handles the hero's move within the maze.
+     * Validates the hero's ability to move in the specified direction based on the
+     * current room's wall configuration and maze boundaries. Updates the hero's
+     * position and room visitation status accordingly.
      *
-     * @param theMaze The current room location before the move.
-     * @param theDir The intended move direction from the current room.
-     * @param theHero The hero/player.
+     * @param theMaze the maze represented as a 2D array of {@link Room} objects.
+     * @param theDir the {@link Direction} in which the hero intends to move.
+     * @param theHero the {@link DungeonCharacter} representing the hero/player.
      *
-     * @return a MoveHandler object with the success status and
-     *          the room moved to if applicable.
+     * @return a {@code MoveHandler} object containing the move's success status and
+     *         the room moved into (if applicable).
      */
     public synchronized static MoveHandler move(final Room[][] theMaze, final Direction theDir,
                                                     final DungeonCharacter theHero) {

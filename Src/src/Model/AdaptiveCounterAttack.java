@@ -1,3 +1,6 @@
+/*
+ * TCSS 360 - Dungeon Adventure
+ */
 package Model;
 
 import java.io.Serializable;
@@ -6,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-
 /**
  * Monster's counterattack according to user's behaviors.
  *
@@ -74,6 +75,8 @@ public class AdaptiveCounterAttack implements Serializable {
     }
 
     /**
+     * Returns the opponent's most frequent used attack.
+     *
      * @return returns the most frequently used action by the user.
      */
     private Action getMostFrequentAction() {
