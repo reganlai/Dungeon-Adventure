@@ -1,16 +1,40 @@
 package Model;
 
+
+/**
+ * Monster's counterattack according to user's behaviors.
+ *
+ * @author George Njane
+ * @version 1.0
+ */
 public final class MoveHandler {
+
+    /** Whether user can move into their chosen direction. */
     private final boolean mySuccess;
+
+    /** A new room. */
     private final Room myNewRoom;
 
+    /**
+     * Initializes the class.
+     * @param theSuccess whether the user can move into their chosen direction
+     * @param theNewRoom the room that the user moved into
+     */
     private MoveHandler(final boolean theSuccess, final Room theNewRoom) {
         mySuccess = theSuccess;
         myNewRoom = theNewRoom;
     }
+
+    /**
+     * @return returns whether user can move into their chosen direction.
+     */
     public boolean getSuccess() {
         return mySuccess;
     }
+
+    /**
+     * @return returns a new room.
+     */
     public Room getMyNewRoom() {
         return myNewRoom;
     }

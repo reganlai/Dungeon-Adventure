@@ -12,6 +12,8 @@ import java.io.Serializable;
  * @version 1.0
  */
 public final class Wall implements Serializable {
+
+    /** A generated serialization ID. */
     @Serial
     private static final long serialVersionUID = -4390761889770933482L;
     /** The north wall of the room. */
@@ -49,6 +51,7 @@ public final class Wall implements Serializable {
     protected WallType getNorthWall() {
         return myNorthWall;
     }
+
     /**
      * Sets the state of the north wall.
      *
@@ -57,6 +60,7 @@ public final class Wall implements Serializable {
     protected void setNorthWall(final WallType theNorthWall) {
         myNorthWall = theNorthWall;
     }
+
     /**
      * Returns the state of the south wall.
      *
@@ -65,6 +69,7 @@ public final class Wall implements Serializable {
     protected WallType getSouthWall() {
         return mySouthWall;
     }
+
     /**
      * Sets the state of the south wall.
      *
@@ -73,6 +78,7 @@ public final class Wall implements Serializable {
     protected void setSouthWall(final WallType theSouthWall) {
         mySouthWall = theSouthWall;
     }
+
     /**
      * Returns the state of the east wall.
      *
@@ -81,6 +87,7 @@ public final class Wall implements Serializable {
     protected WallType getEastWall() {
         return myEastWall;
     }
+
     /**
      * Sets the state of the east wall.
      *
@@ -89,6 +96,7 @@ public final class Wall implements Serializable {
     protected void setEastWall(final WallType theEastWall) {
         myEastWall = theEastWall;
     }
+
     /**
      * Returns the state of the west wall.
      *
@@ -97,6 +105,7 @@ public final class Wall implements Serializable {
     protected WallType getWestWall() {
         return myWestWall;
     }
+
     /**
      * Sets the state of the west wall.
      *

@@ -3,7 +3,7 @@ package Model;
 import javax.swing.*;
 import java.io.Serial;
 import java.io.Serializable;
-
+import java.util.Random;
 
 /**
  * Represents a hero in the dungeon adventure game.
@@ -16,12 +16,21 @@ import java.io.Serializable;
  */
 public abstract class Hero extends DungeonCharacter implements Serializable {
 
+    /** A generated serialization ID. */
     @Serial
     private static final long serialVersionUID = -1047079817127925147L;
-    private final double myChanceToBlock;
-    private int myHealthPotions;
-    private int myPillarsCollected;
 
+    /** The Hero's chance to block. */
+    private final double myChanceToBlock;
+
+    /** The number of health potions collected by the user. */
+    private int myHealthPotions;
+
+    /** The number of vision potions collected by the user. */
+    private int myVisionPotions;
+
+    /** The number of pillars collected by the user. */
+    private int myPillarsCollected;
 
     /**
      * Constructs a Hero with the specified attributes.
@@ -34,18 +43,32 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      * @param theHitChance     the probability (0-1) that an attack hits
      * @param theMaxHp         the maximum health points of the hero
      */
-
     protected Hero(final String theName,final int theHp, final int theMinAttack,
                    final int theMaxAttack, final  int theAttackSpd, final double theHitChance,
                    final double theChanceToBlock, int theMaxHp) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
-
         myChanceToBlock = theChanceToBlock;
         myPillarsCollected = 0;
     }
+
+    /**
+     * @return the image that represents the hero standing in the dungeon.
+     */
     public abstract ImageIcon getHeroInDungeon();
+
+    /**
+     * @return the image of the hero according to action chosen by user.
+     */
     public abstract ImageIcon getImageIcon(final Action theAction);
+
+    /**
+     * @return the image that represents the hero winning the game.
+     */
     public abstract ImageIcon getHeroWonImage();
+
+    /**
+     * @return the image that represents the hero losing the game.
+     */
     public abstract ImageIcon getHeroLostImage();
 
     /**
@@ -54,12 +77,18 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      */
     public abstract boolean specialAbility(final Monster theOp, final Action theMonsterAction);
 
-
     /**
      * @return the number of health potions the hero currently has
      */
     public int getMyHealthPotions() {
         return myHealthPotions;
+    }
+
+    /**
+     * @return the number of vision potions the hero currently has
+     */
+    public int getMyVisionPotions() {
+        return myVisionPotions;
     }
 
     /**
@@ -74,6 +103,13 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      */
     public void addHealthPotion() {
         myHealthPotions++;
+    }
+
+    /**
+     * Increments the number of vision potions the hero has by 1.
+     */
+    public void addVisionPotion() {
+        myVisionPotions++;
     }
 
     /**
@@ -104,6 +140,18 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
 
     }
 
+    /**
+     * Uses a vision potion, which could reveal additional parts of the dungeon.
+     * If the hero has no vision potions, this method will notify the user.
+     */
+    public void useVisionPotion() {
+        if (myVisionPotions > 0) {
+            myVisionPotions--;
+            System.out.println(getMyName() + " used a vision potion!");
+        } else {
+            System.out.println(getMyName() + " has no vision potions left!");
+        }
+    }
 
     /**
      * Helper method to apply damage while rolling chance to block the damage.
@@ -111,6 +159,7 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      */
     @Override
     public void takeDamage(int theDmg) {
+        Random rand = new Random();
 
         if (Math.random() > myChanceToBlock) {
             setMyHp(theDmg >= getMyHp() ? 0 : getMyHp() - theDmg);
@@ -129,7 +178,7 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
     public String toString() {
         return "Hero: " + getMyName() +
                 "\nHp: " + getMyHp() +
-                "\nHealing Potions: " + getMyHealthPotions();
-
+                "\nHealing Potions: " + getMyHealthPotions() +
+                "\nVision Potions: " + getMyVisionPotions();
     }
 }

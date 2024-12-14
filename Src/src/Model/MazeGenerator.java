@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
 /**
  * The class responsible for the creation of the maze as well as
  * each individual room in the maze.
@@ -19,29 +20,46 @@ import java.util.Set;
  * @version 1.0
  */
 public final class MazeGenerator implements Serializable {
+
+    /** A generated serialization ID. */
     @Serial
     private static final long serialVersionUID = 7567907344024427690L;
+
+    /** The percent of the item is going to take up in the dungeon(in squares). */
     private static final int ITEM_PERCENTAGE = 10;
 
+    /** A "random" object. */
     private final Random myRandom = new Random();
 
+    /** How many rooms are occupied. */
     private final Map<Integer, Set<Integer>> myOccupiedRooms;
 
+    /** The row that the user spawned in. */
     private final int mySpawnInRow;
 
+    /** The column that the user spawned in. */
     private final int mySpawnInCol;
 
+    /** The percentage of items in the dungeon. */
     private final int myItemsPercent;
 
-    /** */
+    /** The dungeon as a 2d array*/
     private Room myMaze[][];
 
+    /** How many items have been added to the dungeon. */
     private int myAddedItemsCount;
-    /** */
+
+    /** How many rows this dungeon have. */
     private int myRows;
-    /** */
+
+    /** How many columns this dungeon have. */
     private int myCols;
 
+    /**
+     * Creates a maze.
+     * @param theCols the number of columns this dungeon has
+     * @param theRows the number of rows this dungeon has
+     */
     public MazeGenerator(final int theRows, final int theCols) {
         myAddedItemsCount = 0;
         myOccupiedRooms = new HashMap<>();
@@ -50,26 +68,36 @@ public final class MazeGenerator implements Serializable {
         mySpawnInRow = myRandom.nextInt(myRows);
         mySpawnInCol = myRandom.nextInt(myCols);
         myItemsPercent = (int) Math.ceil((double) (theRows * theCols) / ITEM_PERCENTAGE);
-
         setMaze(theRows, theCols);
-
         initMaze();
     }
-    public void mazeDimensions(final int theRow, final int theCol) {
-        myRows = theRow;
-        myCols = theCol;
-    }
+
+    /**
+     * @return number of rows of this dungeon
+     */
     public int getRows() {
         return myRows;
     }
+
+    /**
+     * @return number of columns of this dungeon
+     */
     public int getCol() {
         return myCols;
     }
 
+    /**
+     * @return the dungeon as a 2d array of rooms
+     */
     public Room[][] getMaze() {
         return myMaze;
     }
 
+    /**
+     * Sets the dimension of the maze determined by the difficulty level
+     * @param theRows the number of rows this dungeon have
+     * @param theCols he number of columns this dungeon have
+     */
     private void setMaze(final int theRows, final int theCols) {
         if (theRows < 1 || theCols < 0) {
             throw new IllegalArgumentException("The maze dimensions are incorrect.");
@@ -167,15 +195,13 @@ public final class MazeGenerator implements Serializable {
         final int row = theRow;
         final int col = theCol;
 
-
         List<Direction> directionList = new ArrayList<>();
         directionList.add(Direction.NORTH);
         directionList.add(Direction.SOUTH);
         directionList.add(Direction.EAST);
         directionList.add(Direction.WEST);
 
-        Collections.shuffle(directionList); //Shuffling ensures for unique paths each time by...
-        // randomizing the order of directions.
+        Collections.shuffle(directionList);
 
         for (Direction dir: directionList) {
             int newRow = row, newCol = col;
@@ -201,9 +227,6 @@ public final class MazeGenerator implements Serializable {
             }
 
         }
-        //System.err.print("backtrack ");
-
-
     }
 
     /**

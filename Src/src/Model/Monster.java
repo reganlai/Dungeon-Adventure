@@ -1,18 +1,19 @@
 package Model;
 
 import javax.swing.*;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Random;
 
-public class Monster extends DungeonCharacter implements Serializable {
+/**
+ * Represents a monster in the dungeon adventure game.
+ * Monster will change its behaviors according to what the user does.
+ *
+ * @author Evan Tran
+ */
+public class Monster extends DungeonCharacter {
 
-    @Serial
-    private static final long serialVersionUID = 6331983131408066245L;
+    /** An AdaptiveCounterAttack object. */
     private final AdaptiveCounterAttack myAdaptiveCounterAttack;
-    private final double myHealChance;
-    private final int myMinHeal;
-    private final int myMaxHeal;
+
     /**
      * Constructs a Model.DungeonCharacter with the specified attributes.
      *
@@ -24,10 +25,8 @@ public class Monster extends DungeonCharacter implements Serializable {
      * @param theHitChance the probability (0-1) that an attack hits
      */
     Monster(final String theName, final int theHp, final int theMinAttack, final int theMaxAttack,
-            final int theAttackSpd, final double theHitChance, final int theMaxHp,
-            final double theHealChance, final int theMinHeal, final int theMaxHeal) {
+            final int theAttackSpd, final double theHitChance, final int theMaxHp) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
-        //super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theMaxHp);
 
         if (theName == null || theName.trim().isEmpty()) {
             throw new IllegalArgumentException("Monster name must not be null or empty.");
@@ -50,65 +49,29 @@ public class Monster extends DungeonCharacter implements Serializable {
         if (theMaxHp <= 0) {
             throw new IllegalArgumentException("Max HP must be positive.");
         }
-        if (theHealChance < 0.0 || theHealChance > 1.0) {
-            throw new IllegalArgumentException("Heal chance must be between 0.0 and 1.0.");
-        }
-        if (theMinHeal < 0 || theMinHeal > theMaxHeal) {
-            throw new IllegalArgumentException("Minimum heal must be non-negative and less than or equal to maximum heal.");
-        }
-        if (theMaxHeal < 0) {
-            throw new IllegalArgumentException("Maximum heal must be non-negative.");
-        }
 
-        // Assign parameters to instance variables
-        myHealChance = theHealChance;
-        myMinHeal = theMinHeal;
-        myMaxHeal = theMaxHeal;
         myAdaptiveCounterAttack = new AdaptiveCounterAttack();
     }
 
+    /**
+     * @return returns AdaptiveCounterAttack.
+     */
     public AdaptiveCounterAttack getmyAdaptiveCounterAttack() {
         return myAdaptiveCounterAttack;
     }
 
-
-    public double getMyHealChance() {
-        return myHealChance;
-    }
-
-    public int getMyMinHeal(){
-        return myMinHeal;
-    }
-
-    public int getMyMaxHeal() {
-        return myMaxHeal;
-    }
-
-    public void heal() {
-        Random rand = new Random();
-        if (rand.nextDouble() <= this.myHealChance) {
-            int healAmount = rand.nextInt(this.myMaxHeal - this.myMinHeal + 1) + this.myMinHeal;
-            int hp = getMyHp() + healAmount;
-            if(hp > getMyMaxHp()){
-                setMyHp(getMyMaxHp());
-                System.out.println(getMyName() + "healed for " + (hp - getMyMaxHp()) + " points!" );
-            } else {
-            setMyHp(hp);
-            System.out.println(getMyName() + " healed for " + healAmount + " points!");
-            }
-        } else {
-            System.out.println(getMyName() + " tried to heal but failed!");
-        }
-    }
-
+    /**
+     * toString used for debugging.
+     */
     public String toString() {
-        return "Monster: " + this.getMyName() +
+        return "Model.Monster: " + this.getMyName() +
                 "\nHit Points: " + this.getMyHp() +
-                "\nAttack Speed: " + this.getMyAttackSpd() +
-                "\nChance to Heal: " + this.myHealChance +
-                "\nHeal Range: " + this.myMinHeal + " - " + this.myMaxHeal;
+                "\nAttack Speed: " + this.getMyAttackSpd();
     }
 
+    /**
+     * @return image of the monster according to the determined action.
+     */
     @Override
     public ImageIcon getImageIcon(final Action theAction) {
         return null;

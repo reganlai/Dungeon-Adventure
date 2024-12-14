@@ -8,24 +8,59 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Connects arrows displayed on screen to keyboard arrows and adds action listeners to them.
+ *
+ * @author George Njane
+ * @author Regan Lai
+ * @version 1.0
+ */
 public class KeyBindingsManager extends MouseAdapter {
 
+    /** Int representation of UP. */
     private final static int UP = 0;
+
+    /** Int representation of DOWN. */
     private final static int DOWN = 1;
+
+    /** Int representation of RIGHT. */
     private final static int RIGHT = 2;
+
+    /** Int representation of LEFT. */
     private final static int LEFT = 3;
+
+    /** GameplayPanel. */
     private final GameplayPanel myPanel;
+
+    /** Controller of the program. */
     private final DungeonController myController;
+
+    /** Up arrow that allows user to move up. */
     private JLabel myUpArrow;
+
+    /** Down arrow that allows user to move down. */
     private JLabel myDownArrow;
+
+    /** Right arrow that allows user to move right. */
     private JLabel myRightArrow;
+
+    /** Left arrow that allows user to move left. */
     private JLabel myLeftArrow;
 
+    /**
+     * Initializes the class
+     * @param thePanel the gameplay panel
+     * @param theController the controller of the program
+     */
     protected KeyBindingsManager(final GameplayPanel thePanel, final DungeonController theController) {
         myController = theController;
         myPanel = thePanel;
         setArrows();
     }
+
+    /**
+     * Initializes the arrows and displays it to gameplay panel.
+     */
     private void setArrows() {
         myUpArrow = new JLabel();
         myDownArrow = new JLabel();
@@ -55,6 +90,11 @@ public class KeyBindingsManager extends MouseAdapter {
         addMouseClickListener(myRightArrow, RIGHT);
     }
 
+    /**
+     * Adds mouse clicked listener to the arrows added to the panel.
+     * @param theArrow the JLabel
+     * @param theDirection the direction of arrow(the direction user wants to move)
+     */
     private void addMouseClickListener(final JLabel theArrow, int theDirection) {
         theArrow.addMouseListener(new MouseAdapter() {
             @Override
@@ -63,6 +103,10 @@ public class KeyBindingsManager extends MouseAdapter {
             }
         });
     }
+
+    /**
+     * Adds key pressed listeners to arrow keys on keyboard.
+     */
     public void keyboardArrowClicked() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
             if (e.getID() == KeyEvent.KEY_PRESSED) {
@@ -88,6 +132,10 @@ public class KeyBindingsManager extends MouseAdapter {
             return false; // Ensure other components can still process the key event
         });
     }
+
+    /**
+     * User moves in their chosen direction.
+     */
     private void moving(final int theDir) {
         myController.move(theDir);
     }
