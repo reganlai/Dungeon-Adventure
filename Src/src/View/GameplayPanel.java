@@ -10,25 +10,76 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Image;
+
+/**
+ * GUI where most of the gameplay exists.
+ *
+ * @author George Njane
+ * @autho Regan Lai
+ * @version 1.0
+ */
 public class GameplayPanel extends JPanel {
+
+    /** JPanel width in pixels. */
     private static final int FRAME_WIDTH = 1000;
+
+    /** JPanel height in pixels. */
     private static final int FRAME_HEIGHT = 500;
+
+    /** Adds key binds to the program. */
     private static KeyBindingsManager myKeyBindingManager;
+
+    /** Controller of the program. */
     private final DungeonController myController;
+
+    /** ExitPanel. */
     private final ExitGUI myExitPanel;
+
+    /** JFrame that holds all the JPanels together. */
     private DungeonGUI myMainFrame;
+
+    /** JMenuBar that holds the JMenus. */
     private JMenuBar myMenubar;
+
+    /** Holds myMap, myInventory, mySave. */
     private JMenu myGameplayMenu;
+
+    /** Shows the map. */
     private JMenuItem myMap;
+
+    /** Holds myControls and myInstructions */
     private JMenu myHelp;
+
+    /** Shows how to win the game. */
     private JMenuItem myInstructions;
+
+    /** Shows the inventory of the user. */
     private JMenuItem myInventory;
+
+    /** Shows how to navigate around the dungeon. */
     private JMenuItem myControls;
+
+    /** Saves the game. */
     private JMenuItem mySave;
+
+    /** JPanel height in pixels. */
     private JLabel myHeroAndBackGround;
+
+    /** Welcomes user to the dungeon. */
     private JLabel myMessage;
+
+    /** Tells user whether they moved in that direction or can't. */
     private JLabel mySecondMessage;
+
+    /** Image of the picked up item. */
     private JLabel myItem;
+
+    /**
+     * Initializes the GUI.
+     * @param theMainFrame the JFrame that holds the JPanels together
+     * @param theController the controller of the program
+     * @param theExitPanel shows when user has won or lost
+     */
     protected GameplayPanel(final DungeonGUI theMainFrame, final DungeonController theController,
                             final ExitGUI theExitPanel) {
         super();
@@ -43,6 +94,10 @@ public class GameplayPanel extends JPanel {
         add(myItem);
         myItem.setBounds(540, 265, 100, 100);
     }
+
+    /**
+     * Initializes the rest of the GUI.
+     */
     protected void init() {
         myKeyBindingManager = new KeyBindingsManager(this, myController);
         myKeyBindingManager.keyboardArrowClicked();
@@ -61,12 +116,20 @@ public class GameplayPanel extends JPanel {
         setControls();
         SwingUtilities.invokeLater(() -> myInstructions.doClick());
     }
+
+    /**
+     * Sets image of hero being in the dungeon.
+     */
     private void setHeroLabel() {
         myHeroAndBackGround.setBounds(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
         myHeroAndBackGround.setIcon(myController.getHero().getHeroInDungeon());
         myHeroAndBackGround.setOpaque(true);
         add(myHeroAndBackGround);
     }
+
+    /**
+     * JLabel showing welcome message to user.
+     */
     private void setMyMessage() {
         myMessage.setText("Welcome to the dungeon!");
         myMessage.setBounds(400, 370, 500, 30);
@@ -78,6 +141,10 @@ public class GameplayPanel extends JPanel {
         add(myMessage);
         add(mySecondMessage);
     }
+
+    /**
+     * Adds JMenuBar to panel.
+     */
     private void setMenuBar() {
         myGameplayMenu.add(myMap);
         setMap();
@@ -99,14 +166,26 @@ public class GameplayPanel extends JPanel {
 
         myMainFrame.setJMenuBar(myMenubar);
     }
+
+    /**
+     * Shows map.
+     */
     private void setMap() {
         myMap.addActionListener(e -> {
             myMainFrame.showMap();
         });
     }
+
+    /**
+     * @return returns the JLabel that updates whenever user moves around in the dungeon.
+     */
     public JLabel getMessageLabel() {
         return mySecondMessage;
     }
+
+    /**
+     * Shows JOptionPane that tells user how to win the game.
+     */
     private void setInstructions() {
         myInstructions.addActionListener(e -> {
             JOptionPane.showMessageDialog(myMainFrame,
@@ -118,6 +197,10 @@ public class GameplayPanel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
         });
     }
+
+    /**
+     * Shows JOptionPane that tells user how to navigate through the dungeon.
+     */
     private void setControls() {
         myControls.addActionListener(e ->{
             JOptionPane.showMessageDialog(myMainFrame,
@@ -127,6 +210,10 @@ public class GameplayPanel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
         });
     }
+
+    /**
+     * Updates background image when user found an item or is at the exit.
+     */
     public void updateVisuals(final String theItem) {
         switch (theItem) {
             case "A", "E", "I", "P":
