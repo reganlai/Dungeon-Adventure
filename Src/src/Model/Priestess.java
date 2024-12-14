@@ -59,6 +59,7 @@ public class Priestess extends Hero implements Serializable {
     /**
      * @return image of the hero according to the action chosen by the user.
      */
+
     @Override
     public ImageIcon getImageIcon(final Action theAction) {
         ImageIcon imageIcon;
@@ -73,6 +74,11 @@ public class Priestess extends Hero implements Serializable {
                 imageIcon = STANDING_PRIESTESS;
         }
         return imageIcon;
+    }
+
+    @Override
+    public ImageIcon getImageIcon(javax.swing.Action theAction) {
+        return null;
     }
 
     /**

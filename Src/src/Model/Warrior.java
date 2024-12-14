@@ -77,6 +77,11 @@ public class Warrior extends Hero implements Serializable {
         return imageIcon;
     }
 
+    @Override
+    public ImageIcon getImageIcon(javax.swing.Action theAction) {
+        return null;
+    }
+
     /**
      * @return image that this hero has won.
      */

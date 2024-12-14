@@ -27,20 +27,12 @@ public class Gremlin extends Monster implements Serializable {
     /**
      * Creates a Gremlin with its respective fields.
      */
-    public Gremlin() {
-        super("Gremlin", 60, 10, 20, 5, .8, 60);
-
+    public Gremlin(final String theName, final int theHp, final int theMinAttack, final int theMaxAttack,
+                   final int theAttackSpd, final double theHitChance, final int theMaxHp,
+                   final double theHealChance, final int theMinHeal, final int theMaxHeal){
+        super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp, theHealChance, theMinHeal, theMaxHeal);
     }
 
-    /**
-     * toString used for debugging.
-     */
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\nClass: Gremlin" +
-                "\nSpecial Ability: Chance to heal ";
-    }
 
     /**
      * Returns Gremlin's image according to its action currently.

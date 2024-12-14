@@ -27,19 +27,12 @@ public class Ogre extends Monster implements Serializable {
     /**
      * Creates an Ogre with its respective fields.
      */
-    public Ogre() {
-        super("Ogre", 120, 30, 30, 2, .6, 120);
+    public Ogre(final String theName, final int theHp, final int theMinAttack, final int theMaxAttack,
+                final int theAttackSpd, final double theHitChance, final int theMaxHp,
+                final double theHealChance, final int theMinHeal, final int theMaxHeal){
+        super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp, theHealChance, theMinHeal, theMaxHeal);
     }
 
-    /**
-     * toString used for debugging.
-     */
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\nClass: Ogre" +
-                "\nSpecial Ability: Chance to heal ";
-    }
 
     /**
      * Returns Ogre's image according to its action currently.
