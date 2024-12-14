@@ -3,7 +3,7 @@ package Model;
 import javax.swing.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Random;
+
 
 /**
  * Represents a hero in the dungeon adventure game.
@@ -20,8 +20,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
     private static final long serialVersionUID = -1047079817127925147L;
     private final double myChanceToBlock;
     private int myHealthPotions;
-    private int myVisionPotions;
-    //private final double myChanceToBlock;
     private int myPillarsCollected;
 
 
@@ -36,20 +34,11 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      * @param theHitChance     the probability (0-1) that an attack hits
      * @param theMaxHp         the maximum health points of the hero
      */
-    //@param theChanceToBlock the probability (0-1) that the hero blocks an attack
+
     protected Hero(final String theName,final int theHp, final int theMinAttack,
                    final int theMaxAttack, final  int theAttackSpd, final double theHitChance,
                    final double theChanceToBlock, int theMaxHp) {
         super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
-//    Hero(String theName,
-//         int theHp,
-//         int theMinAttack, int theMaxAttack, int theAttackSpd, double theHitChance,
-//        double theChanceToBlock, int theMaxHp, int theHealthPotions, int theVisionPotions) {
-//            super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp);
-
-//        if (theChanceToBlock <= 0 || theChanceToBlock >= 1) {
-//            throw new IllegalArgumentException("Chance to block must be between 0 and 1.");
-//        }
 
         myChanceToBlock = theChanceToBlock;
         myPillarsCollected = 0;
@@ -65,25 +54,12 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      */
     public abstract boolean specialAbility(final Monster theOp, final Action theMonsterAction);
 
-    /**
-     * @return the chance (0-1) of the hero blocking an attack
-     */
-//    public double getMyChanceToBlock() {
-//        return myChanceToBlock;
-//    }
 
     /**
      * @return the number of health potions the hero currently has
      */
     public int getMyHealthPotions() {
         return myHealthPotions;
-    }
-
-    /**
-     * @return the number of vision potions the hero currently has
-     */
-    public int getMyVisionPotions() {
-        return myVisionPotions;
     }
 
     /**
@@ -98,13 +74,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      */
     public void addHealthPotion() {
         myHealthPotions++;
-    }
-
-    /**
-     * Increments the number of vision potions the hero has by 1.
-     */
-    public void addVisionPotion() {
-        myVisionPotions++;
     }
 
     /**
@@ -135,18 +104,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
 
     }
 
-    /**
-     * Uses a vision potion, which could reveal additional parts of the dungeon.
-     * If the hero has no vision potions, this method will notify the user.
-     */
-    public void useVisionPotion() {
-        if (myVisionPotions > 0) {
-            myVisionPotions--;
-            System.out.println(getMyName() + " used a vision potion!");
-        } else {
-            System.out.println(getMyName() + " has no vision potions left!");
-        }
-    }
 
     /**
      * Helper method to apply damage while rolling chance to block the damage.
@@ -154,7 +111,6 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
      */
     @Override
     public void takeDamage(int theDmg) {
-        Random rand = new Random();
 
         if (Math.random() > myChanceToBlock) {
             setMyHp(theDmg >= getMyHp() ? 0 : getMyHp() - theDmg);
@@ -173,7 +129,7 @@ public abstract class Hero extends DungeonCharacter implements Serializable {
     public String toString() {
         return "Hero: " + getMyName() +
                 "\nHp: " + getMyHp() +
-                "\nHealing Potions: " + getMyHealthPotions() +
-                "\nVision Potions: " + getMyVisionPotions();
+                "\nHealing Potions: " + getMyHealthPotions();
+
     }
 }

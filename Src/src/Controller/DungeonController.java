@@ -1,19 +1,7 @@
 package Controller;
 
+import Model.*;
 import Model.Action;
-import Model.Direction;
-import Model.Gremlin;
-import Model.Hero;
-import Model.MazeGenerator;
-import Model.Monster;
-import Model.MoveHandler;
-import Model.Ogre;
-import Model.Priestess;
-import Model.Room;
-import Model.Skeleton;
-import Model.Thief;
-import Model.WallType;
-import Model.Warrior;
 import View.DungeonGUI;
 import View.SettingsPanel;
 
@@ -194,17 +182,17 @@ public class DungeonController implements Serializable {
         int randomInt = random.nextInt(3);
         switch(randomInt) {
             case 0:
-                myMonster = new Gremlin();
+                myMonster = MonsterFactory.createMonster("Gremlin");
                 //setMonsterHp();
                 //setMonsterDmg();
                 break;
             case 1:
-                myMonster = new Ogre();
+                myMonster = MonsterFactory.createMonster("Ogre");
                 //setMonsterHp();
                 //setMonsterDmg();
                 break;
             case 2:
-                myMonster = new Skeleton();
+                myMonster = MonsterFactory.createMonster("Skeleton");
 //                setMonsterHp();
 //                setMonsterDmg();
                 break;

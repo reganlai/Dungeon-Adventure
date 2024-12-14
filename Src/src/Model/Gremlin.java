@@ -12,19 +12,14 @@ public class Gremlin extends Monster implements Serializable {
     private final static ImageIcon GREMLIN_ATTACK = new ImageIcon("images/gremlinattack.png");
     private final static ImageIcon GREMLIN_BLOCK = new ImageIcon("images/gremlinblock.png");
 
-    public Gremlin() {
-        super("Gremlin", 60, 10, 20, 5, .8, 60, .4, 20, 40);
 
+    public Gremlin(final String theName, final int theHp, final int theMinAttack, final int theMaxAttack,
+                final int theAttackSpd, final double theHitChance, final int theMaxHp,
+                final double theHealChance, final int theMinHeal, final int theMaxHeal){
+        super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp, theHealChance, theMinHeal, theMaxHeal);
     }
 
-    // Override toString to display Skeleton-specific details
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\nClass: Gremlin" +
-                "\nSpecial Ability: Chance to heal " +
-                "(" + (getMyHealChance() * 100) + "%, Heal Range: " + getMyMinHeal() + " - " + getMyMaxHeal() + " HP)";
-    }
+
     @Override
     public ImageIcon getImageIcon(final Action theAction) {
         ImageIcon imageIcon = new ImageIcon();

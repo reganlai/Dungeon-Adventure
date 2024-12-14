@@ -1,10 +1,14 @@
 package Model;
 
 import javax.swing.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Monster extends DungeonCharacter {
+public class Monster extends DungeonCharacter implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 6331983131408066245L;
     private final AdaptiveCounterAttack myAdaptiveCounterAttack;
     private final double myHealChance;
     private final int myMinHeal;
@@ -98,11 +102,11 @@ public class Monster extends DungeonCharacter {
     }
 
     public String toString() {
-        return "Model.Monster: " + this.getMyName() +
+        return "Monster: " + this.getMyName() +
                 "\nHit Points: " + this.getMyHp() +
                 "\nAttack Speed: " + this.getMyAttackSpd() +
                 "\nChance to Heal: " + this.myHealChance +
-                "\nHeal Range: " + this.myMinHeal + " - " + this.myMinHeal;
+                "\nHeal Range: " + this.myMinHeal + " - " + this.myMaxHeal;
     }
 
     @Override

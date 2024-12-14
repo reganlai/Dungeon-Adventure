@@ -12,17 +12,10 @@ public class Ogre extends Monster implements Serializable {
     private final static ImageIcon OGRE_ATTACK = new ImageIcon("images/ogreattack.png");
     private final static ImageIcon OGRE_BLOCK = new ImageIcon("images/ogreblock.png");
 
-
-    public Ogre() {
-        super("Ogre", 120, 30, 30, 2, .6, 120, .1, 30, 60);
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\nClass: Ogre" +
-                "\nSpecial Ability: Chance to heal " +
-                "(" + (getMyHealChance() * 100) + "%, Heal Range: " + getMyMinHeal() + " - " + getMyMaxHeal() + " HP)";
+    public Ogre(final String theName, final int theHp, final int theMinAttack, final int theMaxAttack,
+                final int theAttackSpd, final double theHitChance, final int theMaxHp,
+                final double theHealChance, final int theMinHeal, final int theMaxHeal){
+        super(theName, theHp, theMinAttack, theMaxAttack, theAttackSpd, theHitChance, theMaxHp, theHealChance, theMinHeal, theMaxHeal);
     }
 
     public ImageIcon getImageIcon(final Action theAction) {
